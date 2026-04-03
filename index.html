@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>APEX Capital Society — Platform</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#09090e;--ink2:#111118;--ink3:#1a1a24;--ink4:#222230;--surface:#f4f3ef;--surface2:#eceae5;--surface3:#e2e0da;--surface4:#d8d5ce;--white:#ffffff;--gold:#c9aa71;--gold2:#a88b52;--gold3:#e8d4a8;--gold-bg:rgba(201,170,113,0.08);--text1:#09090e;--text2:#2d2d3a;--text3:#5a5a6e;--text4:#8a8a9e;--text5:#b0b0c0;--border:#dbd8d0;--border2:#c8c4bb;--border-dark:rgba(255,255,255,0.07);--green:#1d6348;--green-bg:rgba(29,99,72,0.07);--red:#8b2233;--red-bg:rgba(139,34,51,0.07);--blue:#1a3a5c;--blue-bg:rgba(26,58,92,0.07);--f-display:'DM Serif Display',serif;--f-body:'DM Sans',sans-serif;--f-mono:'JetBrains Mono',monospace;--nav-h:56px;--sidebar-w:272px;--ease:cubic-bezier(0.16,1,0.3,1)}
+html{scroll-behavior:smooth}body{font-family:var(--f-body);background:var(--surface);color:var(--text1);line-height:1.6;font-size:14px;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+button{font-family:var(--f-body)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+.au{animation:fadeUp .5s var(--ease) both}.au1{animation-delay:.05s}.au2{animation-delay:.12s}.au3{animation-delay:.2s}.au4{animation-delay:.28s}
+.ai{animation:fadeIn .4s ease both}
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(9,9,14,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-dark)}
+.nav-brand{display:flex;align-items:center;gap:9px;cursor:pointer}
+.nav-mark{width:26px;height:26px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-size:13px;color:var(--ink);font-weight:700;flex-shrink:0}
+.nav-name{font-size:12px;font-weight:600;color:#fff;letter-spacing:.06em;text-transform:uppercase}
+.nav-link{background:none;border:none;cursor:pointer;font-size:11px;font-weight:500;color:rgba(255,255,255,.45);padding:5px 11px;border-radius:2px;letter-spacing:.04em;text-transform:uppercase;transition:color .2s,background .2s}
+.nav-link:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.05)}
+.nav-link.active{color:var(--gold)}
+.app-shell{display:flex;min-height:100vh;padding-top:var(--nav-h)}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--ink);border-right:1px solid var(--border-dark);display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;bottom:0;overflow-y:auto;z-index:100}
+.sidebar-head{padding:20px 18px 16px;border-bottom:1px solid var(--border-dark);flex-shrink:0}
+.sidebar-head-label{font-family:var(--f-mono);font-size:9px;color:rgba(255,255,255,.28);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+.sidebar-bar-track{height:2px;background:rgba(255,255,255,.08);border-radius:1px;margin-bottom:6px}
+.sidebar-bar-fill{height:100%;background:var(--gold);border-radius:1px;transition:width .6s var(--ease)}
+.sidebar-bar-stats{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:9px;color:rgba(255,255,255,.28);letter-spacing:.06em}
+.sidebar-tabs{display:flex;border-bottom:1px solid var(--border-dark);flex-shrink:0}
+.sidebar-tab{flex:1;padding:10px 0;background:none;border:none;cursor:pointer;font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.sidebar-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.sidebar-scroll{flex:1;overflow-y:auto;padding:8px 0}
+.lesson-item{display:flex;align-items:flex-start;gap:9px;padding:7px 18px 7px 16px;cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:background .15s}
+.lesson-item:hover{background:rgba(255,255,255,.03)}
+.lesson-item.active{background:rgba(201,170,113,.07)}
+.lesson-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px;border:1px solid rgba(255,255,255,.18);transition:all .2s}
+.lesson-dot.done{background:var(--gold);border-color:var(--gold)}
+.lesson-dot.cur{border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,170,113,.2)}
+.lesson-item-name{font-size:11px;color:rgba(255,255,255,.4);line-height:1.4}
+.lesson-item.active .lesson-item-name{color:rgba(255,255,255,.75)}
+.lesson-item.done-item .lesson-item-name{color:rgba(255,255,255,.5)}
+.lesson-item-time{font-family:var(--f-mono);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.04em;margin-top:2px}
+.gloss-search{padding:10px 12px;border-bottom:1px solid var(--border-dark)}
+.gloss-search input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;font-family:var(--f-body);font-size:12px;padding:7px 10px;border-radius:2px;outline:none}
+.gloss-search input::placeholder{color:rgba(255,255,255,.25)}
+.gloss-search input:focus{border-color:rgba(201,170,113,.4)}
+.gloss-letter{padding:6px 18px 2px;font-family:var(--f-mono);font-size:9px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase}
+.gloss-term{padding:8px 18px;border-bottom:1px solid rgba(255,255,255,.04)}
+.gloss-term-word{font-size:11px;font-weight:600;color:rgba(255,255,255,.65);margin-bottom:3px}
+.gloss-term-def{font-size:10px;color:rgba(255,255,255,.32);line-height:1.5;font-weight:300}
+.content-area{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--nav-h))}
+.lesson-view{max-width:840px;margin:0 auto;padding:52px 48px 80px}
+.l-breadcrumb{font-family:var(--f-mono);font-size:9px;color:var(--text5);letter-spacing:.1em;text-transform:uppercase;margin-bottom:28px;display:flex;align-items:center;gap:7px}
+.l-breadcrumb span{color:var(--text4)}
+.l-title{font-family:var(--f-display);font-size:clamp(24px,3.5vw,38px);color:var(--text1);line-height:1.18;margin-bottom:10px}
+.l-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.l-tag{font-size:10px;font-weight:500;padding:3px 9px;background:var(--surface3);color:var(--text4);border-radius:2px;letter-spacing:.04em;text-transform:uppercase}
+.l-tag.gold{background:var(--gold-bg);color:var(--gold2)}
+.l-tag.green{background:var(--green-bg);color:var(--green)}
+.l-readtime{font-family:var(--f-mono);font-size:10px;color:var(--text5)}
+.l-hook{background:var(--ink);padding:26px 30px;margin-bottom:36px;border-left:3px solid var(--gold)}
+.l-hook-label{font-family:var(--f-mono);font-size:9px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.l-hook-text{font-size:14px;color:rgba(255,255,255,.78);line-height:1.7;font-style:italic;font-weight:300}
+.l-sec-h{font-family:var(--f-display);font-size:21px;color:var(--text1);margin:36px 0 14px}
+.l-body{font-size:14px;color:var(--text2);line-height:1.82;font-weight:300;margin-bottom:16px}
+.l-body strong{color:var(--text1);font-weight:600}
+.l-callout{border:1px solid var(--border);background:#fff;padding:20px 24px;margin:20px 0;display:flex;gap:14px}
+.l-callout-bar{width:3px;background:var(--gold);flex-shrink:0;border-radius:1px}
+.l-callout-content{flex:1}
+.l-callout-label{font-family:var(--f-mono);font-size:9px;color:var(--gold2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}
+.l-callout-text{font-size:13px;color:var(--text2);line-height:1.7;font-weight:300}
+.l-callout-text strong{color:var(--text1);font-weight:600}
+.l-formula{background:var(--ink);border:1px solid var(--border-dark);padding:18px 22px;margin:16px 0;font-family:var(--f-mono);font-size:13px;color:var(--gold3);letter-spacing:.03em;line-height:1.8}
+.l-list{list-style:none;margin:12px 0 20px;border:1px solid var(--border)}
+.l-list li{padding:11px 18px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);display:flex;align-items:flex-start;gap:11px;line-height:1.6;font-weight:300}
+.l-list li:last-child{border-bottom:none}
+.l-list li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:7px}
+.l-steps{list-style:none;margin:12px 0 20px;counter-reset:step}
+.l-steps li{counter-increment:step;display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);line-height:1.6;font-weight:300}
+.l-steps li::before{content:counter(step);font-family:var(--f-mono);font-size:10px;color:var(--gold);background:var(--ink);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.l-table{width:100%;border-collapse:collapse;margin:16px 0 28px;font-size:12px}
+.l-table th{background:var(--ink);color:rgba(255,255,255,.55);padding:10px 14px;text-align:left;font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;border:1px solid var(--border-dark)}
+.l-table td{padding:10px 14px;border:1px solid var(--border);color:var(--text2);font-weight:300;vertical-align:top}
+.l-table tr:hover td{background:var(--surface2)}
+.l-example{background:#fff;border:1px solid var(--border);padding:24px 26px;margin:18px 0}
+.l-example-label{font-family:var(--f-mono);font-size:9px;color:var(--text4);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.l-example-label::before{content:'';width:16px;height:1px;background:var(--border2)}
+.l-example-body{font-size:13px;color:var(--text2);line-height:1.75;font-weight:300}
+.l-example-body strong{color:var(--text1);font-weight:600}
+.l-terms{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 24px}
+.l-term{background:#fff;border:1px solid var(--border);padding:14px 16px}
+.l-term-word{font-size:12px;font-weight:600;color:var(--text1);margin-bottom:4px}
+.l-term-def{font-size:11px;color:var(--text4);line-height:1.55;font-weight:300}
+.quiz-wrap{margin:36px 0;border:1px solid var(--border);background:#fff;overflow:hidden}
+.quiz-head{background:var(--ink);padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
+.quiz-head-title{font-family:var(--f-mono);font-size:10px;color:rgba(255,255,255,.45);letter-spacing:.1em;text-transform:uppercase}
+.quiz-head-score{font-family:var(--f-mono);font-size:10px;color:var(--gold)}
+.quiz-q{padding:24px 22px;border-bottom:1px solid var(--border)}.quiz-q:last-child{border-bottom:none}
+.quiz-qn{font-family:var(--f-mono);font-size:9px;color:var(--text5);letter-spacing:.1em;margin-bottom:8px}
+.quiz-qtext{font-size:14px;font-weight:500;color:var(--text1);margin-bottom:14px;line-height:1.55}
+.quiz-opts{display:flex;flex-direction:column;gap:7px}
+.quiz-opt{display:flex;align-items:flex-start;gap:11px;padding:10px 14px;border:1px solid var(--border);cursor:pointer;background:none;width:100%;text-align:left;font-family:var(--f-body);font-size:13px;color:var(--text2);transition:all .15s;font-weight:300;line-height:1.5}
+.quiz-opt:hover:not(:disabled){border-color:var(--text4);background:var(--surface)}
+.quiz-opt.sc{border-color:var(--green)!important;background:var(--green-bg)!important;color:var(--green)!important}
+.quiz-opt.sw{border-color:var(--red)!important;background:var(--red-bg)!important;color:var(--red)!important}
+.quiz-opt.cr{border-color:var(--green);background:rgba(29,99,72,.03)}
+.quiz-opt:disabled{cursor:default}
+.quiz-letter{width:20px;height:20px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:var(--text4);flex-shrink:0;font-family:var(--f-mono);margin-top:1px}
+.quiz-fb{font-size:11px;margin-top:10px;padding:8px 12px;border-radius:2px;font-weight:400;line-height:1.6}
+.quiz-fb.ok{background:var(--green-bg);color:var(--green)}
+.quiz-fb.no{background:var(--red-bg);color:var(--red)}
+.l-foot{margin-top:44px;padding-top:28px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.btn-complete{background:var(--ink);color:#fff;border:none;cursor:pointer;font-family:var(--f-body);font-size:11px;font-weight:600;padding:11px 24px;border-radius:2px;letter-spacing:.06em;text-transform:uppercase;transition:background .2s;display:flex;align-items:center;gap:7px}
+.btn-complete:hover{background:var(--ink3)}.btn-complete.done{background:var(--green);cursor:default}
+.btn-next-l{background:var(--gold);color:var(--ink);border:none;cursor:pointer;font-family:var(--f-body);font-size:11px;font-weight:700;padding:11px 24px;border-radius:2px;letter-spacing:.06em;text-transform:uppercase;transition:background .2s}
+.btn-next-l:hover{background:#d8be88}
+.cat-hero{background:var(--ink);padding:72px 64px 60px;position:relative;overflow:hidden}
+.cat-hero-grid{position:absolute;inset:0;opacity:.03;background-image:linear-gradient(rgba(201,170,113,.8) 1px,transparent 1px),linear-gradient(90deg,rgba(201,170,113,.8) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.ch-tag{font-family:var(--f-mono);font-size:9px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px}
+.ch-h1{font-family:var(--f-display);font-size:clamp(32px,4.5vw,58px);color:#fff;line-height:1.08;margin-bottom:14px;letter-spacing:-.015em;max-width:680px}
+.ch-h1 em{font-style:italic;color:var(--gold)}
+.ch-sub{font-size:14px;color:rgba(255,255,255,.45);max-width:480px;line-height:1.7;font-weight:300;margin-bottom:36px}
+.ch-stats{display:flex;gap:44px}
+.chs-n{font-family:var(--f-display);font-size:26px;color:#fff;line-height:1;margin-bottom:3px}
+.chs-l{font-size:10px;color:rgba(255,255,255,.28);letter-spacing:.08em;text-transform:uppercase}
+.track-sel{background:var(--surface2);border-bottom:1px solid var(--border)}
+.track-sel-label{padding:20px 64px 0;font-family:var(--f-mono);font-size:9px;color:var(--text4);letter-spacing:.14em;text-transform:uppercase}
+.track-tabs{display:flex;padding:0 64px;overflow-x:auto}
+.ttrack-tab{display:flex;flex-direction:column;gap:3px;padding:16px 24px 14px;border:none;background:none;border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0;cursor:pointer}
+.ttrack-tab:hover .ttt-name{color:var(--text1)}
+.ttrack-tab.active .ttt-name{color:var(--text1)}
+.ttt-top{display:flex;align-items:center;gap:7px}
+.ttt-icon{font-size:13px;color:var(--text4);transition:color .2s}
+.ttrack-tab.active .ttt-icon{color:var(--gold)}
+.ttt-name{font-size:12px;font-weight:600;color:var(--text3);letter-spacing:.02em;transition:color .2s;white-space:nowrap}
+.ttt-count{font-family:var(--f-mono);font-size:9px;color:var(--text5);letter-spacing:.06em;padding-left:20px}
+.cat-body{padding:44px 64px 80px;max-width:1120px;margin:0 auto}
+.track-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px;gap:28px;flex-wrap:wrap}
+.thd-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;margin-bottom:10px;border-radius:2px}
+.thd-h2{font-family:var(--f-display);font-size:clamp(20px,2.8vw,28px);color:var(--text1);margin-bottom:7px}
+.thd-sub{font-size:13px;color:var(--text3);line-height:1.65;max-width:500px;font-weight:300}
+.thd-right{background:var(--white);border:1px solid var(--border);padding:14px 18px;min-width:200px;flex-shrink:0}
+.thd-right-label{font-family:var(--f-mono);font-size:9px;color:var(--text5);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.thd-right-row{display:flex;align-items:center;gap:7px;padding:4px 0;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
+.thd-right-row:first-of-type{border-top:none}
+.tprog{background:var(--white);border:1px solid var(--border);padding:14px 20px;margin-bottom:24px;display:flex;align-items:center;gap:18px}
+.tprog-label{font-family:var(--f-mono);font-size:9px;color:var(--text5);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.tprog-bar{flex:1;height:3px;background:var(--surface3);border-radius:2px}
+.tprog-fill{height:100%;border-radius:2px;transition:width .6s var(--ease)}
+.tprog-stat-n{font-family:var(--f-display);font-size:17px;color:var(--text1);line-height:1;text-align:right}
+.tprog-stat-l{font-size:10px;color:var(--text4);text-align:right}
+.clist{border:1px solid var(--border);display:flex;flex-direction:column}
+.ccard{background:var(--white);border-bottom:1px solid var(--border);position:relative;transition:background .15s}
+.ccard:last-child{border-bottom:none}
+.ccard.clickable:hover{background:var(--surface);cursor:pointer}
+.ccard.locked{background:var(--surface2)}
+.ccard-inner{display:flex;align-items:stretch}
+.ccard-nc{width:56px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--border);padding:24px 0}
+.ccard-n{font-family:var(--f-display);font-size:20px;line-height:1}
+.ccard-n.ok{color:var(--text1)}.ccard-n.done{color:var(--green)}.ccard-n.no{color:var(--text5)}
+.ccard-body{flex:1;padding:20px 24px;min-width:0}
+.ccard-pretitle{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.ccard-title{font-size:14px;font-weight:600;color:var(--text1);line-height:1.3;margin-bottom:4px}
+.ccard-title.dim{color:var(--text4)}
+.ccard-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.ccard-badges{display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin-top:2px}
+.cbadge{font-size:9px;font-weight:500;padding:2px 7px;border-radius:2px;white-space:nowrap}
+.ccard-desc{font-size:11px;color:var(--text3);line-height:1.6;font-weight:300;margin-bottom:10px}
+.ccard-desc.dim{color:var(--text5)}
+.ccard-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ccard-mi{display:flex;align-items:center;gap:4px;font-family:var(--f-mono);font-size:9px;color:var(--text4)}
+.ccard-sep{width:2px;height:2px;border-radius:50%;background:var(--text5)}
+.ccard-skills{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.cskill{font-size:9px;color:var(--text4);padding:2px 7px;background:var(--surface2);border:1px solid var(--border);border-radius:2px}
+.ccard-ac{width:152px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px 16px;border-left:1px solid var(--border)}
+.cring-wrap{position:relative;width:48px;height:48px}
+.cring-svg{transform:rotate(-90deg)}
+.cring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:9px;font-weight:500}
+.cbtn-start{width:100%;border:none;font-size:10px;font-weight:600;padding:8px 0;border-radius:2px;letter-spacing:.06em;text-transform:uppercase;color:#fff;transition:opacity .2s;cursor:pointer}
+.cbtn-start:hover{opacity:.88}
+.cbtn-locked{width:100%;background:var(--surface3);color:var(--text5);border:1px solid var(--border);font-size:10px;font-weight:500;padding:8px 0;border-radius:2px;letter-spacing:.06em;text-transform:uppercase;cursor:not-allowed}
+.clock-tip{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:var(--ink);color:rgba(255,255,255,.8);padding:6px 10px;font-size:10px;border-radius:2px;white-space:nowrap;pointer-events:none;z-index:10;opacity:0;transition:opacity .2s}
+.ccard.locked:hover .clock-tip{opacity:1}
+.outcomes-section{margin-top:32px;background:var(--white);border:1px solid var(--border);padding:24px 28px}
+.outcomes-label{font-family:var(--f-mono);font-size:9px;color:var(--text5);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+.outcomes-g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.outcome-r{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text2);font-weight:300;line-height:1.55}
+.cmodal-overlay{position:fixed;inset:0;z-index:300;background:rgba(9,9,14,.65);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center}
+.cmodal{background:var(--white);width:100%;max-width:640px;max-height:85vh;overflow-y:auto;border-radius:4px 4px 0 0;animation:slideUp .3s var(--ease) both}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.cmodal-head{position:sticky;top:0;background:var(--white);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;z-index:1}
+.cmodal-pre{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.cmodal-title{font-family:var(--f-display);font-size:19px;color:var(--text1)}
+.cmodal-x{background:none;border:none;font-size:20px;color:var(--text4);line-height:1;padding:4px;cursor:pointer}
+.cmodal-body{padding:24px}
+.cmodal-stats{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.cmodal-stat{background:var(--surface2);padding:11px 14px;flex:1;min-width:70px}
+.cms-l{font-family:var(--f-mono);font-size:8px;color:var(--text5);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.cms-v{font-family:var(--f-display);font-size:17px;color:var(--text1);line-height:1}
+.cmodal-desc{font-size:12px;color:var(--text2);line-height:1.75;font-weight:300;margin-bottom:20px}
+.cmodal-sec{font-size:10px;font-weight:600;color:var(--text1);letter-spacing:.06em;text-transform:uppercase;margin:20px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.cmod-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.cmod-row:last-child{border-bottom:none}
+.cmod-n{font-family:var(--f-mono);font-size:9px;color:var(--text5);width:16px;flex-shrink:0}
+.cmod-name{flex:1;font-size:12px;color:var(--text2)}
+.cmod-lessons{font-family:var(--f-mono);font-size:9px;color:var(--text4)}
+.cmodal-skills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.cmodal-skill{font-size:10px;padding:3px 8px;background:var(--surface2);border:1px solid var(--border);color:var(--text3);border-radius:2px}
+.cmodal-outcomes{display:flex;flex-direction:column;gap:7px}
+.cmodal-outcome{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text2);font-weight:300}
+.cmodal-cta{margin-top:20px;display:flex;gap:8px}
+.cmbtn{flex:1;border:none;font-size:11px;font-weight:600;padding:12px;border-radius:2px;letter-spacing:.06em;text-transform:uppercase;color:#fff;transition:opacity .2s;cursor:pointer}
+.cmbtn:hover{opacity:.88}
+.cmbtn-ghost{background:none;border:1px solid var(--border);color:var(--text3);font-size:11px;font-weight:500;padding:12px 18px;border-radius:2px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
+.cs-chip{font-family:var(--f-mono);font-size:8px;padding:2px 7px;background:var(--surface3);color:var(--text4);border-radius:2px;letter-spacing:.08em;text-transform:uppercase}
+.dash-head{padding:40px 44px 0;background:#fff;border-bottom:1px solid var(--border)}
+.dash-eyebrow{font-family:var(--f-mono);font-size:9px;color:var(--text5);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}
+.dash-h1{font-family:var(--f-display);font-size:28px;color:var(--text1);margin-bottom:20px}
+.dash-tabs{display:flex}
+.dash-tab{padding:10px 22px;font-size:11px;font-weight:500;color:var(--text4);border-bottom:2px solid transparent;cursor:pointer;border-top:none;border-left:none;border-right:none;background:none;font-family:var(--f-body);letter-spacing:.04em;text-transform:uppercase;transition:all .2s}
+.dash-tab.active{color:var(--text1);border-bottom-color:var(--ink)}
+.dash-body{padding:36px 44px}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px}
+.kpi{background:#fff;border:1px solid var(--border);padding:22px}
+.kpi-label{font-family:var(--f-mono);font-size:9px;color:var(--text5);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.kpi-val{font-family:var(--f-display);font-size:30px;color:var(--text1);line-height:1;margin-bottom:5px}
+.kpi-sub{font-size:11px;color:var(--text4)}
+.mod-progress-table{background:#fff;border:1px solid var(--border);margin-bottom:24px}
+.mpt-head{padding:16px 22px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:var(--text1);letter-spacing:.05em;text-transform:uppercase}
+.mpt-row{display:grid;grid-template-columns:1fr 80px 1fr 44px;gap:16px;align-items:center;padding:14px 22px;border-bottom:1px solid var(--border)}
+.mpt-row:last-child{border-bottom:none}
+.mpt-name{font-size:13px;color:var(--text1)}
+.mpt-count{font-size:12px;color:var(--text4)}
+.mpt-bar{height:3px;background:var(--surface3);border-radius:2px}
+.mpt-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .6s var(--ease)}
+.mpt-pct{font-family:var(--f-mono);font-size:10px;color:var(--text4);text-align:right}
+.activity-table{background:#fff;border:1px solid var(--border)}
+.at-head{padding:16px 22px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:var(--text1);letter-spacing:.05em;text-transform:uppercase}
+.at-row{display:flex;align-items:center;gap:14px;padding:12px 22px;border-bottom:1px solid var(--border)}
+.at-row:last-child{border-bottom:none}
+.at-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.at-name{flex:1;font-size:12px;color:var(--text2)}
+.at-mod{font-size:11px;color:var(--text5)}
+.at-badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:2px}
+.at-badge.done{background:var(--green-bg);color:var(--green)}
+.empty-state{padding:40px;text-align:center;border:1px solid var(--border);background:#fff}
+.empty-label{font-family:var(--f-mono);font-size:9px;color:var(--text5);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.empty-text{font-size:13px;color:var(--text4);font-weight:300}
+@media(max-width:768px){.cat-hero{padding:44px 24px 36px}.track-sel-label,.track-tabs,.cat-body{padding-left:24px;padding-right:24px}.track-hd{flex-direction:column}.thd-right{min-width:auto;width:100%}.ccard-ac{width:120px}.ch-stats{gap:24px}.outcomes-g{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.l-terms{grid-template-columns:1fr}}
+@media(max-width:480px){.ccard-nc{width:36px}.ccard-ac{display:none}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useCallback,useMemo,useRef}=React;
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   MODULE & LESSON DATA
+   ══════════════════════════════════════════════════════════════════════════════ */
+const MODULES=[
+  {id:'m1',title:'Financial Foundations',lessons:[
+    {id:'l1_1',title:'The Time Value of Money',time:'10 min'},
+    {id:'l1_2',title:'Income, Cash Flow & the Savings Rate',time:'9 min'},
+    {id:'l1_3',title:'Understanding Debt, Interest & Credit',time:'11 min'},
+    {id:'l1_4',title:'The Personal Balance Sheet',time:'9 min'},
+    {id:'l1_5',title:'Inflation, Purchasing Power & Real Returns',time:'10 min'},
+    {id:'l1_6',title:'Taxes & After-Tax Decision Making',time:'12 min'},
+    {id:'l1_7',title:'Insurance & Risk Transfer Fundamentals',time:'9 min'},
+  ]},
+  {id:'m2',title:'Investing Fundamentals',lessons:[
+    {id:'l2_1',title:'Asset Classes & Their Characteristics',time:'11 min'},
+    {id:'l2_2',title:'Compound Growth & the Mathematics of Returns',time:'10 min'},
+    {id:'l2_3',title:'Equity Markets: Structure & Price Discovery',time:'12 min'},
+    {id:'l2_4',title:'Fixed Income: Bonds, Duration & Yield',time:'13 min'},
+    {id:'l2_5',title:'Portfolio Construction & Diversification',time:'12 min'},
+    {id:'l2_6',title:'Index Funds, ETFs & Passive Investing',time:'10 min'},
+    {id:'l2_7',title:'Alternative Investments & Private Markets',time:'11 min'},
+  ]},
+  {id:'m3',title:'Risk & Decision-Making',lessons:[
+    {id:'l3_1',title:'The Risk-Return Tradeoff',time:'10 min'},
+    {id:'l3_2',title:'Volatility, Drawdown & Downside Risk',time:'11 min'},
+    {id:'l3_3',title:'Expected Value & Probability Thinking',time:'10 min'},
+    {id:'l3_4',title:'Behavioral Biases in Financial Decision-Making',time:'12 min'},
+    {id:'l3_5',title:'Mental Models for Better Decisions',time:'10 min'},
+    {id:'l3_6',title:'Scenario Analysis & Stress Testing',time:'11 min'},
+    {id:'l3_7',title:'Tail Risk, Black Swans & Fragility',time:'12 min'},
+  ]},
+  {id:'m4',title:'Applied Financial Thinking',lessons:[
+    {id:'l4_1',title:'Reading Financial Statements',time:'14 min'},
+    {id:'l4_2',title:'Financial Ratio Analysis',time:'12 min'},
+    {id:'l4_3',title:'Valuation: Intrinsic Value & DCF',time:'14 min'},
+    {id:'l4_4',title:'Valuation: Multiples & Comparables',time:'11 min'},
+    {id:'l4_5',title:'Capital Allocation & Corporate Finance',time:'12 min'},
+    {id:'l4_6',title:'Macroeconomics & Market Cycles',time:'13 min'},
+    {id:'l4_7',title:'Synthesizing a Full Investment Thesis',time:'14 min'},
+  ]},
+  {id:'mhf2',title:'Fundamental Equity Analysis',lessons:[
+    {id:'hf2_l1',title:'The Moat Framework',time:'14 min'},
+    {id:'hf2_l2',title:'Reading Management Quality',time:'13 min'},
+    {id:'hf2_l3',title:'Industry Structure & Competitive Dynamics',time:'12 min'},
+    {id:'hf2_l4',title:'Earnings Quality & Cash Conversion',time:'14 min'},
+    {id:'hf2_l5',title:'The Balance Sheet as a Risk Document',time:'13 min'},
+    {id:'hf2_l6',title:'Segment Analysis & Geographic Decomposition',time:'12 min'},
+    {id:'hf2_l7',title:'Variant Perception',time:'13 min'},
+    {id:'hf2_l8',title:'Building the Short Thesis',time:'14 min'},
+    {id:'hf2_l9',title:'The Investment Memo & Position Sizing',time:'13 min'}
+  ]}
+];
+const TOTAL=MODULES.reduce((a,m)=>a+m.lessons.length,0);
+
+/* ── LESSON CONTENT (key lessons with full content, others with compact stubs) ── */
+const LESSONS={
+l1_1:{
+hook:"You inherit $50,000 today. A financial advisor offers you a guaranteed $70,000 in five years instead. Without any other information, is that deal good, fair, or terrible? You cannot answer that question without understanding the time value of money.",
+terms:[{w:'Present Value (PV)',d:'The current worth of a future sum of money, discounted at a required rate of return.'},{w:'Future Value (FV)',d:'The value of an asset at a specified date in the future, assuming a rate of growth.'},{w:'Discount Rate',d:'The rate used to convert future cash flows into their present-day equivalent.'},{w:'Compounding',d:'Earning returns on previously earned returns, creating exponential rather than linear growth.'},{w:'Opportunity Cost',d:'The value of the best foregone alternative when a choice is made.'},{w:'Annuity',d:'A series of equal cash flows at regular intervals, valued using TVM principles.'}],
+sections:[
+{h:'Why a Dollar Today Is Worth More Than a Dollar Tomorrow',body:'The <strong>Time Value of Money (TVM)</strong> is the foundational axiom of all finance: a unit of currency available today is worth more than the same unit available in the future. This is not inflation \u2014 it is the concept of <em>opportunity cost</em>. A dollar in hand today can be invested to produce additional dollars.\n\nThis principle underlies every significant financial decision: mortgage pricing, corporate capital budgeting, pension fund liability calculations, and the valuation of every asset class on earth.'},
+{h:'The Core Equations',body:'TVM mathematics rest on two equations. <strong>Future Value</strong> asks: given an amount today, what will it grow to? <strong>Present Value</strong> asks the inverse: given an amount in the future, what is it worth in today\'s terms?',formula:'FV  =  PV \u00d7 (1 + r)\u207f\nPV  =  FV \u00f7 (1 + r)\u207f\n\nWhere: r = periodic interest rate | n = number of periods',callout:{label:'Key Insight',text:'The discount rate <strong>r</strong> is the critical variable. It encodes your opportunity cost \u2014 the return you could earn on an alternative of equivalent risk. A higher r means you require more compensation for waiting, which mathematically <em>reduces</em> the present value of any future cash flow.'}},
+{h:'Compounding Frequency',body:'Interest can compound annually, semi-annually, monthly, daily, or continuously. The <strong>effective annual rate (EAR)</strong> captures the impact of compounding frequency:',formula:'EAR  =  (1 + r/m)^m  \u2212  1\n\nWhere: m = compounding periods per year\nContinuous: FV = PV \u00d7 e^(rt)'}
+],
+table:{headers:['Scenario','Principal','Rate','Years','FV (Annual)','FV (Monthly)'],rows:[['Conservative','$10,000','5%','10','$16,289','$16,470'],['Moderate','$10,000','8%','10','$21,589','$22,196'],['Aggressive','$10,000','12%','10','$31,058','$33,004']]},
+example:{label:'Worked Example: The $50,000 Inheritance',text:'You receive $50,000 today. The advisor offers $70,000 in 5 years.\n\n<strong>Step 1:</strong> Your discount rate: ~9% (index fund). <strong>Step 2:</strong> FV of keeping: $50,000 \u00d7 (1.09)\u2075 = <strong>$76,931</strong>. <strong>Step 3:</strong> PV of $70,000 at 9%: $70,000 \u00f7 (1.09)\u2075 = <strong>$45,497</strong>.\n\n<strong>Conclusion:</strong> The offer is below your opportunity cost. Decline.'},
+quiz:[{q:'An investment returns $15,000 in 4 years. Your required return is 10%. Maximum you should pay today?',opts:['$10,245','$11,498','$12,500','$13,660'],ans:0,exp:'PV = $15,000 \u00f7 (1.10)\u2074 = $10,245.'},{q:'If discount rate rises from 5% to 8%, what happens to PV of a future cash flow?',opts:['Increases','Unchanged','Decreases','Depends only on time horizon'],ans:2,exp:'Higher discount rate means each future dollar is worth less today.'}]
+},
+l1_2:{hook:"A professional earning $250,000 per year with zero net worth. A teacher earning $55,000 per year building $800,000 in wealth over 25 years. The variable is not income. It is discipline of cash flow.",
+terms:[{w:'Cash Flow',d:'The net movement of money in and out over a defined period.'},{w:'Savings Rate',d:'Savings as a percentage of gross income. The single most predictive variable in wealth accumulation.'},{w:'Net Worth',d:'Total assets minus total liabilities.'}],
+sections:[{h:'The Primacy of Cash Flow',body:'Wealth is not created by income \u2014 it is created by the <em>systematic conversion of income into assets</em>. Income is a flow; net worth is a stock. The flow matters only insofar as it contributes to the stock.'}],
+quiz:[{q:'A person earns $95,000 gross and spends $71,250. What is their savings rate?',opts:['15%','20%','25%','30%'],ans:2,exp:'Savings = $23,750. Rate = $23,750 / $95,000 = 25%.'}]
+},
+l1_3:{hook:"Two people borrow $30,000 for a car. One finances at 4.9% APR. The other puts it on a credit card at 24.99% APR. The financial outcome diverges by over $12,000.",
+terms:[{w:'APR',d:'Annual Percentage Rate \u2014 the yearly cost of borrowing.'},{w:'Amortization',d:'Gradual repayment of debt through scheduled payments.'}],
+sections:[{h:'The Taxonomy of Debt',body:'<strong>Productive Debt</strong> finances assets that appreciate. <strong>Destructive Debt</strong> finances pure consumption with no asset creation.'}],
+quiz:[{q:'The mathematically optimal debt repayment strategy is:',opts:['Snowball','Avalanche (highest interest first)','Equal payments','Minimum while investing'],ans:1,exp:'Avalanche minimizes total interest paid.'}]
+},
+l1_4:{hook:"Every corporation on earth maintains a balance sheet. Yet most individuals have never constructed one.",
+terms:[{w:'Asset',d:'Any resource with present or future economic value.'},{w:'Net Worth',d:'Assets minus liabilities.'}],
+sections:[{h:'The Personal Balance Sheet',body:'The accounting identity: <strong>Assets = Liabilities + Net Worth</strong>.'}],
+quiz:[{q:'Home worth $450k, $310k mortgage, $180k investments, $25k car loan. Net worth?',opts:['$270,000','$295,000','$335,000','$430,000'],ans:1,exp:'Assets: $630k. Liabilities: $335k. Net Worth: $295,000.'}]
+},
+l1_5:{hook:"In 1980, a gallon of gasoline cost $1.25. Today roughly $3.50. Inflation is the silent tax.",
+terms:[{w:'Inflation',d:'General increase in price levels reducing purchasing power.'},{w:'Real Return',d:'Return after subtracting inflation.'}],
+sections:[{h:'What Inflation Measures',body:'Inflation is measured as the percentage change in a price index \u2014 most cited being the <strong>CPI</strong>.'}],
+quiz:[{q:'Investment returns 9% nominally. Inflation is 3.5%. Approximate real return?',opts:['3.5%','5.5%','9.0%','12.5%'],ans:1,exp:'Real return \u2248 9% \u2212 3.5% = 5.5%.'}]
+},
+l1_6:{hook:"Two analysts, identical gross income. One pays $28,000 in taxes. The other pays $19,500. The difference: understanding the tax code.",
+terms:[{w:'Marginal Tax Rate',d:'Rate applied to the next dollar of income.'},{w:'Tax-Deferred',d:'Income not taxed in current period.'}],
+sections:[{h:'The Progressive Tax System',body:'The U.S. employs a <strong>progressive marginal rate system</strong> \u2014 each additional dollar is taxed at a rate corresponding to its bracket.'}],
+quiz:[{q:'Marginal rate is 24%. You contribute $10,000 to Traditional 401(k). Tax savings?',opts:['$1,200','$2,400','$3,600','$10,000'],ans:1,exp:'$10,000 \u00d7 24% = $2,400.'}]
+},
+l1_7:{hook:"A 42-year-old earns $120,000. She gets a critical illness diagnosis and cannot work. Within 18 months, the family faces financial ruin.",
+terms:[{w:'Risk Transfer',d:'Shifting financial consequence of a loss to an insurer.'},{w:'Premium',d:'The periodic cost of insurance coverage.'}],
+sections:[{h:'The Economic Function of Insurance',body:'Insurance exchanges <strong>low-probability, high-magnitude risks</strong> for a certain, manageable cost.'}],
+quiz:[{q:'No dependents, no debt, $800k assets. Which insurance is LEAST critical?',opts:['Health','Disability','Term life','Umbrella'],ans:2,exp:'Without dependents or debt, life insurance need is near zero.'}]
+},
+l2_1:{hook:"Every investor faces the same menu: own pieces of companies, lend money to governments, hold commodities, or sit in cash.",
+terms:[{w:'Asset Class',d:'A category of investment with similar characteristics.'},{w:'Risk Premium',d:'Excess return above the risk-free rate.'}],
+sections:[{h:'The Asset Class Universe',body:'Finance theory organizes investable assets into classes based on <strong>shared risk characteristics and return drivers</strong>.'}],
+quiz:[{q:'The equity risk premium is best described as:',opts:['Guaranteed equity return above bonds','Compensation for bearing uncertainty','Tax advantage of stocks','Growth vs value difference'],ans:1,exp:'The ERP is compensation for accepting volatility and potential permanent loss.'}]
+},
+l2_2:{hook:"Two investors both start with $10,000. Investor A earns exactly 8% every year. Investor B earns 8% on average through volatile sequence. After 20 years, A has more. Why?",
+terms:[{w:'CAGR',d:'Compound Annual Growth Rate.'},{w:'Volatility Drag',d:'Mathematical drag on compounded returns caused by variance.'}],
+sections:[{h:'The Mechanics of Compounding',body:'Compounding is the process by which returns earn returns. Time is the most powerful input.'}],
+quiz:[{q:'Fund A returns +30% in year 1 and -30% in year 2. CAGR?',opts:['0%','-4.5%','+4.5%','-9%'],ans:1,exp:'$100 \u00d7 1.30 \u00d7 0.70 = $91. CAGR = -4.5%.'}]
+},
+l2_3:{hook:"10,000 shares of Apple trade hands every second. How does this system produce prices?",
+terms:[{w:'Market Capitalization',d:'Share price times shares outstanding.'},{w:'EMH',d:'Efficient Market Hypothesis.'}],
+sections:[{h:'How Equity Markets Function',body:'Market makers provide continuous liquidity by quoting bid and ask prices.'}],
+quiz:[{q:'Under semi-strong EMH, which should NOT generate consistent excess returns?',opts:['Insider trading','Fundamental analysis of public data','Both','Neither'],ans:1,exp:'Semi-strong EMH holds that all public information is already priced in.'}]
+},
+l2_4:{hook:"When the Fed announced a 75-basis-point rate hike in June 2022, the 10-year Treasury lost more value in 12 months than at any point in a century.",
+terms:[{w:'Yield to Maturity',d:'Total annualized return of a bond if held to maturity.'},{w:'Duration',d:'Measure of bond price sensitivity to rate changes.'}],
+sections:[{h:'The Price-Yield Relationship',body:'When rates rise, existing bond prices fall \u2014 the inverse relationship is mathematical certainty.'}],
+quiz:[{q:'A bond has 7% coupon priced at 5% yield. Trading:',opts:['At par','At a discount','At a premium','At face value'],ans:2,exp:'Coupon > yield means premium.'}]
+},
+l2_5:{hook:"Markowitz won the Nobel Prize for proving that combining assets reduces risk without necessarily reducing return.",
+terms:[{w:'Correlation Coefficient',d:'Measures how two assets move together. Range: -1 to +1.'},{w:'Sharpe Ratio',d:'(Return - Risk-Free Rate) / Standard Deviation.'}],
+sections:[{h:'Modern Portfolio Theory',body:'Portfolio risk depends critically on <strong>correlations between assets</strong>, not just individual asset risks.'}],
+quiz:[{q:'Two assets each 15% std dev, correlation -1.0. 50/50 portfolio volatility?',opts:['15%','7.5%','0%','21.2%'],ans:2,exp:'Perfect negative correlation eliminates portfolio volatility in 50/50.'}]
+},
+l2_6:{hook:"In 1975, Vanguard launched a product 99% of Wall Street called an embarrassment \u2014 a fund designed to simply match the market.",
+terms:[{w:'Index Fund',d:'A fund replicating the holdings of a market index.'},{w:'Expense Ratio',d:'Annual fee as a percentage of assets.'}],
+sections:[{h:'The Case for Passive Investing',body:'Active managers in aggregate must equal the market return before costs \u2014 and therefore underperform after costs.'}],
+quiz:[{q:'According to SPIVA, what % of active large-cap managers underperform over 20 years?',opts:['About 40%','About 60%','About 75%','About 95%'],ans:3,exp:'~95% underperform over 20-year periods.'}]
+},
+l2_7:{hook:"The Yale Endowment earned 40% of its returns from alternatives. Individual investors have almost no access.",
+terms:[{w:'Private Equity',d:'Investment in non-public companies.'},{w:'J-Curve',d:'Initial PE losses before strong returns in harvest phase.'}],
+sections:[{h:'The Alternative Investment Universe',body:'Alternatives offer differentiated return sources and potential for excess return through skill or illiquidity premium.'}],
+quiz:[{q:'VC returns follow a power law, meaning:',opts:['All investments return equally','Returns are equally distributed','A tiny fraction generates vast majority of returns','Returns correlate with amount invested'],ans:2,exp:'Most investments fail; 1-2 exceptional winners generate the fund return.'}]
+},
+l3_1:{hook:"Every financial decision is a bet. The question is whether the risk is commensurate with the expected reward.",
+terms:[{w:'Expected Return',d:'Probability-weighted average of all possible outcomes.'},{w:'Sharpe Ratio',d:'Risk-adjusted return metric.'}],
+sections:[{h:'Risk as Multi-Dimensional',body:'Finance commonly equates risk with volatility. Practitioners distinguish between volatility risk, permanent loss risk, and shortfall risk.'}],
+quiz:[{q:'CAPM: only _____ risk is compensated with expected return.',opts:['Idiosyncratic','Systematic','Liquidity','Short-term'],ans:1,exp:'Systematic risk cannot be diversified away; it commands a premium.'}]
+},
+l3_2:{hook:"A hedge fund boasts 25% average annual return. In year 2 the fund drops 65%. You have not recovered after five more years at 25%.",
+terms:[{w:'Maximum Drawdown',d:'Largest peak-to-trough decline.'},{w:'Calmar Ratio',d:'Annualized return divided by maximum drawdown.'}],
+sections:[{h:'Why Drawdown Matters More Than Average Return',body:'A 50% loss requires a 100% gain to recover. A 75% loss requires 300%.'}],
+quiz:[{q:'Investment loses 40%, then gains 40%. Net result?',opts:['Breakeven','Up 16%','Down 16%','Down 4%'],ans:2,exp:'$100 \u00d7 0.60 \u00d7 1.40 = $84. Down 16%.'}]
+},
+l3_3:{hook:"A coin flip: win $200 on heads, lose $100 on tails. Most people hesitate. EV = +$50.",
+terms:[{w:'Expected Value (EV)',d:'Probability-weighted average of all possible outcomes.'},{w:'Kelly Criterion',d:'Formula for optimal bet sizing.'}],
+sections:[{h:'Expected Value: Foundation of Rational Decisions',body:'Expected value is the mathematical average of all outcomes, weighted by probabilities.'}],
+quiz:[{q:'70% chance of +30% and 30% chance of -40%. Expected value?',opts:['+5%','+9%','+21%','-5%'],ans:1,exp:'EV = 0.70(30%) + 0.30(-40%) = 21% - 12% = +9%.'}]
+},
+l3_4:{hook:"Professional investors show the same cognitive biases as novices \u2014 sometimes more severely.",
+terms:[{w:'Loss Aversion',d:'Losses feel ~2\u00d7 as painful as equivalent gains.'},{w:'Disposition Effect',d:'Tendency to sell winners too early and hold losers too long.'}],
+sections:[{h:'Prospect Theory',body:'Investors evaluate outcomes as gains/losses relative to a reference point, with losses weighted approximately twice as heavily.'}],
+quiz:[{q:'Prospect Theory: most investors feel a $1,000 loss as intensely as a _____ gain.',opts:['$500','$1,000','$2,000','$5,000'],ans:2,exp:'Loss aversion coefficient is approximately 2.0.'}]
+},
+l3_5:{hook:"Charlie Munger attributed success to a latticework of mental models drawn from multiple disciplines.",
+terms:[{w:'Inversion',d:'Working backward from undesired outcomes.'},{w:'Circle of Competence',d:'Domain of genuinely deep and reliable knowledge.'}],
+sections:[{h:'Why Mental Models Matter',body:'Financial markets are complex adaptive systems. No single model captures the complexity accurately.'}],
+quiz:[{q:'Inversion helps investors primarily:',opts:['Find best stocks','Avoid return-destroying behaviors','Predict macro turning points','Optimize allocation'],ans:1,exp:'Consistently avoiding errors guarantees above-average results.'}]
+},
+l3_6:{hook:"Lehman Brothers\u2019 risk models showed no scenario of insolvency within 12 months. Within 25 days, it filed the largest bankruptcy in history.",
+terms:[{w:'Scenario Analysis',d:'Evaluating outcomes under alternative future states.'},{w:'Stress Testing',d:'Assessing performance under extreme conditions.'}],
+sections:[{h:'Why Models Fail in Extremes',body:'All models assume relationships estimated from historical data. The future behaves differently in extremes.'}],
+quiz:[{q:'Primary purpose of stress testing:',opts:['Guarantee positive returns','Quantify vulnerability to known extreme scenarios','Eliminate tail risk','Regulatory compliance only'],ans:1,exp:'Stress testing makes risk visible and manageable.'}]
+},
+l3_7:{hook:"In December 2006, models showed nationwide home price decline had probability indistinguishable from zero. 18 months later it destroyed $7 trillion.",
+terms:[{w:'Black Swan',d:'High-impact, low-probability, unpredictable event.'},{w:'Fat Tail',d:'Extreme events occur more frequently than normal distributions predict.'}],
+sections:[{h:'The Problem with Normal Distributions',body:'Real financial returns have <strong>fat tails</strong>: extreme events occur far more frequently than predicted.'}],
+quiz:[{q:'Financial return distributions have fat tails, meaning:',opts:['Returns are normally distributed','Extremes are less frequent','Extreme events occur MORE frequently than normal predicts','Returns always revert quickly'],ans:2,exp:'Fat tails mean extreme outcomes occur more often than bell curve assumes.'}]
+},
+l4_1:{hook:"In 2001, Enron was the 7th largest U.S. company. Within months, bankrupt. The collapse was visible in the financial statements.",
+terms:[{w:'Income Statement',d:'Reports revenue, costs, and profits over a period.'},{w:'Cash Flow Statement',d:'Tracks actual cash movement.'},{w:'Free Cash Flow',d:'Operating cash flow minus capital expenditures.'}],
+sections:[{h:'The Three Financial Statements',body:'The three financial statements form an interconnected system where changes in one flow into the others.',callout:{label:'The Accrual vs. Cash Distinction',text:'Revenue can be recognized when <em>earned</em>, not when cash is received. This creates the gap between net income and cash flow that reveals earnings quality.'}}],
+quiz:[{q:'Company reports $50M net income but -$15M operating cash flow. This indicates:',opts:['Excellent health','Revenue recognized ahead of cash collection','High CapEx','Large dividend'],ans:1,exp:'Net income significantly exceeding OCF signals aggressive accounting or deteriorating quality.'}]
+},
+l4_2:{hook:"Two software companies. Company A trades at 8\u00d7 earnings. Company B at 45\u00d7. Most people conclude A is cheaper. A sophisticated analyst reads differently.",
+terms:[{w:'P/E Ratio',d:'Price / Earnings per share.'},{w:'EV/EBITDA',d:'Capital structure-neutral valuation multiple.'},{w:'DuPont Analysis',d:'Decomposes ROE into margin, turnover, and leverage.'}],
+sections:[{h:'Valuation Ratios',body:'<strong>P/E Ratio:</strong> Most intuitive but most manipulable. <strong>EV/EBITDA:</strong> Enables apples-to-apples comparison across capital structures.'}],
+quiz:[{q:'EV/EBITDA is preferred because:',opts:['EBITDA is always larger','It is capital structure-neutral','P/E only for unprofitable companies','EV/EBITDA ignores depreciation'],ans:1,exp:'EV includes debt; EBITDA is pre-interest \u2014 making it comparable regardless of financing.'}]
+},
+l4_3:{
+hook:"When Buffett bought Coca-Cola in 1988, the market doubted his valuation. He estimated the company\u2019s future cash flows, discounted them to present value, and concluded the business was worth far more than the market was pricing. He wasn\u2019t predicting the future precisely. He was reasoning probabilistically about a durable business with predictable economics \u2014 and purchasing it at a margin of safety.",
+terms:[{w:'Intrinsic Value',d:'The present value of all future cash flows a business will generate over its lifetime.'},{w:'Discounted Cash Flow (DCF)',d:'Valuation method estimating intrinsic value by forecasting future free cash flows and discounting them.'},{w:'Terminal Value',d:'Value of all cash flows beyond the explicit forecast period \u2014 typically 60\u201380% of total DCF value.'},{w:'WACC',d:'Weighted Average Cost of Capital \u2014 the blended required return on debt and equity.'},{w:'Margin of Safety',d:'The discount to intrinsic value at which an investor purchases. Protects against analytical errors.'},{w:'Free Cash Flow',d:'Operating cash flow minus capital expenditures. The cash available to all capital providers.'}],
+sections:[
+{h:'The Philosophy of Intrinsic Value',body:'The fundamental principle of value investing: every business has an <strong>intrinsic value</strong> independent of its stock market price. This value is the present value of all cash the business will ever generate for its owners. The stock market sometimes prices businesses above this value (overvalued) and sometimes below it (undervalued). The investor\u2019s job is to estimate intrinsic value and purchase when price < value with sufficient margin of safety.',callout:{label:'The Market as a Voting vs. Weighing Machine',text:'Ben Graham\u2019s observation: "In the short run, the market is a voting machine. In the long run, it is a weighing machine." Short-term prices reflect sentiment. Long-run prices converge on business value. The DCF estimates what the weighing machine will register.'}},
+{h:'The DCF Model: Structure and Mechanics',body:'A DCF has three components:\n\n<strong>1. Explicit forecast period (5\u201310 years):</strong> Project free cash flows using revenue growth, margin assumptions, and CapEx.\n\n<strong>2. Terminal value:</strong> The value of all cash flows beyond the forecast horizon. Often represents 60\u201380% of total DCF value \u2014 making the terminal assumptions the most important and most uncertain.\n\n<strong>3. Discount rate (WACC):</strong> The blended cost of capital reflecting debt and equity.',formula:'WACC = (E/V) \u00d7 Re + (D/V) \u00d7 Rd \u00d7 (1 \u2212 Tax Rate)\n\nCost of Equity (CAPM): Re = Rf + \u03b2 \u00d7 (Rm \u2212 Rf)\n\nDCF Value = \u03a3[FCFt / (1+WACC)^t] + [TV / (1+WACC)^n]'},
+{h:'Terminal Value: The Dominant Assumption',body:'<strong>Gordon Growth Model:</strong> TV = FCF_final \u00d7 (1 + g) / (WACC \u2212 g). The perpetual growth rate g should be below long-run GDP growth (~2\u20133%) for stable businesses.',callout:{label:'The 60\u201380% Rule',text:'Terminal value typically represents 60\u201380% of total DCF value. This means two numbers \u2014 terminal growth rate and WACC \u2014 determine most of your output. Change them in the model below and watch the implied share price move. This sensitivity is why margin of safety matters.'}},
+{h:'Sensitivity Analysis and Margin of Safety',body:'Because DCF inputs are uncertain, professional analysts produce a range of intrinsic values under different assumptions. The <strong>margin of safety</strong> \u2014 purchasing at a discount to the conservative case \u2014 provides protection against analytical errors. Buffett and Graham typically sought 30\u201350% margins of safety.'}
+],
+table:{headers:['DCF Input','Base Case','Bull Case','Bear Case','Value Impact of 1% Change'],rows:[['Revenue Growth','12%','18%','6%','High'],['EBIT Margin','22%','27%','16%','High'],['Terminal Growth','2.5%','3.5%','1.5%','Very High'],['WACC','9%','8%','11%','Very High'],['CapEx / Revenue','8%','6%','12%','Moderate']]},
+interactive:'dcf',
+modelCompany:'Apex Software \u2014 Discounted Cash Flow Valuation',
+example:{label:'DCF Summary: The Mechanics in One Example',text:'Company: Mid-size software firm. Revenue: $500M. Current FCF: $75M.\nAssumptions: 15% growth yr 1-5, 35% FCF margin by year 5, terminal growth 3%, WACC 10%.\n\nPV of explicit FCFs: <strong>$429M</strong>\nPV of Terminal Value: <strong>$1,371M</strong>\nTotal Intrinsic Value: <strong>$1,800M</strong>\nWith 40% margin of safety: Target purchase price: <strong>$1,080M</strong>'},
+quiz:[{q:'Which component typically represents the largest portion of DCF value?',opts:['Year 1 FCF','Sum of forecast period FCFs','Terminal value','CapEx assumptions'],ans:2,exp:'Terminal value typically represents 60\u201380% because it captures all perpetuity cash flows.'},{q:'If WACC increases from 9% to 11%, intrinsic value will:',opts:['Increase','Remain unchanged','Decrease significantly','Cannot determine'],ans:2,exp:'Higher discount rate reduces present value of all future cash flows \u2014 can reduce value 30\u201350%.'},{q:'WACC represents:',opts:['After-tax cost of debt only','Blended required return on all capital','Risk-free rate plus ERP','Minimum return for shareholders only'],ans:1,exp:'WACC blends cost of equity and after-tax cost of debt.'},{q:'Margin of safety protects against:',opts:['Market volatility only','Errors in intrinsic value estimation','Tax liabilities','Interest rate changes'],ans:1,exp:'Purchasing below estimated intrinsic value creates a buffer for analytical errors.'}]
+},
+l4_4:{hook:"When analysts valued Facebook at $100 billion at IPO, they used comparables \u2014 not a DCF.",
+terms:[{w:'Comparable Company Analysis',d:'Valuing by comparing multiples to a peer group.'},{w:'Control Premium',d:'Additional price (20\u201340%) paid in acquisitions.'}],
+sections:[{h:'The Logic of Relative Valuation',body:'Similar assets should trade at similar prices. Divergences represent mispricing or miscomparison.'}],
+quiz:[{q:'A control premium in acquisitions reflects:',opts:['Legal fees','Value beyond standalone price for synergies and control','Discount for large buyers','Premium for minority stakes'],ans:1,exp:'Control premiums (20\u201340%) represent synergies and strategic positioning.'}]
+},
+l4_5:{hook:"In 1986, Coca-Cola committed: every investment must earn above cost of capital, or money belongs to shareholders.",
+terms:[{w:'ROIC',d:'NOPAT / Invested Capital. Primary measure of business quality.'},{w:'Economic Profit',d:'NOPAT minus (WACC \u00d7 Invested Capital).'}],
+sections:[{h:'The Capital Allocation Framework',body:'Every dollar has five destinations: reinvestment, acquisitions, debt repayment, dividends, or buybacks. The choice depends on ROIC vs WACC.'}],
+quiz:[{q:'A company with ROIC 6% and WACC 9% should primarily:',opts:['Reinvest all earnings','Return capital to shareholders','Acquire businesses','Increase leverage'],ans:1,exp:'When ROIC < WACC, reinvestment destroys value.'}]
+},
+l4_6:{hook:"In 2007, Bernanke said subprime problems were \u2018likely contained.\u2019 The macro signals were visible to those who understood them.",
+terms:[{w:'Business Cycle',d:'Recurring pattern of expansion, peak, contraction, and trough.'},{w:'Yield Curve',d:'Inverted curves have preceded every US recession.'}],
+sections:[{h:'The Business Cycle: Four Regimes',body:'Each cycle phase creates distinct investment environments. Regime awareness determines asset allocation.'}],
+quiz:[{q:'An inverted yield curve historically signals:',opts:['Accelerating growth','High probability of recession in 12\u201324 months','Improving earnings','Stocks more attractive than bonds'],ans:1,exp:'Inverted curves have preceded every US recession since 1955.'}]
+},
+l4_7:{hook:"Soros made $1 billion in a day betting against the pound. It was a thesis: the UK\u2019s rates were incompatible with economic fundamentals.",
+terms:[{w:'Investment Thesis',d:'Structured argument explaining why an investment will outperform.'},{w:'Variant Perception',d:'The specific way your view differs from consensus.'},{w:'Invalidation Condition',d:'Observable event that would prove the thesis wrong.'}],
+sections:[{h:'The Structure of a Complete Investment Thesis',body:'An investment thesis is not a prediction \u2014 it is a structured argument with explicit assumptions, variant perception, and conditions that would prove it wrong.'}],
+quiz:[{q:'Variant perception refers to:',opts:['Having more data','The specific view differing from consensus','Using proprietary models','Being earlier than others'],ans:1,exp:'Without a view that differs from consensus, there is no investment opportunity.'}]
+},
+hf2_l1:{hook:"Buffett: wonderful company at fair price > fair company at wonderful price. Moat is the determinant.",
+terms:[{w:'Economic Moat',d:'Durable structural advantage allowing sustained above-cost returns.'},{w:'Network Effect',d:'Product becomes more valuable as more users join.'}],
+sections:[{h:'Why Moats Matter Before Valuation',body:'Moat analysis determines whether your DCF assumptions are credible or speculative.'}],
+quiz:[{q:'A software company has 95% gross margins and 40% annual churn. Its moat is:',opts:['Wide \u2014 high margins','Narrow \u2014 churn contradicts switching costs','Wide \u2014 network effects','No moat'],ans:1,exp:'40% churn means customers leave readily \u2014 contradicting a switching cost moat.'}]
+},
+hf2_l2:{hook:"Henry Singleton ran Teledyne: 17.9% annualized for 27 years by allocating capital like an investor.",
+terms:[{w:'Capital Allocation',d:'How management deploys the cash the business generates.'},{w:'Owner-Operator',d:'Manager with significant personal equity stake.'}],
+sections:[{h:'Why Management Quality Is an Investment Variable',body:'A business earning 18% ROIC run by a disciplined allocator creates dramatically more value than the same business run by an empire builder.'}],
+quiz:[{q:'A CEO tying 100% of bonus to revenue growth will most likely:',opts:['Maximize per-share value','Grow revenue regardless of ROIC','Return excess capital','Maintain conservative leverage'],ans:1,exp:'Revenue-linked bonuses incentivize growth independent of shareholder value creation.'}]
+},
+hf2_l3:{hook:"Porter published Five Forces in 1980. Few investors can use it to identify mispricings.",
+terms:[{w:'Pricing Power',d:'Ability to raise prices without proportionally losing volume.'},{w:'Capacity Cycle',d:'Recurring pattern of underinvestment causing tight supply, then overinvestment causing collapse.'}],
+sections:[{h:'Industry Structure as Forward-Looking Tool',body:'The question for investors: given current structure, where will margins be in 3\u20135 years?'}],
+quiz:[{q:'An industry consolidates from 12 to 3 players. Most likely implication for survivors:',opts:['Margins unchanged','Rational pricing can emerge, improving margins','Entrants fill the vacuum','Survivors destroy value'],ans:1,exp:'Consolidation reduces rivalry. 3 rational players can maintain price discipline.'}]
+},
+hf2_l4:{hook:"In 2015, Valeant reported $291M net income. Operating cash flow: negative $120M. Stock went from $263 to $11.",
+terms:[{w:'Earnings Quality',d:'Degree to which earnings reflect actual economic performance.'},{w:'Accruals Ratio',d:'(Net Income \u2212 OCF) / Average Assets. Warning signal when high.'}],
+sections:[{h:'Why Earnings Lie and Cash Doesn\u2019t',body:'Cash flow is a bank statement. Money either left the account or it didn\u2019t.'}],
+quiz:[{q:'Net income grew 25% while OCF grew 8% and DSO rose 18 days. This indicates:',opts:['Strong quality','Revenue may be recognized ahead of cash','Heavy investment in receivables','Cash flow error'],ans:1,exp:'Earnings outpacing cash flow plus rising DSO = classic quality deterioration.'}]
+},
+hf2_l5:{hook:"Lehman Brothers had 30:1 leverage. $22B equity was the sliver between solvency and the largest bankruptcy ever.",
+terms:[{w:'Off-Balance-Sheet Liabilities',d:'Obligations not appearing as reported liabilities.'},{w:'Debt Maturity Profile',d:'Schedule of when debt comes due.'}],
+sections:[{h:'The Balance Sheet as a Risk Document',body:'The balance sheet answers the question the income statement cannot: <em>what happens if things go wrong?</em>'}],
+quiz:[{q:'$1B net debt and $3B pension deficit. Appropriate total leverage figure:',opts:['$1B','$4B','$1B plus footnote','$3B'],ans:1,exp:'Pension deficits are real obligations. $1B + $3B = $4B total.'}]
+},
+hf2_l6:{hook:"Daniel Loeb showed Sony\u2019s entertainment division was worth more than the entire company. The info was in the 10-K.",
+terms:[{w:'Sum-of-the-Parts',d:'Valuing each segment independently and summing.'},{w:'Conglomerate Discount',d:'Tendency for diversified companies to trade below segment sum.'}],
+sections:[{h:'Why Segment Analysis Creates Alpha',body:'Markets apply a single blended multiple to companies with segments deserving very different multiples.'}],
+quiz:[{q:'A conglomerate discount exists because:',opts:['Diversified = lower margins','Blended multiples underprice high-quality segments','Higher regulatory scrutiny','Diversification destroys ROIC'],ans:1,exp:'Market applies one multiple to segments deserving very different multiples.'}]
+},
+hf2_l7:{hook:"We are long Microsoft. The stock is up 40%. We are also long Microsoft. We believe it is still cheap.",
+terms:[{w:'Variant Perception',d:'Specific analytical view differing from consensus.'},{w:'Time Arbitrage',d:'Exploiting market\u2019s over-focus on near-term results.'}],
+sections:[{h:'Why Variant Perception Is the Only Path to Alpha',body:'If your view is identical to consensus, buying generates only the market return. Excess return requires being right when the market is wrong.'}],
+quiz:[{q:'An investor buys a high-quality business at consensus valuation. Most likely outcome:',opts:['Outperformance','Market return \u2014 quality is priced in','Underperformance','Depends on next quarter'],ans:1,exp:'No variant = no edge. Expected return equals the market return.'}]
+},
+hf2_l8:{hook:"David Einhorn published a 140-page presentation on Lehman Brothers. The market dismissed it. He shorted it. The company failed precisely as described.",
+terms:[{w:'Short Thesis',d:'Structured argument that a security is overvalued.'},{w:'Short Squeeze',d:'Rapid price increase forcing shorts to cover.'}],
+sections:[{h:'The Three Types of Short Thesis',body:'<strong>Overvaluation:</strong> Business is real but priced too high. <strong>Fundamental deterioration:</strong> Competitive position eroding. <strong>Accounting/fraud:</strong> Reported numbers are materially false.'}],
+quiz:[{q:'Most structurally challenging aspect of short selling:',opts:['Requires more analysis','Capped upside (100%) and unlimited downside','Higher taxes','Only for hedge funds'],ans:1,exp:'A short can lose multiples of initial investment if stock rises. Sizing and catalyst are critical.'}]
+},
+hf2_l9:{hook:"Julian Robertson generated 32% annualized returns for 20 years. His process was simple to describe and nearly impossible to execute.",
+terms:[{w:'Investment Memo',d:'Written document articulating the full thesis for a position.'},{w:'Position Sizing',d:'Capital allocation calibrated by conviction, EV, and downside risk.'}],
+sections:[{h:'The Investment Memo as a Discipline Tool',body:'Writing forces precision. Vague convictions become embarrassingly obvious when committed to paper.'}],
+quiz:[{q:'Primary purpose of writing an investment memo:',opts:['Compliance','Force precision, create accountability, pre-commit to exit conditions','Communicate to management','Document valuation'],ans:1,exp:'The memo imposes discipline on your own decision-making process.'}]
+}
+};
+
+const GLOSSARY=[
+  {w:'Alpha',d:'Return exceeding what systematic risk exposure predicts.'},{w:'Annuity',d:'Series of equal cash flows at regular intervals.'},
+  {w:'Antifragility',d:'Property of gaining from volatility and disorder.'},{w:'Asset Allocation',d:'Distribution of portfolio across asset classes.'},
+  {w:'Beta',d:'Sensitivity of returns relative to a market benchmark.'},{w:'Black Swan',d:'High-impact, unpredictable event rationalized in retrospect.'},
+  {w:'CAGR',d:'Compound Annual Growth Rate.'},{w:'Compounding',d:'Earning returns on previously earned returns.'},
+  {w:'Correlation',d:'How two assets move together. Range: -1 to +1.'},{w:'DCF',d:'Discounted Cash Flow valuation method.'},
+  {w:'Diversification',d:'Spreading investments across uncorrelated assets.'},{w:'Drawdown',d:'Decline from peak value to subsequent trough.'},
+  {w:'ERP',d:'Equity Risk Premium \u2014 excess return equities provide above risk-free rate.'},{w:'Expected Value',d:'Probability-weighted average of all possible outcomes.'},
+  {w:'FCF',d:'Free Cash Flow \u2014 operating cash flow minus capital expenditures.'},{w:'Inflation',d:'General price increase reducing purchasing power.'},
+  {w:'Intrinsic Value',d:'PV of all future cash flows a business will generate.'},{w:'Kelly Criterion',d:'Formula for optimal position sizing.'},
+  {w:'Leverage',d:'Use of debt to amplify potential returns. Amplifies both gains and losses.'},{w:'Loss Aversion',d:'Feeling losses ~2\u00d7 as intensely as equivalent gains.'},
+  {w:'Margin of Safety',d:'Discount between purchase price and estimated intrinsic value.'},{w:'Maximum Drawdown',d:'Largest historical peak-to-trough decline.'},
+  {w:'Net Worth',d:'Total assets minus total liabilities.'},{w:'P/E Ratio',d:'Price divided by earnings per share.'},
+  {w:'Present Value',d:'Current worth of a future sum, discounted at required return.'},{w:'ROIC',d:'Return on Invested Capital \u2014 NOPAT / Invested Capital.'},
+  {w:'Savings Rate',d:'Savings as percentage of gross income.'},{w:'Sharpe Ratio',d:'(Return \u2212 Risk-Free Rate) / Standard Deviation.'},
+  {w:'Terminal Value',d:'Value of all cash flows beyond the DCF forecast period.'},{w:'Volatility Drag',d:'Reduction in compounded returns caused by variance.'},
+  {w:'WACC',d:'Weighted Average Cost of Capital \u2014 blended required return on all capital.'},
+];
+
+const COURSE_LESSONS={
+  ib1:['l1_1','l1_2','l1_3','l1_4','l1_5','l1_6','l1_7'],
+  ib2:['l4_1','l4_2','l4_3','l4_4'],
+  ib3:['l4_5','l4_6','l4_7'],
+  pe1:['l1_1','l1_2','l1_3','l1_4'],
+  pe2:['l4_3','l4_4','l4_5'],
+  hf1:['l2_1','l2_2','l2_3','l2_4','l2_5','l2_6','l2_7'],
+  hf2:['hf2_l1','hf2_l2','hf2_l3','hf2_l4','hf2_l5','hf2_l6','hf2_l7','hf2_l8','hf2_l9'],
+  hf3:['l3_1','l3_2','l3_3','l3_4'],
+  hf4:['l3_5','l3_6','l3_7','l4_6'],
+  cf1:['l1_1','l1_3','l1_4','l1_6'],
+  cf2:['l1_2','l1_5','l4_1','l4_2'],
+  cf3:['l4_3','l4_4','l4_5'],
+  vc1:['l2_1','l2_7','l3_3'],
+  vc2:['l2_2','l2_3','l3_1','l3_2'],
+  vc3:['l4_3','l4_4','l4_5'],
+};
+
+const TRACKS=[
+  {id:'ib',label:'Investment Banking',short:'IB',icon:'\u2B21',accent:'#2563eb',accentBg:'rgba(37,99,235,.08)',
+   desc:'Master the complete IB skill set \u2014 financial modeling, M&A, LBO, pitch books, and live deal execution.',
+   outcomes:['Build 3-statement, DCF, LBO, and merger models','Read and analyze 10-Ks like a senior analyst','Construct and present a full pitch book','Structure and price leveraged buyout transactions'],
+   prereqs:['No prerequisites for Course 1','Excel familiarity helpful'],
+   courses:[
+    {id:'ib1',title:'Financial Foundations',pretitle:'Course 1 of 5',level:'Foundations',diff:'Introductory',hours:'8 hrs',modules:7,lessons:7,prereq:null,prereqLabel:null,hasContent:true,
+     desc:'Time value of money, three-statement literacy, ratio analysis, and accounting framework.',
+     skills:['TVM','Three Statements','Ratio Analysis','Working Capital','Accounting'],
+     outcomes:['Understand how the three statements link','Calculate key ratios','Identify red flags'],
+     moduleList:[{n:1,t:'Time Value of Money',l:1},{n:2,t:'Cash Flow & Savings',l:1},{n:3,t:'Debt & Credit',l:1},{n:4,t:'Balance Sheet',l:1},{n:5,t:'Inflation & Real Returns',l:1},{n:6,t:'Taxes',l:1},{n:7,t:'Insurance & Risk',l:1}]},
+    {id:'ib2',title:'Financial Modeling I \u2014 DCF & Valuation',pretitle:'Course 2 of 5',level:'Core',diff:'Intermediate',hours:'12 hrs',modules:4,lessons:4,prereq:'ib1',prereqLabel:'Financial Foundations',hasContent:true,
+     desc:'Build a complete 3-statement model and DCF valuation. Every cell, every formula explained.',
+     skills:['3-Statement Analysis','DCF Construction','WACC','Sensitivity Analysis','Comps'],
+     outcomes:['Analyze financial statements professionally','Build a DCF from scratch','Construct a full comps table'],
+     moduleList:[{n:1,t:'Reading Financial Statements',l:1},{n:2,t:'Financial Ratio Analysis',l:1},{n:3,t:'Valuation: Intrinsic Value & DCF',l:1},{n:4,t:'Valuation: Multiples & Comparables',l:1}]},
+    {id:'ib3',title:'Financial Modeling II \u2014 M&A & Capital',pretitle:'Course 3 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:3,lessons:3,prereq:'ib2',prereqLabel:'Financial Modeling I',hasContent:true,
+     desc:'Capital allocation frameworks, macroeconomic regime analysis, and complete investment thesis.',
+     skills:['Capital Allocation','ROIC & EVA','Macro Frameworks','Investment Thesis'],
+     outcomes:['Apply ROIC-WACC framework','Use macro regime analysis','Write a complete thesis'],
+     moduleList:[{n:1,t:'Capital Allocation',l:1},{n:2,t:'Macroeconomics & Cycles',l:1},{n:3,t:'Investment Thesis',l:1}]},
+    {id:'ib4',title:'LBO Modeling',pretitle:'Course 4 of 5',level:'Advanced',diff:'Advanced',hours:'11 hrs',modules:5,lessons:22,prereq:'ib3',prereqLabel:'M&A & Capital',hasContent:false,
+     desc:'Build a leveraged buyout model from scratch.',skills:['LBO Construction','Debt Structuring','IRR & MOIC'],
+     outcomes:['Build a complete LBO model','Structure a leveraged buyout','Calculate sponsor IRR and MOIC'],
+     moduleList:[{n:1,t:'LBO Fundamentals',l:4},{n:2,t:'Sources & Uses',l:4},{n:3,t:'Operating Model',l:5},{n:4,t:'Debt Schedule',l:5},{n:5,t:'Returns Analysis',l:4}]},
+    {id:'ib5',title:'Pitch Book & Deal Execution',pretitle:'Course 5 of 5',level:'Applied',diff:'Advanced',hours:'9 hrs',modules:4,lessons:16,prereq:'ib4',prereqLabel:'LBO Modeling',hasContent:false,
+     desc:'Full deal workflow \u2014 pitch books, CIM analysis, management presentations.',skills:['Pitch Books','CIM Analysis','Deal Process'],
+     outcomes:['Build a complete pitch book','Analyze a CIM','Manage sell-side M&A process'],
+     moduleList:[{n:1,t:'Pitch Book Architecture',l:4},{n:2,t:'Sell-Side M&A',l:4},{n:3,t:'Capital Markets',l:4},{n:4,t:'Full Deal Simulation',l:4}]},
+  ]},
+  {id:'pe',label:'Private Equity',short:'PE',icon:'\u25C8',accent:'#7c3aed',accentBg:'rgba(124,58,237,.08)',
+   desc:'From LBO construction to portfolio company value creation, operational improvement, and exit strategy.',
+   outcomes:['Source and structure PE investments','Build operating improvement models','Manage portfolio companies','Understand LP/GP economics'],
+   prereqs:['Financial Foundations recommended','LBO experience helpful for Course 2+'],
+   courses:[
+    {id:'pe1',title:'PE Fundamentals',pretitle:'Course 1 of 5',level:'Foundations',diff:'Introductory',hours:'7 hrs',modules:4,lessons:4,prereq:null,prereqLabel:null,hasContent:true,
+     desc:'PE industry structure, fund economics, LP/GP relationships.',skills:['Fund Structure','LP/GP Economics','Investment Mandates'],
+     outcomes:['Explain PE fund structure','Differentiate buyout, growth, distressed','Understand TVM as PE foundation'],
+     moduleList:[{n:1,t:'Time Value of Money',l:1},{n:2,t:'Cash Flow',l:1},{n:3,t:'Debt & Credit',l:1},{n:4,t:'Balance Sheet',l:1}]},
+    {id:'pe2',title:'LBO Modeling & Deal Structuring',pretitle:'Course 2 of 5',level:'Core',diff:'Intermediate',hours:'13 hrs',modules:3,lessons:3,prereq:'pe1',prereqLabel:'PE Fundamentals',hasContent:true,
+     desc:'Valuation frameworks for PE deal analysis.',skills:['DCF Valuation','Comps','Capital Allocation'],
+     outcomes:['Apply DCF to PE targets','Use ROIC-WACC framework','Analyze capital allocation from PE perspective'],
+     moduleList:[{n:1,t:'DCF Valuation',l:1},{n:2,t:'Multiples & Comparables',l:1},{n:3,t:'Capital Allocation',l:1}]},
+    {id:'pe3',title:'Due Diligence',pretitle:'Course 3 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:5,lessons:20,prereq:'pe2',prereqLabel:'LBO Modeling',hasContent:false,
+     desc:'Commercial, financial, and operational due diligence.',skills:['Commercial DD','Financial DD','Investment Memo'],
+     outcomes:['Conduct due diligence','Write investment memorandum','Assess management quality'],
+     moduleList:[{n:1,t:'DD Process',l:4},{n:2,t:'Market Analysis',l:4},{n:3,t:'Financial DD',l:4},{n:4,t:'Management Assessment',l:4},{n:5,t:'Investment Memo',l:4}]},
+    {id:'pe4',title:'Value Creation',pretitle:'Course 4 of 5',level:'Advanced',diff:'Advanced',hours:'9 hrs',modules:4,lessons:16,prereq:'pe3',prereqLabel:'Due Diligence',hasContent:false,
+     desc:'Post-acquisition value creation.',skills:['100-Day Plans','Operational Improvement','Add-on M&A'],
+     outcomes:['Design 100-day plan','Model operational improvements','Structure management incentives'],
+     moduleList:[{n:1,t:'100-Day Plan',l:4},{n:2,t:'Revenue & Margin',l:4},{n:3,t:'Add-on Acquisitions',l:4},{n:4,t:'Board Governance',l:4}]},
+    {id:'pe5',title:'Exit Strategy & Fund Management',pretitle:'Course 5 of 5',level:'Applied',diff:'Advanced',hours:'8 hrs',modules:4,lessons:14,prereq:'pe4',prereqLabel:'Value Creation',hasContent:false,
+     desc:'Exit process and fund lifecycle management.',skills:['Exit Process','IPO Preparation','LP Reporting'],
+     outcomes:['Manage exit process','Prepare LP reports','Monitor portfolio performance'],
+     moduleList:[{n:1,t:'Exit Strategy',l:4},{n:2,t:'Sale Process',l:4},{n:3,t:'IPO Execution',l:3},{n:4,t:'Fund Management',l:3}]},
+  ]},
+  {id:'hf',label:'Hedge Fund / Public Markets',short:'HF',icon:'\u25CE',accent:'#059669',accentBg:'rgba(5,150,105,.08)',
+   desc:'Long/short equity, macro frameworks, portfolio construction, and generating actionable investment ideas.',
+   outcomes:['Generate long and short ideas with full thesis','Construct risk-controlled equity portfolio','Apply macro frameworks','Build quantitative screens'],
+   prereqs:['No prerequisites for Course 1','Financial Foundations recommended for Course 2+'],
+   courses:[
+    {id:'hf1',title:'Investment Fundamentals',pretitle:'Course 1 of 5',level:'Foundations',diff:'Introductory',hours:'9 hrs',modules:7,lessons:7,prereq:null,prereqLabel:null,hasContent:true,
+     desc:'Asset classes, market structure, portfolio theory, and foundational frameworks.',skills:['Asset Classes','Market Mechanics','Portfolio Theory','Risk & Return'],
+     outcomes:['Explain risk-return tradeoff','Apply MPT to portfolios','Understand market pricing'],
+     moduleList:[{n:1,t:'Asset Classes',l:1},{n:2,t:'Compounding',l:1},{n:3,t:'Equity Markets',l:1},{n:4,t:'Fixed Income',l:1},{n:5,t:'Portfolio Construction',l:1},{n:6,t:'Index Funds & ETFs',l:1},{n:7,t:'Alternatives',l:1}]},
+    {id:'hf2',title:'Fundamental Equity Analysis',pretitle:'Course 2 of 5',level:'Core',diff:'Intermediate',hours:'18 hrs',modules:3,lessons:9,prereq:'hf1',prereqLabel:'Investment Fundamentals',hasContent:true,
+     desc:'Complete HF equity toolkit \u2014 moats, earnings quality, segment analysis, thesis construction.',skills:['Moat Analysis','Earnings Quality','Balance Sheet Forensics','Short Thesis','Investment Memo'],
+     outcomes:['Identify durable competitive advantages','Detect earnings manipulation','Build complete investment thesis'],
+     moduleList:[{n:1,t:'Business Quality Assessment',l:3},{n:2,t:'Financial Statement Analysis',l:3},{n:3,t:'Variant Perception & Thesis',l:3}]},
+    {id:'hf3',title:'Short Selling & Risk Analysis',pretitle:'Course 3 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:4,lessons:4,prereq:'hf2',prereqLabel:'Fundamental Equity Analysis',hasContent:true,
+     desc:'Risk-return, drawdown, expected value, and behavioral biases.',skills:['Risk-Return','Drawdown & VaR','Expected Value','Behavioral Finance'],
+     outcomes:['Quantify investment risk','Apply expected value thinking','Identify behavioral biases'],
+     moduleList:[{n:1,t:'Risk-Return Tradeoff',l:1},{n:2,t:'Volatility & Drawdown',l:1},{n:3,t:'Expected Value',l:1},{n:4,t:'Behavioral Biases',l:1}]},
+    {id:'hf4',title:'Macro, Models & Tail Risk',pretitle:'Course 4 of 5',level:'Advanced',diff:'Advanced',hours:'11 hrs',modules:4,lessons:4,prereq:'hf3',prereqLabel:'Short Selling & Risk',hasContent:true,
+     desc:'Mental models, stress testing, tail risk, and macroeconomic frameworks.',skills:['Mental Models','Scenario Analysis','Tail Risk','Black Swan Theory'],
+     outcomes:['Apply multi-disciplinary mental models','Stress-test portfolios','Understand macro regime changes'],
+     moduleList:[{n:1,t:'Mental Models',l:1},{n:2,t:'Scenario Analysis',l:1},{n:3,t:'Tail Risk & Black Swans',l:1},{n:4,t:'Macroeconomics & Cycles',l:1}]},
+    {id:'hf5',title:'Portfolio Management',pretitle:'Course 5 of 5',level:'Applied',diff:'Advanced',hours:'9 hrs',modules:4,lessons:16,prereq:'hf4',prereqLabel:'Macro & Models',hasContent:false,
+     desc:'Running a book \u2014 position sizing, risk limits, performance attribution.',skills:['Position Sizing','Risk Limits','Performance Attribution'],
+     outcomes:['Manage risk-controlled equity book','Monitor VaR and drawdown','Prepare quarterly investor letters'],
+     moduleList:[{n:1,t:'Position Sizing',l:4},{n:2,t:'Risk Management',l:4},{n:3,t:'Performance Attribution',l:4},{n:4,t:'Investor Relations',l:4}]},
+  ]},
+  {id:'cf',label:'Corporate Finance / FP&A',short:'CF',icon:'\u25C7',accent:'#d97706',accentBg:'rgba(217,119,6,.08)',
+   desc:'Internal finance function \u2014 budgeting, forecasting, capital allocation, and decision-support analytics.',
+   outcomes:['Build and manage budgets and forecasts','Present analysis to C-suite','Evaluate capital allocation with ROI frameworks','Lead investor relations'],
+   prereqs:['No prerequisites for Course 1','Excel proficiency recommended'],
+   courses:[
+    {id:'cf1',title:'Accounting & Financial Reporting',pretitle:'Course 1 of 5',level:'Foundations',diff:'Introductory',hours:'8 hrs',modules:4,lessons:4,prereq:null,prereqLabel:null,hasContent:true,
+     desc:'TVM, debt mechanics, balance sheet construction, and tax strategy.',skills:['GAAP','TVM','Debt Mechanics','Balance Sheet','Tax Strategy'],
+     outcomes:['Apply TVM to corporate decisions','Construct balance sheets','Understand debt and tax optimization'],
+     moduleList:[{n:1,t:'Time Value of Money',l:1},{n:2,t:'Debt & Credit',l:1},{n:3,t:'Balance Sheet',l:1},{n:4,t:'Taxes',l:1}]},
+    {id:'cf2',title:'FP&A: Budgeting & Forecasting',pretitle:'Course 2 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:4,lessons:4,prereq:'cf1',prereqLabel:'Accounting',hasContent:true,
+     desc:'Driver-based budgeting, variance analysis, and management reporting.',skills:['Driver-Based Budgeting','Variance Analysis','Management Reporting'],
+     outcomes:['Build driver-based budget','Understand inflation impact','Produce management reporting'],
+     moduleList:[{n:1,t:'Cash Flow & Savings',l:1},{n:2,t:'Inflation',l:1},{n:3,t:'Financial Statements',l:1},{n:4,t:'Ratio Analysis',l:1}]},
+    {id:'cf3',title:'Capital Allocation & Investment Analysis',pretitle:'Course 3 of 5',level:'Core',diff:'Intermediate',hours:'9 hrs',modules:3,lessons:3,prereq:'cf2',prereqLabel:'FP&A Budgeting',hasContent:true,
+     desc:'DCF valuation, comparable multiples, and ROIC-WACC framework.',skills:['NPV & IRR','Capital Budgeting','DCF','ROIC & EVA'],
+     outcomes:['Evaluate capital investments with DCF','Build rigorous business cases','Apply ROIC-WACC framework'],
+     moduleList:[{n:1,t:'DCF Valuation',l:1},{n:2,t:'Multiples & Comparables',l:1},{n:3,t:'Capital Allocation',l:1}]},
+    {id:'cf4',title:'Treasury & Working Capital',pretitle:'Course 4 of 5',level:'Advanced',diff:'Advanced',hours:'8 hrs',modules:4,lessons:16,prereq:'cf3',prereqLabel:'Capital Allocation',hasContent:false,
+     desc:'Cash management, liquidity forecasting, hedging.',skills:['Cash Management','Liquidity','FX Hedging'],
+     outcomes:['Build 13-week cash forecast','Design FX hedging program','Optimize working capital'],
+     moduleList:[{n:1,t:'Treasury',l:4},{n:2,t:'Debt Capital Markets',l:4},{n:3,t:'Hedging',l:4},{n:4,t:'Working Capital',l:4}]},
+    {id:'cf5',title:'Investor Relations',pretitle:'Course 5 of 5',level:'Applied',diff:'Advanced',hours:'8 hrs',modules:4,lessons:14,prereq:'cf4',prereqLabel:'Treasury',hasContent:false,
+     desc:'Earnings calls, investor days, and financial communications.',skills:['Earnings Calls','Investor Days','Strategic Planning'],
+     outcomes:['Execute quarterly earnings','Run investor day','Communicate strategy to markets'],
+     moduleList:[{n:1,t:'IR Fundamentals',l:4},{n:2,t:'Earnings Process',l:4},{n:3,t:'Investor Days',l:3},{n:4,t:'Strategic Finance',l:3}]},
+  ]},
+  {id:'vc',label:'Venture Capital',short:'VC',icon:'\u25EC',accent:'#0ea5e9',accentBg:'rgba(14,165,233,.08)',
+   desc:'Early-stage investing \u2014 sourcing, founder assessment, term sheets, and power-law economics.',
+   outcomes:['Evaluate early-stage companies','Negotiate term sheets','Manage venture portfolio','Understand fund economics'],
+   prereqs:['No prerequisites for Course 1'],
+   courses:[
+    {id:'vc1',title:'VC Fundamentals',pretitle:'Course 1 of 5',level:'Foundations',diff:'Introductory',hours:'7 hrs',modules:3,lessons:3,prereq:null,prereqLabel:null,hasContent:true,
+     desc:'VC industry, power-law returns, and foundational analytical frameworks.',skills:['VC Fund Structure','Power-Law','Expected Value'],
+     outcomes:['Explain VC fund economics','Understand power-law distributions','Apply expected value thinking'],
+     moduleList:[{n:1,t:'Asset Classes',l:1},{n:2,t:'Alternatives',l:1},{n:3,t:'Expected Value',l:1}]},
+    {id:'vc2',title:'Startup Evaluation',pretitle:'Course 2 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:4,lessons:4,prereq:'vc1',prereqLabel:'VC Fundamentals',hasContent:true,
+     desc:'Evaluating startups \u2014 compounding, market mechanics, risk-return.',skills:['Compounding','Market Mechanics','Risk-Return'],
+     outcomes:['Apply return analysis to startups','Understand equity market structure','Analyze risk-return tradeoffs'],
+     moduleList:[{n:1,t:'Compounding',l:1},{n:2,t:'Equity Markets',l:1},{n:3,t:'Risk-Return',l:1},{n:4,t:'Drawdown',l:1}]},
+    {id:'vc3',title:'Startup Valuation',pretitle:'Course 3 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:3,lessons:3,prereq:'vc2',prereqLabel:'Startup Evaluation',hasContent:true,
+     desc:'DCF, multiples, and capital allocation for portfolio decisions.',skills:['VC Valuation','Revenue Multiples','Capital Allocation'],
+     outcomes:['Apply DCF to early-stage companies','Use ROIC-WACC for reinvestment decisions','Construct venture investment thesis'],
+     moduleList:[{n:1,t:'DCF Valuation',l:1},{n:2,t:'Multiples',l:1},{n:3,t:'Capital Allocation',l:1}]},
+    {id:'vc4',title:'Portfolio Management',pretitle:'Course 4 of 5',level:'Advanced',diff:'Advanced',hours:'9 hrs',modules:4,lessons:16,prereq:'vc3',prereqLabel:'Valuation',hasContent:false,
+     desc:'Follow-on decisions, reserves, board governance.',skills:['Follow-on Framework','Reserve Allocation','Board Governance'],
+     outcomes:['Build reserve model','Apply follow-on framework','Provide board-level support'],
+     moduleList:[{n:1,t:'Reserves & Follow-ons',l:4},{n:2,t:'Board Governance',l:4},{n:3,t:'Portfolio Support',l:4},{n:4,t:'Portfolio Monitoring',l:4}]},
+    {id:'vc5',title:'Exits, Returns & Fund Ops',pretitle:'Course 5 of 5',level:'Applied',diff:'Advanced',hours:'8 hrs',modules:4,lessons:14,prereq:'vc4',prereqLabel:'Portfolio Management',hasContent:false,
+     desc:'Exit processes, return metrics, and fund lifecycle.',skills:['Exit Processes','DPI/TVPI/IRR','Carry Waterfall'],
+     outcomes:['Manage IPO/M&A exit','Calculate DPI, TVPI, IRR','Execute Fund II fundraise'],
+     moduleList:[{n:1,t:'Exit Processes',l:4},{n:2,t:'Return Metrics',l:4},{n:3,t:'Secondary Markets',l:3},{n:4,t:'Fund Lifecycle',l:3}]},
+  ]},
+];
+// ─── UPGRADED SPREADSHEET-STYLE DCF MODEL ─────────────────────────────────────
+function DCFModel({companyName}){
+  const defaults={
+    baseRev:500, g:[18,16,14,12,10],
+    ebitMargin:[22,22,22,22,22], taxRate:25,
+    capexPct:8, nwcPct:3,
+    wacc:9.5, termGrowth:3.0,
+    shares:85, netDebt:200, curPrice:32.00
+  };
+  const [inp,setInp]=React.useState({...defaults});
+  const [showOrientation,setShowOrientation]=React.useState(false);
+  const [showFormulas,setShowFormulas]=React.useState(false);
+  const [showSens,setShowSens]=React.useState(true);
+  const [hover,setHover]=React.useState(null);
+  const [activeCell,setActiveCell]=React.useState(null);
+
+  function upd(path,val){
+    const n=parseFloat(val);
+    if(isNaN(n))return;
+    setInp(p=>{
+      const next={...p};
+      if(Array.isArray(path)){
+        const arr=[...next[path[0]]];
+        arr[path[1]]=n;
+        next[path[0]]=arr;
+      } else {
+        next[path]=n;
+      }
+      return next;
+    });
+  }
+
+  // ── COMPUTE ──
+  const model=React.useMemo(()=>{
+    const {baseRev,g,ebitMargin,taxRate,capexPct,nwcPct,wacc,termGrowth,shares,netDebt}=inp;
+    const w=wacc/100, tg=termGrowth/100, tax=taxRate/100;
+    const cp=capexPct/100, nw=nwcPct/100;
+
+    let revs=[baseRev], ebit=[], nopat=[], capex=[], dwc=[], fcf=[], df=[], pvFcf=[];
+    for(let i=0;i<5;i++){
+      const rev=revs[i]*(1+g[i]/100);
+      revs.push(rev);
+      const eb=rev*(ebitMargin[i]/100);
+      const np=eb*(1-tax);
+      const cx=rev*cp;
+      const wc=rev*nw;
+      const fc=np-cx-wc;
+      const d=1/Math.pow(1+w,i+1);
+      ebit.push(eb);
+      nopat.push(np);
+      capex.push(cx);
+      dwc.push(wc);
+      fcf.push(fc);
+      df.push(d);
+      pvFcf.push(fc*d);
+    }
+
+    const lastFcf=fcf[4];
+    const tv=lastFcf*(1+tg)/(w-tg);
+    const pvTv=tv*df[4];
+    const sumPvFcf=pvFcf.reduce((a,b)=>a+b,0);
+    const ev=sumPvFcf+pvTv;
+    const eqVal=ev-netDebt;
+    const ivps=eqVal/shares;
+    const tvPctEV=pvTv/ev*100;
+    const upside=(ivps-inp.curPrice)/inp.curPrice*100;
+    const revGrowthY5=revs[5];
+    const impliedRevCAGR=(Math.pow(revGrowthY5/baseRev,1/5)-1)*100;
+
+    return{revs,ebit,nopat,capex,dwc,fcf,df,pvFcf,tv,pvTv,sumPvFcf,ev,eqVal,ivps,tvPctEV,upside,impliedRevCAGR};
+  },[inp]);
+
+  // ── SENSITIVITY ──
+  const sensData=React.useMemo(()=>{
+    const wRange=[-2,-1,-0.5,0,0.5,1,2].map(d=>inp.wacc+d);
+    const tgRange=[-1.5,-1,-0.5,0,0.5,1,1.5].map(d=>inp.termGrowth+d);
+    return{wRange,tgRange,grid:wRange.map(w=>{
+      const wi=w/100;
+      return tgRange.map(tg=>{
+        if(tg/100>=wi)return null;
+        const lastFcf=model.fcf[4];
+        const tv2=lastFcf*(1+tg/100)/(wi-tg/100);
+        const pvTv2=tv2*model.df[4]*(Math.pow(1+inp.wacc/100,5)/Math.pow(1+wi,5));
+        // Recompute PV of FCFs with new WACC
+        let spv=0;
+        for(let i=0;i<5;i++){spv+=model.fcf[i]/Math.pow(1+wi,i+1);}
+        const pvTvNew=tv2/Math.pow(1+wi,5);
+        const evN=spv+pvTvNew;
+        const eqN=evN-inp.netDebt;
+        return(eqN/inp.shares);
+      });
+    })};
+  },[inp,model]);
+
+  // ── FORMATTING ──
+  const fM=(n)=>n>=1000?`$${(n/1000).toFixed(1)}B`:n>=0?`$${n.toFixed(1)}M`:`($${Math.abs(n).toFixed(1)}M)`;
+  const fB=(n)=>`$${(n/1000).toFixed(2)}B`;
+  const fP=(n)=>`${n.toFixed(1)}%`;
+  const fS=(n)=>`$${n.toFixed(2)}`;
+  const fX=(n)=>`${n.toFixed(3)}x`;
+
+  const BLUE='#1e40af';
+  const BLUE_BG='rgba(37,99,235,.06)';
+  const BLUE_BORDER='rgba(37,99,235,.25)';
+  const HD_BG='#09090e';
+  const SEC_BG='#f1f0ec';
+  const ROW_ALT='rgba(248,247,244,.6)';
+
+  const TOOLTIPS={
+    rev:'Revenue = Prior Year Revenue × (1 + Growth Rate). The top line of the business.',
+    gRate:'Revenue growth rate — how fast the company is growing year over year.',
+    ebit:'EBIT = Revenue × EBIT Margin. Operating profit before interest and taxes.',
+    ebitM:'EBIT Margin — operating profitability as a percentage of revenue.',
+    nopat:'NOPAT = EBIT × (1 − Tax Rate). Net Operating Profit After Tax.',
+    capex:'Capital Expenditure = Revenue × CapEx %. Investment in long-lived assets.',
+    dwc:'Change in Net Working Capital = Revenue × NWC %. Cash tied up in operations.',
+    fcf:'Free Cash Flow = NOPAT − CapEx − ΔNWC. Cash available to all capital providers.',
+    df:'Discount Factor = 1/(1+WACC)^n. Converts future cash to present value.',
+    pvFcf:'PV of FCF = FCF × Discount Factor. What each year\'s cash flow is worth today.',
+    tv:'Terminal Value = FCF₅×(1+g)/(WACC−g). Value of all cash flows beyond Year 5.',
+    pvTv:'PV of Terminal Value = TV/(1+WACC)⁵. Terminal value in today\'s dollars.',
+    ev:'Enterprise Value = Σ PV of FCFs + PV of Terminal Value. Total business value.',
+    eqVal:'Equity Value = Enterprise Value − Net Debt. Value belonging to shareholders.',
+    ivps:'Implied Share Price = Equity Value / Shares Outstanding.',
+  };
+  const FORMULAS={
+    rev:'= Prior Year Rev × (1 + Growth %)',
+    ebit:'= Revenue × EBIT Margin %',
+    nopat:'= EBIT × (1 − Tax Rate)',
+    capex:'= Revenue × CapEx %',
+    dwc:'= Revenue × NWC %',
+    fcf:'= NOPAT − CapEx − ΔNWC',
+    df:'= 1 / (1 + WACC)^Year',
+    pvFcf:'= FCF × Discount Factor',
+  };
+
+  // ── CELL COMPONENTS ──
+  function EditCell({value,field,idx,min=-100,max=100,step=0.5,suffix='',prefix=''}){
+    const key=idx!==undefined?`${field}_${idx}`:field;
+    const isActive=activeCell===key;
+    const path=idx!==undefined?[field,idx]:field;
+    // Validation
+    let invalid=false, errMsg='';
+    if(field==='wacc'&&value>30){invalid=true;errMsg='Max 30%';}
+    if(field==='termGrowth'&&value>=inp.wacc){invalid=true;errMsg='Must be < WACC';}
+    if((field==='g')&&Math.abs(value)>100){invalid=true;errMsg='Max ±100%';}
+    return(
+      <td onClick={()=>setActiveCell(key)} style={{
+        background:BLUE_BG, color:invalid?'#dc2626':BLUE, fontWeight:600,
+        fontFamily:'var(--f-mono)', fontSize:'11px', padding:'5px 8px',
+        cursor:'pointer', minWidth:'68px', textAlign:'right',
+        outline:isActive?`2px solid ${BLUE}`:invalid?'2px solid #dc2626':'1px solid '+BLUE_BORDER,
+        outlineOffset:'-1px', position:'relative', whiteSpace:'nowrap'
+      }}>
+        {isActive?(
+          <input type="number" value={value} min={min} max={max} step={step}
+            autoFocus
+            onChange={e=>upd(path,e.target.value)}
+            onBlur={()=>setActiveCell(null)}
+            onKeyDown={e=>{if(e.key==='Enter'||e.key==='Tab'){e.preventDefault();setActiveCell(null);}}}
+            style={{width:'52px',border:'none',background:'transparent',color:BLUE,
+              fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,
+              textAlign:'right',outline:'none'}}/>
+        ):(
+          <span>{prefix}{typeof value==='number'?value.toFixed(1):value}{suffix}</span>
+        )}
+        {invalid&&!isActive&&<div style={{position:'absolute',bottom:'-14px',right:'2px',fontSize:'8px',color:'#dc2626',whiteSpace:'nowrap'}}>{errMsg}</div>}
+      </td>
+    );
+  }
+
+  function OutCell({value,highlight,bold,dim}){
+    return(
+      <td style={{
+        color:highlight?'#059669':dim?'var(--text4)':'var(--text1)',
+        fontFamily:'var(--f-mono)', fontSize:'11px', padding:'5px 8px',
+        textAlign:'right', fontWeight:bold?700:400, whiteSpace:'nowrap',
+        background:highlight?'rgba(5,150,105,.03)':'transparent'
+      }}>{value}</td>
+    );
+  }
+
+  function LabelCell({text,tooltip,formula,indent}){
+    const tt=tooltip&&TOOLTIPS[tooltip];
+    const fm=formula&&showFormulas&&FORMULAS[formula];
+    return(
+      <td style={{
+        padding:`5px 8px 5px ${indent?'24px':'8px'}`, fontSize:'11px',
+        color:'var(--text2)', whiteSpace:'nowrap', position:'relative',
+        fontWeight:indent?300:400, minWidth:'200px'
+      }}
+        onMouseEnter={()=>tt&&setHover(tooltip)}
+        onMouseLeave={()=>setHover(null)}>
+        <span>{text}</span>
+        {fm&&<span style={{marginLeft:'8px',fontSize:'9px',color:'var(--text5)',fontFamily:'var(--f-mono)'}}>{fm}</span>}
+        {hover===tooltip&&tt&&(
+          <div style={{position:'absolute',left:'0',bottom:'100%',background:'var(--ink)',color:'rgba(255,255,255,.85)',padding:'8px 12px',fontSize:'10px',lineHeight:'1.5',maxWidth:'280px',zIndex:20,borderRadius:'2px',fontFamily:'var(--f-body)',fontWeight:300,boxShadow:'0 4px 16px rgba(0,0,0,.3)',whiteSpace:'normal'}}>{tt}</div>
+        )}
+      </td>
+    );
+  }
+
+  function SectionHeader({text,cols}){
+    return(
+      <tr><td colSpan={cols} style={{
+        padding:'6px 8px', background:HD_BG, color:'rgba(255,255,255,.55)',
+        fontFamily:'var(--f-mono)', fontSize:'9px', letterSpacing:'.12em',
+        textTransform:'uppercase', fontWeight:600, borderBottom:'1px solid var(--border-dark)'
+      }}>{text}</td></tr>
+    );
+  }
+
+  const years=['Base','Year 1','Year 2','Year 3','Year 4','Year 5'];
+  const yrsOnly=['Year 1','Year 2','Year 3','Year 4','Year 5'];
+  const COLS=8; // label + base + 5 years + terminal
+
+  // ── ASSESSMENT ──
+  const assessment=model.upside>15?{label:'Undervalued',color:'#059669',bg:'rgba(5,150,105,.08)'}:
+    model.upside<-15?{label:'Overvalued',color:'#dc2626',bg:'rgba(220,38,38,.08)'}:
+    {label:'Fairly Valued',color:'#d97706',bg:'rgba(217,119,6,.08)'};
+
+  return(
+    <div style={{margin:'28px 0'}}>
+      {/* ── ORIENTATION PANEL ── */}
+      <div style={{border:'1px solid var(--border)',marginBottom:'16px',background:'#fff'}}>
+        <button onClick={()=>setShowOrientation(p=>!p)} style={{
+          width:'100%',padding:'14px 20px',background:'none',border:'none',cursor:'pointer',
+          display:'flex',alignItems:'center',justifyContent:'space-between',
+          fontFamily:'var(--f-body)',fontSize:'12px',fontWeight:600,color:'var(--text1)',textAlign:'left'
+        }}>
+          <span style={{display:'flex',alignItems:'center',gap:'8px'}}>
+            <span style={{fontSize:'14px'}}>📘</span> What Is a DCF Model? — Orientation Guide
+          </span>
+          <span style={{fontSize:'10px',color:'var(--text4)'}}>{showOrientation?'▼ Hide':'▶ Show'}</span>
+        </button>
+        {showOrientation&&(
+          <div style={{padding:'0 20px 20px',fontSize:'13px',color:'var(--text2)',lineHeight:1.7,fontWeight:300}}>
+            <p style={{marginBottom:'12px'}}>A <strong>Discounted Cash Flow (DCF)</strong> model estimates what a business is worth today by projecting its future cash flows and discounting them back to present value. It is the foundational valuation methodology used in investment banking, private equity, and hedge fund analysis.</p>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'12px',margin:'16px 0'}}>
+              {[
+                {n:'1',t:'Revenue & FCF Build',d:'Project revenue growth, then calculate free cash flow — the actual cash the business generates after all operating costs and reinvestment.'},
+                {n:'2',t:'Terminal Value',d:'Estimate the value of all cash flows beyond the explicit forecast period. This typically represents 60–80% of total value — the single most important assumption.'},
+                {n:'3',t:'Valuation Bridge',d:'Sum the present values, subtract net debt, and divide by shares outstanding to get an implied share price.'}
+              ].map(s=>(
+                <div key={s.n} style={{background:'var(--surface2)',padding:'14px',border:'1px solid var(--border)'}}>
+                  <div style={{fontFamily:'var(--f-display)',fontSize:'22px',color:'rgba(201,170,113,.15)',marginBottom:'6px'}}>{s.n}</div>
+                  <div style={{fontSize:'11px',fontWeight:600,color:'var(--text1)',marginBottom:'4px'}}>{s.t}</div>
+                  <div style={{fontSize:'10px',color:'var(--text3)',lineHeight:1.6}}>{s.d}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{background:'var(--ink)',padding:'14px 18px',borderLeft:'3px solid var(--gold)'}}>
+              <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--gold)',letterSpacing:'.12em',textTransform:'uppercase',marginBottom:'6px'}}>The Single Most Important Thing</div>
+              <div style={{fontSize:'12px',color:'rgba(255,255,255,.75)',lineHeight:1.7,fontWeight:300}}>Terminal value typically represents <strong style={{color:'var(--gold)'}}>60–80%</strong> of total DCF value. This means the terminal growth rate and WACC assumptions dominate the output. Change the model below and watch how sensitive the share price is to these two inputs.</div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── MODEL HEADER ── */}
+      <div style={{border:'1px solid var(--border)',background:'#fff',overflow:'hidden'}}>
+        <div style={{padding:'14px 20px',background:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'10px'}}>
+          <div>
+            <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'rgba(255,255,255,.35)',letterSpacing:'.14em',textTransform:'uppercase',marginBottom:'3px'}}>Interactive DCF Model</div>
+            <div style={{fontFamily:'var(--f-display)',fontSize:'16px',color:'#fff'}}>Apex Software — Discounted Cash Flow Valuation</div>
+          </div>
+          <div style={{display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
+            <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',padding:'3px 8px',borderRadius:'2px',background:BLUE_BG,color:BLUE,border:'1px solid '+BLUE_BORDER}}>BLUE = Your Inputs</div>
+            <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',padding:'3px 8px',borderRadius:'2px',background:'rgba(255,255,255,.05)',color:'rgba(255,255,255,.45)'}}>BLACK = Formulas</div>
+            <button onClick={()=>setShowFormulas(p=>!p)} style={{fontFamily:'var(--f-mono)',fontSize:'9px',padding:'3px 8px',borderRadius:'2px',background:showFormulas?'rgba(201,170,113,.15)':'rgba(255,255,255,.05)',color:showFormulas?'var(--gold)':'rgba(255,255,255,.35)',border:'1px solid '+(showFormulas?'rgba(201,170,113,.3)':'rgba(255,255,255,.1)'),cursor:'pointer'}}>
+              {showFormulas?'✓ Formulas':'Show Formulas'}
+            </button>
+            <button onClick={()=>setInp({...defaults})} style={{fontFamily:'var(--f-mono)',fontSize:'9px',padding:'3px 8px',borderRadius:'2px',background:'rgba(255,255,255,.05)',color:'rgba(255,255,255,.35)',border:'1px solid rgba(255,255,255,.1)',cursor:'pointer'}}>↻ Reset</button>
+          </div>
+        </div>
+
+        {/* ── SPREADSHEET GRID ── */}
+        <div style={{overflowX:'auto'}}>
+          <table style={{width:'100%',borderCollapse:'collapse',fontSize:'11px',minWidth:'720px'}}>
+            <thead>
+              <tr style={{background:SEC_BG}}>
+                <th style={{padding:'7px 8px',textAlign:'left',fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text4)',letterSpacing:'.1em',fontWeight:500,minWidth:'200px',position:'sticky',left:0,background:SEC_BG,zIndex:2}}>LINE ITEM</th>
+                {years.map(y=><th key={y} style={{padding:'7px 8px',textAlign:'right',fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text4)',letterSpacing:'.08em',fontWeight:500,minWidth:'72px'}}>{y}</th>)}
+                <th style={{padding:'7px 8px',textAlign:'right',fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text4)',letterSpacing:'.08em',fontWeight:500}}>Terminal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* ── REVENUE BUILD ── */}
+              <SectionHeader text="Revenue Build" cols={COLS}/>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="Revenue Growth Rate (%)" tooltip="gRate"/>
+                <td style={{padding:'5px 8px',textAlign:'right',fontSize:'10px',color:'var(--text5)',fontFamily:'var(--f-mono)'}}>—</td>
+                {inp.g.map((v,i)=><EditCell key={i} value={v} field="g" idx={i} min={-50} max={100} suffix="%"/>)}
+                <OutCell value={fP(inp.termGrowth)} dim/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="Revenue ($M)" tooltip="rev" formula="rev"/>
+                <OutCell value={fM(model.revs[0])} bold/>
+                {model.revs.slice(1).map((r,i)=><OutCell key={i} value={fM(r)} bold/>)}
+                <OutCell value="—" dim/>
+              </tr>
+
+              {/* ── FCF BUILD ── */}
+              <SectionHeader text="Free Cash Flow Build" cols={COLS}/>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="EBIT Margin (%)" tooltip="ebitM"/>
+                <td style={{padding:'5px 8px',textAlign:'right',fontSize:'10px',color:'var(--text5)',fontFamily:'var(--f-mono)'}}>—</td>
+                {inp.ebitMargin.map((v,i)=><EditCell key={i} value={v} field="ebitMargin" idx={i} min={-50} max={80} suffix="%"/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="EBIT ($M)" tooltip="ebit" formula="ebit" indent/>
+                <td/>
+                {model.ebit.map((v,i)=><OutCell key={i} value={fM(v)}/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="Tax Rate (%)" indent/>
+                <td/>
+                <td colSpan={5} style={{textAlign:'center'}}>
+                  <span onClick={()=>setActiveCell('taxRate')} style={{cursor:'pointer',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,background:BLUE_BG,padding:'2px 8px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='taxRate'?(
+                      <input type="number" value={inp.taxRate} min={0} max={50} step={0.5} autoFocus
+                        onChange={e=>upd('taxRate',e.target.value)} onBlur={()=>setActiveCell(null)}
+                        onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}}
+                        style={{width:'40px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,textAlign:'center',outline:'none'}}/>
+                    ):`${inp.taxRate.toFixed(1)}%`}
+                  </span>
+                </td>
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="NOPAT ($M)" tooltip="nopat" formula="nopat" indent/>
+                <td/>
+                {model.nopat.map((v,i)=><OutCell key={i} value={fM(v)}/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text={`Less: CapEx (${inp.capexPct}% of Rev)`} tooltip="capex" formula="capex" indent/>
+                <td/>
+                {model.capex.map((v,i)=><OutCell key={i} value={`(${fM(v).replace('$','$')})`}/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text={`Less: ΔNWC (${inp.nwcPct}% of Rev)`} tooltip="dwc" formula="dwc" indent/>
+                <td/>
+                {model.dwc.map((v,i)=><OutCell key={i} value={`(${fM(v).replace('$','$')})`}/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'2px solid var(--border)'}}>
+                <LabelCell text="Free Cash Flow ($M)" tooltip="fcf" formula="fcf"/>
+                <td/>
+                {model.fcf.map((v,i)=><OutCell key={i} value={fM(v)} bold highlight={v>0}/>)}
+                <td/>
+              </tr>
+
+              {/* ── ASSUMPTIONS ROW ── */}
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <td style={{padding:'5px 8px',fontSize:'10px',color:'var(--text4)'}}>CapEx % of Revenue</td>
+                <td/>
+                <td colSpan={3} style={{textAlign:'center'}}>
+                  <span onClick={()=>setActiveCell('capexPct')} style={{cursor:'pointer',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,background:BLUE_BG,padding:'2px 8px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='capexPct'?<input type="number" value={inp.capexPct} min={0} max={50} step={0.5} autoFocus onChange={e=>upd('capexPct',e.target.value)} onBlur={()=>setActiveCell(null)} onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}} style={{width:'40px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,textAlign:'center',outline:'none'}}/>:`${inp.capexPct.toFixed(1)}%`}
+                  </span>
+                </td>
+                <td style={{padding:'5px 8px',fontSize:'10px',color:'var(--text4)',textAlign:'right'}}>NWC % of Revenue</td>
+                <td style={{textAlign:'center'}}>
+                  <span onClick={()=>setActiveCell('nwcPct')} style={{cursor:'pointer',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,background:BLUE_BG,padding:'2px 8px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='nwcPct'?<input type="number" value={inp.nwcPct} min={0} max={30} step={0.5} autoFocus onChange={e=>upd('nwcPct',e.target.value)} onBlur={()=>setActiveCell(null)} onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}} style={{width:'40px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,textAlign:'center',outline:'none'}}/>:`${inp.nwcPct.toFixed(1)}%`}
+                  </span>
+                </td>
+                <td/>
+              </tr>
+
+              {/* ── DISCOUNTING ── */}
+              <SectionHeader text="Discounting & Present Value" cols={COLS}/>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="WACC" tooltip="df"/>
+                <td colSpan={6} style={{textAlign:'center'}}>
+                  <span onClick={()=>setActiveCell('wacc')} style={{cursor:'pointer',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'12px',fontWeight:700,background:BLUE_BG,padding:'3px 12px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='wacc'?<input type="number" value={inp.wacc} min={1} max={30} step={0.25} autoFocus onChange={e=>upd('wacc',e.target.value)} onBlur={()=>setActiveCell(null)} onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}} style={{width:'50px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'12px',fontWeight:700,textAlign:'center',outline:'none'}}/>:`${inp.wacc.toFixed(1)}%`}
+                  </span>
+                </td>
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="Discount Factor" tooltip="df" formula="df" indent/>
+                <td/>
+                {model.df.map((d,i)=><OutCell key={i} value={fX(d)}/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'2px solid var(--border)'}}>
+                <LabelCell text="PV of Free Cash Flow ($M)" tooltip="pvFcf" formula="pvFcf"/>
+                <td/>
+                {model.pvFcf.map((p,i)=><OutCell key={i} value={fM(p)} bold/>)}
+                <OutCell value={fM(model.sumPvFcf)} bold highlight/>
+              </tr>
+
+              {/* ── TERMINAL VALUE ── */}
+              <SectionHeader text="Terminal Value (Gordon Growth Model)" cols={COLS}/>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="Terminal Growth Rate"/>
+                <td colSpan={6} style={{textAlign:'center'}}>
+                  <span onClick={()=>setActiveCell('termGrowth')} style={{cursor:'pointer',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'12px',fontWeight:700,background:BLUE_BG,padding:'3px 12px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='termGrowth'?<input type="number" value={inp.termGrowth} min={0} max={inp.wacc-0.5} step={0.25} autoFocus onChange={e=>upd('termGrowth',e.target.value)} onBlur={()=>setActiveCell(null)} onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}} style={{width:'50px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'12px',fontWeight:700,textAlign:'center',outline:'none'}}/>:`${inp.termGrowth.toFixed(1)}%`}
+                  </span>
+                </td>
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="Terminal Value ($M)" tooltip="tv" indent/>
+                <td colSpan={5}/>
+                <td/>
+                <OutCell value={fM(model.tv)} bold/>
+              </tr>
+
+              <tr style={{borderBottom:'2px solid var(--border)'}}>
+                <LabelCell text="PV of Terminal Value ($M)" tooltip="pvTv"/>
+                <td colSpan={5} style={{padding:'5px 8px',fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text5)',textAlign:'right'}}>
+                  TV as % of EV: <span style={{color:model.tvPctEV>80?'#dc2626':model.tvPctEV>70?'#d97706':'var(--text3)',fontWeight:600}}>{model.tvPctEV.toFixed(1)}%</span>
+                </td>
+                <td/>
+                <OutCell value={fM(model.pvTv)} bold highlight/>
+              </tr>
+
+              {/* ── VALUATION BRIDGE ── */}
+              <SectionHeader text="Valuation Bridge" cols={COLS}/>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="Enterprise Value" tooltip="ev"/>
+                <td colSpan={6} style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text5)',textAlign:'right',padding:'5px 8px'}}>Σ PV FCFs ({fM(model.sumPvFcf)}) + PV TV ({fM(model.pvTv)})</td>
+                <OutCell value={fB(model.ev)} bold highlight/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="Less: Net Debt ($M)"/>
+                <td colSpan={5}/>
+                <EditCell value={inp.netDebt} field="netDebt" min={-10000} max={100000} step={10} prefix="$" suffix="M"/>
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="Equity Value" tooltip="eqVal"/>
+                <td colSpan={6}/>
+                <OutCell value={fB(model.eqVal)} bold highlight/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="Shares Outstanding (M)"/>
+                <td colSpan={5}/>
+                <EditCell value={inp.shares} field="shares" min={1} max={10000} step={1} suffix="M"/>
+                <td/>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* ── OUTPUT PANEL ── */}
+        <div style={{padding:'20px 24px',background:'linear-gradient(135deg,#09090e 0%,#1a1a24 100%)',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'16px'}}>
+          <div>
+            <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'rgba(255,255,255,.35)',letterSpacing:'.14em',textTransform:'uppercase',marginBottom:'6px'}}>Implied Intrinsic Value Per Share</div>
+            <div style={{display:'flex',alignItems:'baseline',gap:'16px'}}>
+              <div style={{fontFamily:'var(--f-display)',fontSize:'48px',color:'#c9aa71',lineHeight:1}}>{fS(model.ivps)}</div>
+              <div style={{padding:'4px 10px',borderRadius:'2px',background:assessment.bg,fontFamily:'var(--f-mono)',fontSize:'10px',fontWeight:600,color:assessment.color}}>
+                {model.upside>=0?'▲':'▼'} {Math.abs(model.upside).toFixed(1)}% vs. ${inp.curPrice.toFixed(2)} · {assessment.label}
+              </div>
+            </div>
+          </div>
+          <div style={{display:'flex',gap:'28px',flexWrap:'wrap'}}>
+            {[
+              {l:'Enterprise Value',v:fB(model.ev)},
+              {l:'Equity Value',v:fB(model.eqVal)},
+              {l:'TV % of EV',v:fP(model.tvPctEV)},
+              {l:'Current Price',v:fS(inp.curPrice),edit:true},
+            ].map(s=>(
+              <div key={s.l} style={{textAlign:'right'}}>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'rgba(255,255,255,.3)',letterSpacing:'.06em',textTransform:'uppercase',marginBottom:'3px'}}>{s.l}</div>
+                {s.edit?(
+                  <span onClick={()=>setActiveCell('curPrice')} style={{cursor:'pointer',fontFamily:'var(--f-mono)',fontSize:'14px',color:BLUE,fontWeight:600,background:BLUE_BG,padding:'2px 6px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='curPrice'?<input type="number" value={inp.curPrice} min={0.01} max={10000} step={0.5} autoFocus onChange={e=>upd('curPrice',e.target.value)} onBlur={()=>setActiveCell(null)} onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}} style={{width:'50px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'14px',fontWeight:600,textAlign:'right',outline:'none'}}/>:fS(inp.curPrice)}
+                  </span>
+                ):(
+                  <div style={{fontFamily:'var(--f-mono)',fontSize:'14px',color:'rgba(255,255,255,.8)',fontWeight:600}}>{s.v}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── SENSITIVITY TABLE ── */}
+        <div style={{borderTop:'1px solid var(--border)'}}>
+          <button onClick={()=>setShowSens(p=>!p)} style={{width:'100%',padding:'10px 20px',background:'none',border:'none',cursor:'pointer',fontFamily:'var(--f-mono)',fontSize:'10px',color:'var(--text3)',letterSpacing:'.1em',textTransform:'uppercase',textAlign:'left',display:'flex',alignItems:'center',gap:'8px'}}>
+            <span style={{fontSize:'11px'}}>{showSens?'▼':'▶'}</span>
+            Sensitivity Analysis — Implied Share Price (WACC × Terminal Growth Rate)
+          </button>
+          {showSens&&(
+            <div style={{overflowX:'auto',padding:'0 20px 16px'}}>
+              <table style={{borderCollapse:'collapse',fontSize:'11px',margin:'0 auto'}}>
+                <thead>
+                  <tr>
+                    <th style={{padding:'5px 10px',background:SEC_BG,fontFamily:'var(--f-mono)',fontSize:'8px',color:'var(--text4)',letterSpacing:'.08em',textAlign:'center',border:'1px solid var(--border)'}}>WACC ↓ \ g →</th>
+                    {sensData.tgRange.map(tg=>(
+                      <th key={tg} style={{padding:'5px 10px',background:tg===inp.termGrowth?BLUE_BG:SEC_BG,fontFamily:'var(--f-mono)',fontSize:'9px',color:tg===inp.termGrowth?BLUE:'var(--text4)',letterSpacing:'.06em',textAlign:'center',border:'1px solid var(--border)',fontWeight:tg===inp.termGrowth?700:400}}>{tg.toFixed(1)}%</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {sensData.grid.map((row,wi)=>{
+                    const wv=sensData.wRange[wi];
+                    const isBaseW=wv===inp.wacc;
+                    return(
+                      <tr key={wi}>
+                        <td style={{padding:'5px 10px',background:isBaseW?BLUE_BG:SEC_BG,fontFamily:'var(--f-mono)',fontSize:'9px',color:isBaseW?BLUE:'var(--text4)',border:'1px solid var(--border)',textAlign:'center',fontWeight:isBaseW?700:400}}>{wv.toFixed(1)}%</td>
+                        {row.map((val,ti)=>{
+                          const tgv=sensData.tgRange[ti];
+                          const isBase=isBaseW&&tgv===inp.termGrowth;
+                          if(val===null)return<td key={ti} style={{padding:'5px 10px',background:'#f8f7f4',border:'1px solid var(--border)',textAlign:'center',fontSize:'9px',color:'var(--text5)'}}>n/a</td>;
+                          const pctDiff=(val-inp.curPrice)/inp.curPrice;
+                          const bg=isBase?'rgba(201,170,113,.15)':pctDiff>0.10?'rgba(5,150,105,.06)':pctDiff<-0.10?'rgba(220,38,38,.06)':pctDiff>-0.10&&pctDiff<0.10?'rgba(217,119,6,.04)':'transparent';
+                          const color=isBase?'#a88b52':pctDiff>0.10?'#059669':pctDiff<-0.10?'#dc2626':'#d97706';
+                          return(<td key={ti} style={{padding:'5px 10px',fontFamily:'var(--f-mono)',fontSize:'11px',color,background:bg,border:'1px solid var(--border)',textAlign:'center',fontWeight:isBase?700:400}}>{fS(val)}</td>);
+                        })}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <div style={{display:'flex',gap:'16px',justifyContent:'center',padding:'8px 0',fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text4)'}}>
+                <span><span style={{display:'inline-block',width:'8px',height:'8px',background:'rgba(5,150,105,.15)',border:'1px solid #059669',marginRight:'4px'}}/>Upside {'>'}10%</span>
+                <span><span style={{display:'inline-block',width:'8px',height:'8px',background:'rgba(217,119,6,.1)',border:'1px solid #d97706',marginRight:'4px'}}/>±10%</span>
+                <span><span style={{display:'inline-block',width:'8px',height:'8px',background:'rgba(220,38,38,.1)',border:'1px solid #dc2626',marginRight:'4px'}}/>Downside {'>'}10%</span>
+                <span><span style={{display:'inline-block',width:'8px',height:'8px',background:'rgba(201,170,113,.2)',border:'1px solid #a88b52',marginRight:'4px'}}/>Base Case</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── DYNAMIC INSIGHTS ── */}
+      <div style={{marginTop:'16px',border:'1px solid var(--border)',background:'#fff',padding:'20px 24px'}}>
+        <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text4)',letterSpacing:'.12em',textTransform:'uppercase',marginBottom:'14px'}}>Key Insights — Dynamic Analysis</div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'12px'}}>
+          <div style={{padding:'14px',background:model.tvPctEV>80?'rgba(220,38,38,.05)':model.tvPctEV>70?'rgba(217,119,6,.05)':'rgba(5,150,105,.05)',border:'1px solid var(--border)'}}>
+            <div style={{fontSize:'10px',fontWeight:600,color:'var(--text1)',marginBottom:'4px'}}>Terminal Value Concentration</div>
+            <div style={{fontFamily:'var(--f-display)',fontSize:'22px',color:model.tvPctEV>80?'#dc2626':model.tvPctEV>70?'#d97706':'#059669',marginBottom:'4px'}}>{model.tvPctEV.toFixed(1)}%</div>
+            <div style={{fontSize:'10px',color:'var(--text3)',lineHeight:1.5}}>
+              {model.tvPctEV>80?'⚠️ Terminal value exceeds 80% of EV — model is heavily dependent on terminal assumptions. Scrutinize WACC and terminal growth carefully.':
+               model.tvPctEV>70?'Terminal value in the 70–80% range — typical for growth companies. Sensitivity to terminal assumptions is meaningful.':
+               'Terminal value below 70% — explicit forecast period cash flows carry significant weight. Model is relatively robust.'}
+            </div>
+          </div>
+          <div style={{padding:'14px',background:'var(--surface2)',border:'1px solid var(--border)'}}>
+            <div style={{fontSize:'10px',fontWeight:600,color:'var(--text1)',marginBottom:'4px'}}>Implied Revenue CAGR</div>
+            <div style={{fontFamily:'var(--f-display)',fontSize:'22px',color:model.impliedRevCAGR>20?'#d97706':'var(--text1)',marginBottom:'4px'}}>{model.impliedRevCAGR.toFixed(1)}%</div>
+            <div style={{fontSize:'10px',color:'var(--text3)',lineHeight:1.5}}>
+              {model.impliedRevCAGR>25?'Growth rate exceeds most industries. Verify against TAM and competitive dynamics.':
+               model.impliedRevCAGR>15?'Strong growth implied. Typical for mid-stage software but aggressive for mature businesses.':
+               'Moderate growth. Reasonable for established businesses with pricing power.'}
+            </div>
+          </div>
+          <div style={{padding:'14px',background:'var(--surface2)',border:'1px solid var(--border)'}}>
+            <div style={{fontSize:'10px',fontWeight:600,color:'var(--text1)',marginBottom:'4px'}}>WACC Assessment</div>
+            <div style={{fontFamily:'var(--f-display)',fontSize:'22px',color:'var(--text1)',marginBottom:'4px'}}>{inp.wacc.toFixed(1)}%</div>
+            <div style={{fontSize:'10px',color:'var(--text3)',lineHeight:1.5}}>
+              {inp.wacc<8?'Below-average WACC — appropriate for low-risk businesses with stable cash flows (utilities, consumer staples).':
+               inp.wacc<11?'Mid-range WACC — typical for established technology and industrial companies with moderate growth.':
+               'Elevated WACC — appropriate for high-growth or high-risk businesses. Increases the discount on future cash flows.'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   UI COMPONENTS
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+function QuizBlock({quiz,lessonId}){
+  const key='apex_quiz_'+lessonId;
+  const [answers,setAnswers]=useState(()=>{try{return JSON.parse(localStorage.getItem(key))||{};}catch{return{};}});
+  const handleAnswer=(qi,oi)=>{if(answers[qi]!==undefined)return;const next={...answers,[qi]:oi};setAnswers(next);try{localStorage.setItem(key,JSON.stringify(next));}catch{}};
+  const correct=quiz.filter((q,i)=>answers[i]===q.ans).length;
+  const answered=Object.keys(answers).length;
+  return(
+    <div className="quiz-wrap">
+      <div className="quiz-head">
+        <span className="quiz-head-title">Knowledge Check \u2014 {quiz.length} Questions</span>
+        {answered>0&&<span className="quiz-head-score">{correct}/{answered} correct{answered===quiz.length?` \u00b7 ${Math.round(correct/quiz.length*100)}%`:''}</span>}
+      </div>
+      {quiz.map((q,qi)=>{const chosen=answers[qi];return(
+        <div key={qi} className="quiz-q">
+          <div className="quiz-qn">Q{qi+1} of {quiz.length}</div>
+          <div className="quiz-qtext">{q.q}</div>
+          <div className="quiz-opts">
+            {q.opts.map((opt,oi)=>{let cls='quiz-opt';if(chosen!==undefined){if(oi===q.ans)cls+=' cr';if(chosen===oi&&oi!==q.ans)cls+=' sw';if(chosen===oi&&oi===q.ans)cls+=' sc';}
+              return(<button key={oi} className={cls} onClick={()=>handleAnswer(qi,oi)} disabled={chosen!==undefined}><span className="quiz-letter">{String.fromCharCode(65+oi)}</span>{opt}</button>);})}
+          </div>
+          {chosen!==undefined&&<div className={`quiz-fb ${chosen===q.ans?'ok':'no'}`}>{chosen===q.ans?'\u2713 Correct \u2014 ':'\u2717 Incorrect \u2014 '}{q.exp}</div>}
+        </div>
+      );})}
+    </div>
+  );
+}
+
+function LessonView({lesson,modTitle,completed,onComplete,onNext,onPrev}){
+  const data=LESSONS[lesson.id];
+  if(!data)return<div style={{padding:'48px',color:'var(--text4)'}}>Lesson content loading...</div>;
+  useEffect(()=>{window.scrollTo({top:58,behavior:'smooth'});},[lesson.id]);
+  return(
+    <div className="lesson-view ai">
+      <div className="l-breadcrumb">{modTitle}<span>\u203a</span>{lesson.title}</div>
+      <h1 className="l-title">{lesson.title}</h1>
+      <div className="l-meta">
+        <span className="l-tag gold">Finance</span>
+        <span className="l-tag">{modTitle}</span>
+        <span className="l-readtime">~{lesson.time}</span>
+        {completed&&<span className="l-tag green">\u2713 Complete</span>}
+      </div>
+      <div className="l-hook">
+        <div className="l-hook-label">Consider This</div>
+        <div className="l-hook-text">{data.hook}</div>
+      </div>
+      {data.terms&&data.terms.length>0&&(<><h2 className="l-sec-h">Key Terms</h2><div className="l-terms">{data.terms.map(t=><div key={t.w} className="l-term"><div className="l-term-word">{t.w}</div><div className="l-term-def">{t.d}</div></div>)}</div></>)}
+      {data.sections&&data.sections.map((s,si)=>(
+        <div key={si}>
+          <h2 className="l-sec-h">{s.h}</h2>
+          {s.body&&<p className="l-body" dangerouslySetInnerHTML={{__html:s.body.replace(/\n\n/g,'</p><p class="l-body">')}}/>}
+          {s.formula&&<div className="l-formula">{s.formula}</div>}
+          {s.callout&&<div className="l-callout"><div className="l-callout-bar"/><div className="l-callout-content"><div className="l-callout-label">{s.callout.label}</div><div className="l-callout-text" dangerouslySetInnerHTML={{__html:s.callout.text}}/></div></div>}
+          {s.body2&&<p className="l-body" dangerouslySetInnerHTML={{__html:s.body2}}/>}
+          {s.list&&<ul className="l-list">{s.list.map((item,li)=><li key={li}>{item}</li>)}</ul>}
+          {s.steps&&<ol className="l-steps">{s.steps.map((step,sti)=><li key={sti}>{step}</li>)}</ol>}
+        </div>
+      ))}
+      {data.table&&(<><h2 className="l-sec-h">Reference Data</h2><div style={{overflowX:'auto'}}><table className="l-table"><thead><tr>{data.table.headers.map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{data.table.rows.map((row,ri)=><tr key={ri}>{row.map((cell,ci)=><td key={ci}>{cell}</td>)}</tr>)}</tbody></table></div></>)}
+      {data.example&&(<><h2 className="l-sec-h">Worked Example</h2><div className="l-example"><div className="l-example-label">{data.example.label}</div><div className="l-example-body" dangerouslySetInnerHTML={{__html:data.example.text.replace(/\n\n/g,'<br/><br/>').replace(/\n/g,'<br/>')}}/></div></>)}
+      {data.interactive==='dcf'&&(<><h2 className="l-sec-h">Interactive DCF Model</h2><p className="l-body" style={{marginBottom:'4px'}}>Build the model yourself. Blue cells are your inputs \u2014 click any one to edit. All outputs recalculate instantly. Start with the defaults, then change WACC and terminal growth to feel the sensitivity.</p><DCFModel companyName={data.modelCompany||'DCF Valuation'}/></>)}
+      {data.quiz&&data.quiz.length>0&&<QuizBlock quiz={data.quiz} lessonId={lesson.id}/>}
+      <div className="l-foot">
+        <div style={{display:'flex',gap:'8px'}}>
+          {onPrev&&<button onClick={onPrev} style={{background:'none',border:'1px solid var(--border)',color:'var(--text3)',cursor:'pointer',fontFamily:'var(--f-body)',fontSize:'11px',fontWeight:500,padding:'10px 20px',borderRadius:'2px',letterSpacing:'.05em',textTransform:'uppercase'}}>\u2190 Previous</button>}
+          <button className={`btn-complete ${completed?'done':''}`} onClick={!completed?onComplete:undefined}>{completed?'\u2713 Completed':'Mark as Complete'}</button>
+        </div>
+        {onNext&&<button className="btn-next-l" onClick={onNext}>Next Lesson \u2192</button>}
+      </div>
+    </div>
+  );
+}
+
+function CRing({pct,size=48,sw=3,color='#c9aa71',track='#e2e0da'}){
+  const r=size/2-sw,c=2*Math.PI*r;
+  return(<svg width={size} height={size} className="cring-svg"><circle cx={size/2} cy={size/2} r={r} fill="none" stroke={track} strokeWidth={sw}/><circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={sw} strokeDasharray={c} strokeDashoffset={c*(1-pct/100)} strokeLinecap="round" style={{transition:'stroke-dashoffset .6s var(--ease)'}}/></svg>);
+}
+
+const DS={'Introductory':{bg:'rgba(5,150,105,.08)',color:'#059669'},'Intermediate':{bg:'rgba(37,99,235,.08)',color:'#2563eb'},'Advanced':{bg:'rgba(220,38,38,.08)',color:'#dc2626'}};
+const LS={'Foundations':{bg:'rgba(201,170,113,.1)',color:'#a88b52'},'Core':{bg:'rgba(9,9,14,.06)',color:'#3a3a4a'},'Advanced':{bg:'rgba(220,38,38,.06)',color:'#dc2626'},'Applied':{bg:'rgba(124,58,237,.07)',color:'#7c3aed'}};
+
+function CourseCard({course,idx,unlocked,complete,accent,onStart}){
+  const ds=DS[course.diff]||DS['Introductory'],ls=LS[course.level]||LS['Foundations'];
+  const hasLessons=course.hasContent&&COURSE_LESSONS[course.id];
+  return(
+    <div className={`ccard ${unlocked&&hasLessons?'clickable':''} ${!unlocked?'locked':''}`} onClick={unlocked&&hasLessons?()=>onStart(course):undefined}>
+      {!unlocked&&course.prereqLabel&&<div className="clock-tip">Complete "{course.prereqLabel}" to unlock</div>}
+      <div className="ccard-inner">
+        <div className="ccard-nc"><div className={`ccard-n ${complete?'done':unlocked?'ok':'no'}`}>{complete?'\u2713':idx+1}</div></div>
+        <div className="ccard-body">
+          <div className="ccard-row">
+            <div><div className="ccard-pretitle" style={{color:unlocked?accent:'var(--text5)'}}>{course.pretitle}</div><div className={`ccard-title${!unlocked?' dim':''}`}>{course.title}{!hasLessons&&unlocked&&<span className="cs-chip" style={{marginLeft:8}}>Coming Soon</span>}</div></div>
+            <div className="ccard-badges"><span className="cbadge" style={{background:ls.bg,color:ls.color}}>{course.level}</span><span className="cbadge" style={{background:ds.bg,color:ds.color}}>{course.diff}</span>{complete&&<span className="cbadge" style={{background:'var(--green-bg)',color:'var(--green)'}}>\u2713 Done</span>}</div>
+          </div>
+          <div className={`ccard-desc${!unlocked?' dim':''}`}>{course.desc}</div>
+          <div className="ccard-meta"><div className="ccard-mi">\u23F1 {course.hours}</div><div className="ccard-sep"/><div className="ccard-mi">\u25EB {course.modules} modules</div><div className="ccard-sep"/><div className="ccard-mi">\u25A4 {course.lessons} lessons</div>{!unlocked&&course.prereqLabel&&<><div className="ccard-sep"/><div className="ccard-mi" style={{color:'var(--text5)'}}>\ud83d\udd12 {course.prereqLabel}</div></>}</div>
+          {unlocked&&hasLessons&&<div className="ccard-skills">{course.skills.map(s=><span key={s} className="cskill">{s}</span>)}</div>}
+        </div>
+        <div className="ccard-ac">
+          {unlocked?(hasLessons?(<><div className="cring-wrap"><CRing pct={complete?100:0} color={complete?'#1d6348':accent}/><div className="cring-pct" style={{color:complete?'var(--green)':accent}}>{complete?'\u2713':'0%'}</div></div><button className="cbtn-start" style={{background:accent}} onClick={e=>{e.stopPropagation();onStart(course)}}>{complete?'Review':'Start'}</button></>):(<><div style={{fontSize:'13px',opacity:.4}}>\ud83d\udd1c</div><button className="cbtn-locked" disabled>Coming Soon</button></>)):(<><div style={{fontSize:'14px'}}>🔒</div><button className="cbtn-locked" disabled>Locked</button>{course.prereqLabel&&<div style={{fontSize:'9px',color:'var(--text5)',textAlign:'center',lineHeight:1.4}}>Finish<br/><span style={{color:'var(--text3)'}}>{course.prereqLabel}</span></div>}</>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CourseModal({course,track,onClose,onStart}){
+  if(!course)return null;
+  return(
+    <div className="cmodal-overlay" onClick={onClose}>
+      <div className="cmodal" onClick={e=>e.stopPropagation()}>
+        <div className="cmodal-head"><div><div className="cmodal-pre" style={{color:track.accent}}>{course.pretitle} \u00b7 {track.label}</div><div className="cmodal-title">{course.title}</div></div><button className="cmodal-x" onClick={onClose}>\u00d7</button></div>
+        <div className="cmodal-body">
+          <div className="cmodal-stats">{[{l:'Duration',v:course.hours},{l:'Modules',v:course.modules},{l:'Lessons',v:course.lessons},{l:'Level',v:course.diff}].map(s=><div key={s.l} className="cmodal-stat"><div className="cms-l">{s.l}</div><div className="cms-v">{s.v}</div></div>)}</div>
+          <div className="cmodal-desc">{course.desc}</div>
+          <div className="cmodal-sec">Curriculum</div>
+          <div>{course.moduleList.map(m=><div key={m.n} className="cmod-row"><div className="cmod-n">{m.n}</div><div className="cmod-name">{m.t}</div><div className="cmod-lessons">{m.l} lesson{m.l!==1?'s':''}</div></div>)}</div>
+          <div className="cmodal-sec">Skills Covered</div>
+          <div className="cmodal-skills">{course.skills.map(s=><span key={s} className="cmodal-skill">{s}</span>)}</div>
+          <div className="cmodal-sec">What You'll Be Able to Do</div>
+          <div className="cmodal-outcomes">{course.outcomes.map((o,i)=><div key={i} className="cmodal-outcome"><span style={{color:track.accent,fontWeight:600,flexShrink:0}}>\u2192</span>{o}</div>)}</div>
+          <div className="cmodal-cta">
+            {course.hasContent?<button className="cmbtn" style={{background:track.accent}} onClick={()=>{onStart(course);onClose();}}>Start Course</button>:<button className="cmbtn" style={{background:'var(--text4)',cursor:'not-allowed'}} disabled>Coming Soon</button>}
+            <button className="cmbtn-ghost" onClick={onClose}>Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CatalogView({completed,onStartCourse}){
+  const [tid,setTid]=useState('ib');
+  const [modal,setModal]=useState(null);
+  const track=TRACKS.find(t=>t.id===tid);
+  const trackDone=track?track.courses.filter(c=>{const ls=COURSE_LESSONS[c.id];return ls&&ls.length>0&&ls.every(lid=>completed.has(lid));}).length:0;
+  const trackTotal=track?track.courses.length:0;
+  const trackHours=track?track.courses.reduce((a,c)=>a+parseInt(c.hours),0):0;
+  function isUnlocked(course){if(!course.prereq)return true;const pls=COURSE_LESSONS[course.prereq];if(!pls||pls.length===0)return completed.has(course.prereq+'_done');return pls.every(lid=>completed.has(lid));}
+  function isCourseComplete(course){const ls=COURSE_LESSONS[course.id];if(!ls)return false;return ls.every(lid=>completed.has(lid));}
+  return(
+    <div className="ai" style={{background:'var(--surface)'}}>
+      <div className="cat-hero"><div className="cat-hero-grid"/>
+        <div className="ch-tag au au1">APEX Capital Society \u00b7 Career Track Curriculum</div>
+        <h1 className="ch-h1 au au2">Choose your<br/><em>career track.</em><br/>Build real skills.</h1>
+        <p className="ch-sub au au3">Five structured career tracks. Each course uses real content from our lesson library \u2014 sequenced from foundations through execution-ready.</p>
+        <div className="ch-stats au au4">{[{n:'5',l:'Career Tracks'},{n:'25',l:'Total Courses'},{n:'37',l:'Live Lessons'},{n:'30+',l:'Key Terms'}].map(s=><div key={s.l}><div className="chs-n">{s.n}</div><div className="chs-l">{s.l}</div></div>)}</div>
+      </div>
+      <div className="track-sel">
+        <div className="track-sel-label">Select a career track</div>
+        <div className="track-tabs">{TRACKS.map(t=>{const active=tid===t.id;return(<button key={t.id} className={`ttrack-tab${active?' active':''}`} style={active?{borderBottomColor:t.accent}:{}} onClick={()=>setTid(t.id)}><div className="ttt-top"><span className="ttt-icon" style={active?{color:t.accent}:{}}>{t.icon}</span><span className="ttt-name">{t.short} \u2014 {t.label}</span></div><div className="ttt-count">{t.courses.length} courses</div></button>);})}</div>
+      </div>
+      {track&&(
+        <div className="cat-body ai" key={tid}>
+          <div className="track-hd">
+            <div><div className="thd-badge" style={{background:track.accentBg,color:track.accent}}>{track.icon} {track.label} Track</div><h2 className="thd-h2">{track.label}</h2><p className="thd-sub">{track.desc}</p></div>
+            <div className="thd-right"><div className="thd-right-label">Prerequisites</div>{track.prereqs.map((p,i)=><div key={i} className="thd-right-row"><span style={{color:track.accent,fontSize:'10px'}}>\u2192</span>{p}</div>)}</div>
+          </div>
+          <div className="tprog"><span className="tprog-label">Track Progress</span><div className="tprog-bar"><div className="tprog-fill" style={{width:`${trackTotal>0?(trackDone/trackTotal)*100:0}%`,background:track.accent}}/></div><div style={{display:'flex',gap:'18px',flexShrink:0}}><div><div className="tprog-stat-n" style={{color:track.accent}}>{trackDone}/{trackTotal}</div><div className="tprog-stat-l">Courses</div></div><div><div className="tprog-stat-n">{trackHours}+</div><div className="tprog-stat-l">Hours</div></div></div></div>
+          <div className="clist">{track.courses.map((course,idx)=><CourseCard key={course.id} course={course} idx={idx} unlocked={isUnlocked(course)} complete={isCourseComplete(course)} accent={track.accent} onStart={()=>onStartCourse(course,track)}/>)}</div>
+          <div className="outcomes-section"><div className="outcomes-label">What You'll Achieve</div><div className="outcomes-g">{track.outcomes.map((o,i)=><div key={i} className="outcome-r"><span style={{color:track.accent,fontWeight:600,flexShrink:0}}>\u2192</span>{o}</div>)}</div></div>
+        </div>
+      )}
+      {modal&&<CourseModal course={modal} track={track} onClose={()=>setModal(null)} onStart={(c)=>{onStartCourse(c,track);setModal(null);}}/>}
+    </div>
+  );
+}
+
+function CourseLessonView({course,track,completed,onComplete,onFinishCourse}){
+  const lessonIds=COURSE_LESSONS[course.id]||[];
+  const allLessons=MODULES.flatMap(m=>m.lessons.map(l=>({...l,modId:m.id,modTitle:m.title})));
+  const courseLessons=lessonIds.map(lid=>allLessons.find(l=>l.id===lid)).filter(Boolean);
+  const [activeId,setActiveId]=useState(courseLessons[0]?.id||null);
+  const [sideTab,setSideTab]=useState('modules');
+  const [glossSearch,setGlossSearch]=useState('');
+  const active=courseLessons.find(l=>l.id===activeId)||courseLessons[0];
+  const activeIdx=courseLessons.findIndex(l=>l.id===activeId);
+  const prevLesson=courseLessons[activeIdx-1]||null;
+  const nextLesson=courseLessons[activeIdx+1]||null;
+  const doneLessons=courseLessons.filter(l=>completed.has(l.id)).length;
+  const totalPct=courseLessons.length>0?Math.round(doneLessons/courseLessons.length*100):0;
+  const allDone=doneLessons===courseLessons.length&&courseLessons.length>0;
+  const filteredGloss=useMemo(()=>{if(!glossSearch.trim())return GLOSSARY;const q=glossSearch.toLowerCase();return GLOSSARY.filter(g=>g.w.toLowerCase().includes(q)||g.d.toLowerCase().includes(q));},[glossSearch]);
+  const glossByLetter=useMemo(()=>{const m={};filteredGloss.forEach(g=>{const l=g.w[0].toUpperCase();if(!m[l])m[l]=[];m[l].push(g);});return m;},[filteredGloss]);
+  if(!active)return<div style={{padding:'48px',color:'var(--text4)'}}>No lessons found.</div>;
+  return(
+    <div style={{display:'flex'}}>
+      <aside className="sidebar">
+        <div className="sidebar-head">
+          <div className="sidebar-head-label">{course.title}</div>
+          <div><div className="sidebar-bar-track"><div className="sidebar-bar-fill" style={{width:`${totalPct}%`,background:track.accent}}/></div><div className="sidebar-bar-stats"><span>{doneLessons}/{courseLessons.length} lessons</span><span style={{color:track.accent}}>{totalPct}%</span></div></div>
+        </div>
+        <div className="sidebar-tabs">{[['modules','Modules'],['glossary','Glossary']].map(([id,label])=><button key={id} className={`sidebar-tab ${sideTab===id?'active':''}`} style={sideTab===id?{color:track.accent,borderBottomColor:track.accent}:{}} onClick={()=>setSideTab(id)}>{label}</button>)}</div>
+        <div className="sidebar-scroll">
+          {sideTab==='modules'&&(<div>
+            {courseLessons.map((lesson,li)=>{const isDone=completed.has(lesson.id);const isActive=activeId===lesson.id;return(
+              <button key={lesson.id} className={`lesson-item${isActive?' active':''}${isDone?' done-item':''}`} onClick={()=>setActiveId(lesson.id)}>
+                <span className={`lesson-dot${isDone?' done':isActive?' cur':''}`} style={isDone?{background:track.accent,borderColor:track.accent}:isActive?{borderColor:track.accent}:{}}/>
+                <div><div className="lesson-item-name">{li+1}. {lesson.title}</div><div className="lesson-item-time">{lesson.time}</div></div>
+              </button>
+            );})}
+            {allDone&&<div style={{padding:'16px',margin:'8px',background:'var(--green-bg)',border:'1px solid rgba(29,99,72,.2)',borderRadius:'2px'}}><div style={{fontSize:'10px',color:'var(--green)',fontWeight:600,marginBottom:'6px'}}>\ud83c\udf93 Course Complete!</div><button onClick={onFinishCourse} style={{width:'100%',background:'var(--green)',color:'#fff',border:'none',cursor:'pointer',fontFamily:'var(--f-body)',fontSize:'10px',fontWeight:600,padding:'8px',borderRadius:'2px',letterSpacing:'.06em',textTransform:'uppercase'}}>Back to Catalog</button></div>}
+          </div>)}
+          {sideTab==='glossary'&&(<>
+            <div className="gloss-search"><input placeholder="Search terms..." value={glossSearch} onChange={e=>setGlossSearch(e.target.value)}/></div>
+            {Object.keys(glossByLetter).sort().map(letter=><div key={letter}><div className="gloss-letter">{letter}</div>{glossByLetter[letter].map(g=><div key={g.w} className="gloss-term"><div className="gloss-term-word">{g.w}</div><div className="gloss-term-def">{g.d}</div></div>)}</div>)}
+          </>)}
+        </div>
+      </aside>
+      <main className="content-area"><LessonView key={activeId} lesson={active} modTitle={active.modTitle} completed={completed.has(activeId)} onComplete={()=>onComplete(activeId)} onNext={nextLesson?()=>setActiveId(nextLesson.id):null} onPrev={prevLesson?()=>setActiveId(prevLesson.id):null}/></main>
+    </div>
+  );
+}
+
+function UnifiedDashboard({completed}){
+  const totalLessons=TOTAL;
+  const doneLessons=[...completed].filter(k=>MODULES.some(m=>m.lessons.some(l=>l.id===k))).length;
+  const totalPct=totalLessons>0?Math.round(doneLessons/totalLessons*100):0;
+  const trackProgress=TRACKS.map(t=>{
+    const coursesWithLessons=t.courses.filter(c=>COURSE_LESSONS[c.id]);
+    const totalL=coursesWithLessons.reduce((a,c)=>(COURSE_LESSONS[c.id]||[]).length+a,0);
+    const doneL=coursesWithLessons.reduce((a,c)=>(COURSE_LESSONS[c.id]||[]).filter(lid=>completed.has(lid)).length+a,0);
+    return{...t,doneL,totalL,pct:totalL>0?Math.round(doneL/totalL*100):0};
+  });
+  const recentDone=MODULES.flatMap(m=>m.lessons.map(l=>({...l,modTitle:m.title}))).filter(l=>completed.has(l.id)).slice(-6).reverse();
+  return(
+    <div className="ai" style={{background:'var(--surface)'}}>
+      <div className="dash-head"><div className="dash-eyebrow">Learning Dashboard</div><div className="dash-h1">Your Progress</div><div className="dash-tabs"><button className="dash-tab active">Overview</button></div></div>
+      <div className="dash-body">
+        <div className="kpi-grid">{[{l:'Lessons Done',v:`${doneLessons}`,s:`of ${totalLessons}`},{l:'Progress',v:`${totalPct}%`,s:'completion'},{l:'Active Tracks',v:`${trackProgress.filter(t=>t.doneL>0).length}`,s:'of 5 started'}].map(c=><div key={c.l} className="kpi"><div className="kpi-label">{c.l}</div><div className="kpi-val">{c.v}</div><div className="kpi-sub">{c.s}</div></div>)}</div>
+        <div className="mod-progress-table"><div className="mpt-head">Progress by Track</div>{trackProgress.map(t=><div key={t.id} className="mpt-row"><span className="mpt-name" style={{display:'flex',alignItems:'center',gap:'7px'}}><span style={{color:t.accent}}>{t.icon}</span>{t.label}</span><span className="mpt-count">{t.doneL}/{t.totalL}</span><div className="mpt-bar"><div className="mpt-fill" style={{width:`${t.pct}%`,background:t.accent}}/></div><span className="mpt-pct">{t.pct}%</span></div>)}</div>
+        {recentDone.length>0?(<div className="activity-table"><div className="at-head">Recently Completed</div>{recentDone.map(l=><div key={l.id} className="at-row"><div className="at-dot"/><span className="at-name">{l.title}</span><span className="at-mod">{l.modTitle}</span><span className="at-badge done">Complete</span></div>)}</div>):(<div className="empty-state"><div className="empty-label">No Activity Yet</div><div className="empty-text">Start a course from the Catalog.</div></div>)}
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const [view,setView]=useState('catalog');
+  const [activeCourse,setActiveCourse]=useState(null);
+  const [activeTrack,setActiveTrack]=useState(null);
+  const [completed,setCompleted]=useState(()=>{try{return new Set(JSON.parse(localStorage.getItem('apex_v1_done'))||[]);}catch{return new Set();}});
+  const handleComplete=useCallback((lessonId)=>{setCompleted(prev=>{const next=new Set(prev);next.add(lessonId);try{localStorage.setItem('apex_v1_done',JSON.stringify([...next]));}catch{}return next;});},[]);
+  const handleStartCourse=(course,track)=>{setActiveCourse(course);setActiveTrack(track);setView('lesson');window.scrollTo({top:0,behavior:'smooth'});};
+  const handleBack=()=>{setView('catalog');window.scrollTo({top:0,behavior:'smooth'});};
+  const totalDone=[...completed].filter(k=>MODULES.some(m=>m.lessons.some(l=>l.id===k))).length;
+  return(
+    <>
+      <nav className="nav">
+        <div className="nav-brand" onClick={handleBack}><div className="nav-mark">A</div><span className="nav-name">APEX Capital Society</span></div>
+        <div style={{display:'flex',alignItems:'center',gap:'8px',flex:1,justifyContent:'center'}}>
+          {view==='lesson'&&activeCourse&&activeTrack&&(
+            <div style={{display:'flex',alignItems:'center',gap:'6px'}}>
+              <button onClick={handleBack} style={{background:'none',border:'none',cursor:'pointer',fontFamily:'var(--f-mono)',fontSize:'9px',color:'rgba(255,255,255,.4)',letterSpacing:'.1em',textTransform:'uppercase'}}>\u2190 Catalog</button>
+              <span style={{color:'rgba(255,255,255,.2)',fontSize:'10px'}}>/</span>
+              <span style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:activeTrack.accent,letterSpacing:'.1em',textTransform:'uppercase'}}>{activeTrack.short}</span>
+              <span style={{color:'rgba(255,255,255,.2)',fontSize:'10px'}}>/</span>
+              <span style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'rgba(255,255,255,.5)',letterSpacing:'.08em',textTransform:'uppercase'}}>{activeCourse.title}</span>
+            </div>
+          )}
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:'2px'}}>
+          {[['catalog','Catalog'],['dashboard','Dashboard']].map(([v,l])=><button key={v} className="nav-link" style={{color:view===v?'var(--gold)':'rgba(255,255,255,.4)'}} onClick={()=>{setView(v);window.scrollTo({top:0,behavior:'smooth'});}}>{l}</button>)}
+          <div style={{marginLeft:'12px',display:'flex',alignItems:'center',gap:'6px'}}>
+            <div style={{width:'60px',height:'2px',background:'rgba(255,255,255,.1)',borderRadius:'1px'}}><div style={{height:'100%',background:'var(--gold)',borderRadius:'1px',width:`${(totalDone/TOTAL)*100}%`,transition:'width .6s var(--ease)'}}/></div>
+            <span style={{fontFamily:'var(--f-mono)',fontSize:'8px',color:'rgba(255,255,255,.3)',letterSpacing:'.06em'}}>{totalDone}/{TOTAL}</span>
+          </div>
+        </div>
+      </nav>
+      <div style={{paddingTop:'var(--nav-h)'}}>
+        {view==='catalog'&&<CatalogView completed={completed} onStartCourse={handleStartCourse}/>}
+        {view==='lesson'&&activeCourse&&activeTrack&&<CourseLessonView key={activeCourse.id} course={activeCourse} track={activeTrack} completed={completed} onComplete={handleComplete} onFinishCourse={handleBack}/>}
+        {view==='dashboard'&&<UnifiedDashboard completed={completed}/>}
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
