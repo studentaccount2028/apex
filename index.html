@@ -1201,6 +1201,150 @@ function QuizBlock({quiz,lessonId}){
   );
 }
 
+function renderBody(body){
+  if(!body)return null;
+  const blocks=[];
+  // Split body into segments by detecting special block patterns
+  const lines=body.split('\n');
+  let current=[];
+  let i=0;
+
+  const flushProse=()=>{
+    if(current.length===0)return;
+    const text=current.join('\n').trim();
+    if(text){
+      blocks.push({type:'prose',text});
+    }
+    current=[];
+  };
+
+  while(i<lines.length){
+    const line=lines[i];
+
+    // Detect FORMULA block: starts with ═══ or === border line
+    const isFormulaStart=
+      /^[=═]{6,}/.test(line)||
+      (line.includes('═══')||line.includes('==='));
+
+    if(isFormulaStart){
+      flushProse();
+      const formulaLines=[line];
+      i++;
+      while(i<lines.length){
+        formulaLines.push(lines[i]);
+        // End after second closing border line
+        if((/^[=═]{6,}/.test(lines[i])||lines[i].includes('═══'))&&formulaLines.length>1){
+          i++;
+          break;
+        }
+        i++;
+      }
+      blocks.push({type:'formula',text:formulaLines.join('\n')});
+      continue;
+    }
+
+    // Detect standalone formula/structure: indented lines with arrows or math
+    const isStructuredLine=
+      /^\s{2,}/.test(line)&&
+      (line.includes('→')||line.includes('←')||line.includes('×')||
+       line.includes('=')||line.includes('─')||line.includes('+')||
+       /\$[0-9]/.test(line));
+
+    if(isStructuredLine&&current.length===0){
+      // Collect a block of structured lines
+      const structLines=[line];
+      i++;
+      while(i<lines.length&&(
+        /^\s{2,}/.test(lines[i])||
+        /^[─━]+/.test(lines[i])||
+        lines[i].trim()===''&&structLines.length<20
+      )){
+        if(lines[i].trim()===''&&i+1<lines.length&&!/^\s{2,}/.test(lines[i+1]))break;
+        structLines.push(lines[i]);
+        i++;
+      }
+      if(structLines.length>1){
+        blocks.push({type:'formula',text:structLines.join('\n')});
+        continue;
+      } else {
+        current.push(line);
+        i++;
+        continue;
+      }
+    }
+
+    // Detect CALLOUT block: [LABEL TEXT] on its own line followed by quoted text
+    const calloutMatch=line.match(/^\[([A-Z][A-Z\s:]+)\]$/);
+    if(calloutMatch){
+      flushProse();
+      const label=calloutMatch[1];
+      i++;
+      const calloutLines=[];
+      while(i<lines.length&&lines[i].trim()!==''){
+        calloutLines.push(lines[i]);
+        i++;
+      }
+      blocks.push({type:'callout',label,text:calloutLines.join('\n').replace(/^"|"$/g,'').trim()});
+      continue;
+    }
+
+    // Detect EXAMPLE block: [EXAMPLE: TITLE]
+    const exampleMatch=line.match(/^\[EXAMPLE:\s*(.*?)\]$/);
+    if(exampleMatch){
+      flushProse();
+      const label=exampleMatch[1];
+      i++;
+      const exLines=[];
+      // Collect until blank line or next special block
+      while(i<lines.length&&!lines[i].match(/^\[/)&&!lines[i].match(/^[=═]{10,}/)){
+        exLines.push(lines[i]);
+        i++;
+      }
+      blocks.push({type:'example',label,text:exLines.join('\n').trim()});
+      continue;
+    }
+
+    current.push(line);
+    i++;
+  }
+  flushProse();
+
+  return blocks.map((block,bi)=>{
+    if(block.type==='prose'){
+      // Split into paragraphs on double newline
+      const paras=block.text.split(/\n\n+/).filter(p=>p.trim());
+      return paras.map((para,pi)=>(
+        <p key={bi+'-'+pi} className="l-body"
+          dangerouslySetInnerHTML={{__html:para.replace(/\n/g,'<br/>')}}/>
+      ));
+    }
+    if(block.type==='formula'){
+      return<div key={bi} className="l-formula">{block.text}</div>;
+    }
+    if(block.type==='callout'){
+      return(
+        <div key={bi} className="l-callout">
+          <div className="l-callout-bar"/>
+          <div className="l-callout-content">
+            <div className="l-callout-label">{block.label}</div>
+            <div className="l-callout-text">{block.text}</div>
+          </div>
+        </div>
+      );
+    }
+    if(block.type==='example'){
+      return(
+        <div key={bi} className="l-example">
+          <div className="l-example-label">{block.label}</div>
+          <div className="l-example-body"
+            dangerouslySetInnerHTML={{__html:block.text.replace(/\n/g,'<br/>')}}/>
+        </div>
+      );
+    }
+    return null;
+  });
+}
+
 function LessonView({lesson,modTitle,completed,onComplete,onNext,onPrev}){
   const [data,setData]=useState(null);
   const [loading,setLoading]=useState(true);
@@ -1221,40 +1365,38 @@ function LessonView({lesson,modTitle,completed,onComplete,onNext,onPrev}){
   if(!data)return<div style={{padding:'48px',color:'var(--text4)'}}>Content not available yet — check back soon.</div>;
   return(
     <div className="lesson-view ai">
-      <div className="l-breadcrumb">{modTitle}<span>\u203a</span>{lesson.title}</div>
+      <div className="l-breadcrumb">{modTitle}<span>›</span>{lesson.title}</div>
       <h1 className="l-title">{lesson.title}</h1>
       <div className="l-meta">
         <span className="l-tag gold">Finance</span>
         <span className="l-tag">{modTitle}</span>
         <span className="l-readtime">~{lesson.time}</span>
-        {completed&&<span className="l-tag green">\u2713 Complete</span>}
+        {completed&&<span className="l-tag green">✓ Complete</span>}
       </div>
       <div className="l-hook">
-        <div className="l-hook-label">Consider This</div>
+        <div className="l-hook-label">Analyst Brief</div>
         <div className="l-hook-text">{data.hook}</div>
       </div>
       {data.terms&&data.terms.length>0&&(<><h2 className="l-sec-h">Key Terms</h2><div className="l-terms">{data.terms.map(t=><div key={t.w} className="l-term"><div className="l-term-word">{t.w}</div><div className="l-term-def">{t.d}</div></div>)}</div></>)}
       {data.sections&&data.sections.map((s,si)=>(
         <div key={si}>
           <h2 className="l-sec-h">{s.h}</h2>
-          {s.body&&<p className="l-body" dangerouslySetInnerHTML={{__html:s.body.replace(/\n\n/g,'</p><p class="l-body">')}}/>}
+          {renderBody(s.body)}
           {s.formula&&<div className="l-formula">{s.formula}</div>}
           {s.callout&&<div className="l-callout"><div className="l-callout-bar"/><div className="l-callout-content"><div className="l-callout-label">{s.callout.label}</div><div className="l-callout-text" dangerouslySetInnerHTML={{__html:s.callout.text}}/></div></div>}
-          {s.body2&&<p className="l-body" dangerouslySetInnerHTML={{__html:s.body2}}/>}
           {s.list&&<ul className="l-list">{s.list.map((item,li)=><li key={li}>{item}</li>)}</ul>}
-          {s.steps&&<ol className="l-steps">{s.steps.map((step,sti)=><li key={sti}>{step}</li>)}</ol>}
         </div>
       ))}
       {data.table&&(<><h2 className="l-sec-h">Reference Data</h2><div style={{overflowX:'auto'}}><table className="l-table"><thead><tr>{data.table.headers.map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{data.table.rows.map((row,ri)=><tr key={ri}>{row.map((cell,ci)=><td key={ci}>{cell}</td>)}</tr>)}</tbody></table></div></>)}
       {data.example&&(<><h2 className="l-sec-h">Worked Example</h2><div className="l-example"><div className="l-example-label">{data.example.label}</div><div className="l-example-body" dangerouslySetInnerHTML={{__html:data.example.text.replace(/\n\n/g,'<br/><br/>').replace(/\n/g,'<br/>')}}/></div></>)}
-      {data.interactive==='dcf'&&(<><h2 className="l-sec-h">Interactive DCF Model</h2><p className="l-body" style={{marginBottom:'4px'}}>Build the model yourself. Blue cells are your inputs \u2014 click any one to edit. All outputs recalculate instantly. Start with the defaults, then change WACC and terminal growth to feel the sensitivity.</p><DCFModel companyName={data.modelCompany||'DCF Valuation'}/></>)}
+      {data.interactive==='dcf'&&(<><h2 className="l-sec-h">Interactive DCF Model</h2><p className="l-body" style={{marginBottom:'4px'}}>Build the model yourself. Blue cells are your inputs — click any one to edit. All outputs recalculate instantly.</p><DCFModel companyName={data.modelCompany||'DCF Valuation'}/></>)}
       {data.quiz&&data.quiz.length>0&&<QuizBlock quiz={data.quiz} lessonId={lesson.id}/>}
       <div className="l-foot">
         <div style={{display:'flex',gap:'8px'}}>
-          {onPrev&&<button onClick={onPrev} style={{background:'none',border:'1px solid var(--border)',color:'var(--text3)',cursor:'pointer',fontFamily:'var(--f-body)',fontSize:'11px',fontWeight:500,padding:'10px 20px',borderRadius:'2px',letterSpacing:'.05em',textTransform:'uppercase'}}>\u2190 Previous</button>}
-          <button className={`btn-complete ${completed?'done':''}`} onClick={!completed?onComplete:undefined}>{completed?'\u2713 Completed':'Mark as Complete'}</button>
+          {onPrev&&<button onClick={onPrev} style={{background:'none',border:'1px solid var(--border)',color:'var(--text3)',cursor:'pointer',fontFamily:'var(--f-body)',fontSize:'11px',fontWeight:500,padding:'10px 20px',borderRadius:'2px',letterSpacing:'.05em',textTransform:'uppercase'}}>← Previous</button>}
+          <button className={`btn-complete ${completed?'done':''}`} onClick={!completed?onComplete:undefined}>{completed?'✓ Completed':'Mark as Complete'}</button>
         </div>
-        {onNext&&<button className="btn-next-l" onClick={onNext}>Next Lesson \u2192</button>}
+        {onNext&&<button className="btn-next-l" onClick={onNext}>Next Lesson →</button>}
       </div>
     </div>
   );
