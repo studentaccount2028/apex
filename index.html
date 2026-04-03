@@ -1064,11 +1064,39 @@ function renderBody(body){
 
   return blocks.map((block,bi)=>{
     if(block.type==='prose'){
-      // Split into paragraphs on double newline
-      const paras=block.text.split(/\n\n+/).filter(p=>p.trim());
+      // Split on double newlines first, then treat single newlines as breaks
+      // Single newlines that look like new thoughts (not mid-sentence) become paragraphs
+      const paras=block.text
+        .split(/\n\n+/)
+        .flatMap(chunk=>{
+          // Further split on single newlines that start a new sentence/concept
+          // i.e. lines that aren't continuation of a list or mid-sentence
+          const lines=chunk.split('\n');
+          if(lines.length<=1)return[chunk];
+          // Group lines: if a line starts with capital or is a label, new para
+          const groups=[];
+          let current=lines[0];
+          for(let i=1;i<lines.length;i++){
+            const line=lines[i];
+            const isNewPara=
+              /^[A-Z\[\(]/.test(line)||  // starts with capital or bracket
+              /^Question \d/.test(line)||  // numbered questions
+              /^(D&A|Stock|Working|Changes|Operating|Investing|Financing)/.test(line)||
+              line.trim()==='';
+            if(isNewPara&&current.trim()){
+              groups.push(current);
+              current=line;
+            } else {
+              current=current+' '+line;
+            }
+          }
+          if(current.trim())groups.push(current);
+          return groups;
+        })
+        .filter(p=>p.trim());
       return paras.map((para,pi)=>(
         <p key={bi+'-'+pi} className="l-body"
-          dangerouslySetInnerHTML={{__html:para.replace(/\n/g,'<br/>')}}/>
+          dangerouslySetInnerHTML={{__html:para.trim()}}/>
       ));
     }
     if(block.type==='formula'){
