@@ -1,5 +1,5 @@
 {
-fs_m1: {
+"fs_m1": {
   "hook": "In 2018, General Electric reported a net loss of $22 billion - the largest in its history. The Wall Street analysts who saw it coming were reading the income statement not for the headline number, but for what was happening to margins, revenue mix, and the trajectory of each business segment. This module teaches you to read the same way.",
   "terms": [
     {
@@ -82,7 +82,7 @@ fs_m1: {
   ]
 },
 
-fs_m2: {
+"fs_m2": {
   "hook": "In 2001, Enron reported $979 million in net income. Their operating cash flow was negative $153 million. WorldCom reported billions in profits. They had been capitalizing $3.8 billion in operating expenses - making cash outflows look like assets. Both companies collapsed within months of these filings. The cash flow statement would have shown you why, had you read it.",
   "terms": [],
   "sections": [
@@ -133,7 +133,7 @@ fs_m2: {
   ]
 },
 
-fs_m3: {
+"fs_m3": {
   "hook": "In 2007, Lehman Brothers had $691 billion in assets against $668 billion in liabilities - a 3.2% equity cushion on a $691 billion asset base. 30-to-1 leverage. A 3.3% decline in asset values would eliminate shareholders' equity entirely. That information was in every annual report. The balance sheet was not hiding it. Most analysts were not reading it.",
   "terms": [],
   "sections": [
@@ -184,7 +184,7 @@ fs_m3: {
   ]
 },
 
-fs_m4: {
+"fs_m4": {
   "hook": "Every financial model that has ever been built at Goldman Sachs, Morgan Stanley, or any top- tier investment bank is built on one foundational principle: the three statements move together. Change a revenue assumption, and the effects cascade through every line of every statement. Understanding how they connect is the difference between building a model and using one.",
   "terms": [],
   "sections": [
@@ -204,7 +204,7 @@ fs_m4: {
   "quiz": []
 },
 
-fs_m5: {
+"fs_m5": {
   "hook": "Every major corporate fraud and value destruction event of the last 30 years - Enron, WorldCom, Tyco, Valeant, Wirecard, Luckin Coffee - left clear pattern signatures in their financial statements for years before the event. The analysts who found these patterns early were not smarter. They were trained to look in the right places. This module is that training.",
   "terms": [],
   "sections": [
@@ -237,7 +237,7 @@ fs_m5: {
   ]
 },
 
-fs_m6: {
+"fs_m6": {
   "hook": "It is Monday morning, 7:45 AM. Your MD drops a file on your desk and says: 'Meridian Industrial is on our watchlist. Their CFO is presenting to the investment committee Thursday. I want a preliminary view by tomorrow morning. Three years of statements. Tell me what you see, flag the risks, and give me a direction. One page.' You have 24 hours. This is that exercise. Work through it the way you would on the desk.",
   "terms": [],
   "sections": [
@@ -286,7 +286,7 @@ fs_m6: {
   ]
 },
 
-fs_m7: {
+"fs_m7": {
   "hook": "A DCF model is not a forecasting exercise. It is a structured analytical opinion about what a business is worth - and every single number in that model traces back to financial statement history. The analyst who understands the statements builds a model. The analyst who does not understand them builds a spreadsheet.",
   "terms": [],
   "sections": [
