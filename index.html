@@ -1,0 +1,2806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>APEX Capital Society — Platform</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&family=Anton&family=Condiment&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+@keyframes apexFloat {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-10px); }
+}
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config={
+    corePlugins:{preflight:false},
+    theme:{extend:{
+      colors:{neon:'#6FFF00',cream:'#EFF4FF'},
+      fontFamily:{
+        grotesk:['Anton','sans-serif'],
+        condiment:['Condiment','cursive'],
+      }
+    }}
+  }
+</script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+/* ── Pitch Competition Components ── */
+function PitchHeader({
+  liveLabel = 'Live Competition',
+  schedule = 'Weekly · Every Sunday',
+  tagline = 'Real VCs · Real Feedback · Real Stakes',
+}) {
+  return (
+    <div style={{borderBottom:'1px solid rgba(255,255,255,0.08)',padding:'18px 40px',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:12}}>
+      <div style={{display:'flex',alignItems:'center',gap:12}}>
+        <span className="font-grotesk text-[11px] uppercase tracking-[.25em] text-cream" style={{opacity:0.9,background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.15)',padding:'4px 12px',borderRadius:'100px'}}>
+          {liveLabel}
+        </span>
+        <span className="font-mono text-[11px] uppercase tracking-[.2em] text-cream" style={{opacity:0.35}}>
+          {schedule}
+        </span>
+      </div>
+      <span className="font-mono text-[10px] uppercase tracking-[.18em] text-cream" style={{opacity:0.25}}>
+        {tagline}
+      </span>
+    </div>
+  );
+}
+
+function PitchHero({
+  title = 'APEX Capital Society',
+  subtitle = 'Pitch your business idea to real VCs. Every week.',
+}) {
+  return (
+    <>
+      <div className="font-grotesk text-[28px] uppercase text-cream" style={{lineHeight:1.1,marginBottom:'0.75rem'}}>
+        {title}
+      </div>
+      <div className="font-grotesk text-[18px] uppercase text-cream" style={{opacity:0.55,marginBottom:'1.25rem',lineHeight:1.3}}>
+        {subtitle}
+      </div>
+    </>
+  );
+}
+
+function PitchDescription({
+  text = 'High school students submit 5-question pitches. Real venture capital investors score and judge them. Winners get recognized, feedback, and a platform.',
+}) {
+  return (
+    <p className="font-mono text-[13px] text-cream leading-relaxed" style={{opacity:0.5,marginBottom:'1.75rem'}}>
+      {text}
+    </p>
+  );
+}
+
+function WeeklyCycle({
+  heading = 'Weekly Cycle',
+  steps = [
+    { day: 'Sun', action: 'Open' },
+    { day: 'Thu', action: 'Close' },
+    { day: 'Fri', action: 'Judge' },
+    { day: 'Sat', action: 'Winners' },
+  ],
+  tags = ['No business plan', 'No team required', '45 minutes'],
+  timeline = false,
+}) {
+  if (timeline) {
+    const STEP_META = {
+      Sun: { icon:'📋', bg:'rgba(99,130,255,0.13)',  border:'rgba(99,130,255,0.55)',  glowBase:'0 0 18px rgba(99,130,255,0.45), inset 0 1px 0 rgba(255,255,255,0.18)',  glowPeak:'0 0 36px rgba(99,130,255,0.75), 0 0 70px rgba(99,130,255,0.2), inset 0 1px 0 rgba(255,255,255,0.22)', pulse:true  },
+      Thu: { icon:'🔒', bg:'rgba(160,100,255,0.11)', border:'rgba(160,100,255,0.45)', glowBase:'0 0 16px rgba(160,100,255,0.35), inset 0 1px 0 rgba(255,255,255,0.15)', pulse:false },
+      Fri: { icon:'⚖️', bg:'rgba(201,170,113,0.11)', border:'rgba(201,170,113,0.45)', glowBase:'0 0 16px rgba(201,170,113,0.35), inset 0 1px 0 rgba(255,255,255,0.15)', pulse:false },
+      Sat: { icon:'🏆', bg:'rgba(74,222,128,0.10)',  border:'rgba(74,222,128,0.45)',  glowBase:'0 0 16px rgba(74,222,128,0.35), inset 0 1px 0 rgba(255,255,255,0.15)',  pulse:false },
+    };
+    return (
+      <>
+        <div className="font-grotesk text-[10px] uppercase tracking-[.25em] text-cream" style={{opacity:0.35,marginBottom:'24px'}}>
+          {heading}
+        </div>
+        <div className="pitch-timeline" style={{marginBottom:'2rem'}}>
+          {steps.map((item,i) => {
+            const m = STEP_META[item.day] || STEP_META.Sun;
+            return (
+              <div key={item.day} className="pitch-timeline-step">
+                <div className="pitch-timeline-icon">{m.icon}</div>
+                <div
+                  className="pitch-timeline-node"
+                  style={{
+                    background: m.bg,
+                    border: `1px solid ${m.border}`,
+                    boxShadow: m.glowBase,
+                    animation: m.pulse ? 'timelineNodePulse 2.5s ease-in-out infinite' : undefined,
+                    '--node-glow-base': m.glowBase,
+                    '--node-glow-peak': m.glowPeak || m.glowBase,
+                  }}
+                >{item.day}</div>
+                <div className="font-grotesk text-[14px] uppercase text-cream" style={{opacity:0.9,textAlign:'center',letterSpacing:'.06em'}}>{item.action}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{display:'flex',gap:'10px',flexWrap:'wrap'}}>
+          {tags.map(tag => (
+            <span key={tag} className="font-mono text-[10px] uppercase tracking-[.12em] text-cream"
+              style={{background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.14)',backdropFilter:'blur(12px)',WebkitBackdropFilter:'blur(12px)',padding:'7px 16px',borderRadius:'100px',color:'rgba(239,244,255,0.65)',boxShadow:'inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+              {tag}
+            </span>
+          ))}
+        </div>
+      </>
+    );
+  }
+  return (
+    <>
+      <div className="font-grotesk text-[10px] uppercase tracking-[.25em] text-cream" style={{opacity:0.35,marginBottom:'12px'}}>
+        {heading}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'8px',marginBottom:'1.75rem'}}>
+        {steps.map(item => (
+          <div key={item.day} style={{background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'12px',padding:'12px 10px',textAlign:'center'}}>
+            <div className="font-mono text-[9px] uppercase tracking-[.18em] text-cream" style={{opacity:0.35,marginBottom:4}}>
+              {item.day}
+            </div>
+            <div className="font-grotesk text-[13px] uppercase text-cream" style={{opacity:0.8}}>
+              {item.action}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
+        {tags.map(tag => (
+          <span key={tag} className="font-mono text-[10px] uppercase tracking-[.12em] text-cream" style={{opacity:0.4,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.08)',padding:'5px 12px',borderRadius:'100px'}}>
+            {tag}
+          </span>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function QuestionsPanel({ heading = 'Answer 5 Questions' }) {
+  const [open, setOpen] = React.useState(null);
+  const questions = [
+    {
+      q: 'What are you building?',
+      weight: 20,
+      desc: 'Clearly define the product or service. Judges want a crisp one-sentence answer — no jargon, no hedge words. If you can\'t explain it cold, the idea isn\'t ready.',
+    },
+    {
+      q: 'Why does it matter?',
+      weight: 25,
+      desc: 'Articulate the real-world pain and why it\'s worth solving now. This is the highest-weighted question — most pitches skip the "why now" and lose the room here.',
+    },
+    {
+      q: "Who's your customer?",
+      weight: 20,
+      desc: 'Name a specific, reachable segment. "Everyone" is not a customer. Show you understand who has the problem most acutely and can pay to solve it.',
+    },
+    {
+      q: 'How do you make money?',
+      weight: 20,
+      desc: 'Walk through the revenue model: pricing, unit economics, and how you reach margin over time. Judges score harshness of logic, not optimism of projections.',
+    },
+    {
+      q: "What's your unfair advantage?",
+      weight: 15,
+      desc: 'What do you have that a well-funded competitor can\'t easily replicate? Proprietary data, a founding team insight, a distribution lock — something defensible.',
+    },
+  ];
+  return (
+    <div>
+      <div className="font-grotesk text-[10px] uppercase tracking-[.25em] text-cream" style={{opacity:0.35,marginBottom:'12px'}}>
+        {heading}
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:'6px'}}>
+        {questions.map((item, i) => {
+          const isOpen = open === i;
+          return (
+            <div
+              key={i}
+              onClick={() => setOpen(isOpen ? null : i)}
+              style={{
+                background: isOpen ? 'rgba(99,130,255,0.08)' : 'rgba(255,255,255,0.04)',
+                border: '1px solid ' + (isOpen ? 'rgba(99,130,255,0.22)' : 'rgba(255,255,255,0.07)'),
+                borderRadius:'10px',
+                cursor:'pointer',
+                transition:'background .2s,border-color .2s',
+                overflow:'hidden',
+              }}
+            >
+              <div style={{display:'flex',alignItems:'center',gap:'12px',padding:'10px 14px'}}>
+                <span className="font-mono text-[9px] text-cream" style={{opacity:0.3,flexShrink:0}}>0{i+1}</span>
+                <span className="font-mono text-[12px] text-cream leading-relaxed" style={{opacity:0.75,flex:1}}>{item.q}</span>
+                <span className="font-mono text-[10px]" style={{color:'rgba(99,130,255,0.75)',flexShrink:0,letterSpacing:'.05em'}}>{item.weight}%</span>
+                <span style={{color:'rgba(255,255,255,0.25)',fontSize:'10px',flexShrink:0,transform:isOpen?'rotate(90deg)':'rotate(0deg)',transition:'transform .2s',marginLeft:'2px'}}>›</span>
+              </div>
+              {isOpen && (
+                <div style={{padding:'0 14px 12px 38px'}}>
+                  <div className="font-mono text-[11px] text-cream leading-relaxed" style={{opacity:0.5}}>{item.desc}</div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function HowItWorks({
+  heading = 'How It Works',
+  steps = [
+    'Get scored by AI instantly',
+    'Top 20 go to real VC judges',
+    'Winners get VC feedback in their profile',
+  ],
+}) {
+  return (
+    <div>
+      <div className="font-grotesk text-[10px] uppercase tracking-[.25em] text-cream" style={{opacity:0.35,marginBottom:'12px'}}>
+        {heading}
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:'6px'}}>
+        {steps.map((item, i) => (
+          <div key={i} style={{display:'flex',alignItems:'center',gap:'10px'}}>
+            <span className="font-grotesk text-[11px] text-cream" style={{opacity:0.25}}>→</span>
+            <span className="font-mono text-[12px] text-cream" style={{opacity:0.55}}>{item}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CTAFooter({
+  text = 'Build your portfolio. Get recognized. Launch your career. This is how you start.',
+}) {
+  return (
+    <p className="font-mono text-[12px] text-cream leading-relaxed" style={{opacity:0.4,borderTop:'1px solid rgba(255,255,255,0.07)',paddingTop:'16px',margin:0}}>
+      {text}
+    </p>
+  );
+}
+</script>
+<script type="text/babel">
+const {useState,useEffect,useCallback,useMemo,useRef}=React;
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   MODULE & LESSON DATA
+   ══════════════════════════════════════════════════════════════════════════════ */
+const MODULES=[
+  {id:'m1',title:'Financial Foundations',lessons:[
+    {id:'l1_1',title:'The Time Value of Money',time:'10 min'},
+    {id:'l1_2',title:'Income, Cash Flow & the Savings Rate',time:'9 min'},
+    {id:'l1_3',title:'Understanding Debt, Interest & Credit',time:'11 min'},
+    {id:'l1_4',title:'The Personal Balance Sheet',time:'9 min'},
+    {id:'l1_5',title:'Inflation, Purchasing Power & Real Returns',time:'10 min'},
+    {id:'l1_6',title:'Taxes & After-Tax Decision Making',time:'12 min'},
+    {id:'l1_7',title:'Insurance & Risk Transfer Fundamentals',time:'9 min'},
+  ]},
+  {id:'m2',title:'Investing Fundamentals',lessons:[
+    {id:'l2_1',title:'Asset Classes & Their Characteristics',time:'11 min'},
+    {id:'l2_2',title:'Compound Growth & the Mathematics of Returns',time:'10 min'},
+    {id:'l2_3',title:'Equity Markets: Structure & Price Discovery',time:'12 min'},
+    {id:'l2_4',title:'Fixed Income: Bonds, Duration & Yield',time:'13 min'},
+    {id:'l2_5',title:'Portfolio Construction & Diversification',time:'12 min'},
+    {id:'l2_6',title:'Index Funds, ETFs & Passive Investing',time:'10 min'},
+    {id:'l2_7',title:'Alternative Investments & Private Markets',time:'11 min'},
+  ]},
+  {id:'m3',title:'Risk & Decision-Making',lessons:[
+    {id:'l3_1',title:'The Risk-Return Tradeoff',time:'10 min'},
+    {id:'l3_2',title:'Volatility, Drawdown & Downside Risk',time:'11 min'},
+    {id:'l3_3',title:'Expected Value & Probability Thinking',time:'10 min'},
+    {id:'l3_4',title:'Behavioral Biases in Financial Decision-Making',time:'12 min'},
+    {id:'l3_5',title:'Mental Models for Better Decisions',time:'10 min'},
+    {id:'l3_6',title:'Scenario Analysis & Stress Testing',time:'11 min'},
+    {id:'l3_7',title:'Tail Risk, Black Swans & Fragility',time:'12 min'},
+  ]},
+  {id:'m4',title:'Applied Financial Thinking',lessons:[
+    {id:'l4_1',title:'Reading Financial Statements',time:'14 min'},
+    {id:'l4_2',title:'Financial Ratio Analysis',time:'12 min'},
+    {id:'l4_3',title:'Valuation: Intrinsic Value & DCF',time:'14 min'},
+    {id:'l4_4',title:'Valuation: Multiples & Comparables',time:'11 min'},
+    {id:'l4_5',title:'Capital Allocation & Corporate Finance',time:'12 min'},
+    {id:'l4_6',title:'Macroeconomics & Market Cycles',time:'13 min'},
+    {id:'l4_7',title:'Synthesizing a Full Investment Thesis',time:'14 min'},
+  ]},
+  {id:'mhf2',title:'Fundamental Equity Analysis',lessons:[
+    {id:'hf2_l1',title:'The Moat Framework',time:'14 min'},
+    {id:'hf2_l2',title:'Reading Management Quality',time:'13 min'},
+    {id:'hf2_l3',title:'Industry Structure & Competitive Dynamics',time:'12 min'},
+    {id:'hf2_l4',title:'Earnings Quality & Cash Conversion',time:'14 min'},
+    {id:'hf2_l5',title:'The Balance Sheet as a Risk Document',time:'13 min'},
+    {id:'hf2_l6',title:'Segment Analysis & Geographic Decomposition',time:'12 min'},
+    {id:'hf2_l7',title:'Variant Perception',time:'13 min'},
+    {id:'hf2_l8',title:'Building the Short Thesis',time:'14 min'},
+    {id:'hf2_l9',title:'The Investment Memo & Position Sizing',time:'13 min'}
+  ]},
+  {id:'m_fs',title:'Reading Financial Statements',lessons:[
+    {id:'fs_m1',title:'The Income Statement: Revenue, Costs & Profitability',time:'40 min'},
+    {id:'fs_m2',title:'The Cash Flow Statement: Reality vs. The Accounting Illusion',time:'45 min'},
+    {id:'fs_m3',title:'The Balance Sheet: Financial Structure, Risk & Hidden Obligations',time:'40 min'},
+    {id:'fs_m4',title:'Linking the Three Statements',time:'35 min'},
+    {id:'fs_m5',title:'Analyst Pattern Recognition: Reading Signals Before the Market Does',time:'50 min'},
+    {id:'fs_m6',title:'Goldman Simulation: The Analyst Case',time:'60 min'},
+    {id:'fs_m7',title:'Bridge to Valuation: From Financial Statements to DCF',time:'30 min'},
+  ]},
+  {id:'m_ra',title:'Financial Ratio Analysis',lessons:[
+    {id:'ra_m1',title:'Profitability Ratios: Reading the Economics of a Business',time:'40 min'},
+    {id:'ra_m2',title:'Efficiency Ratios: The Working Capital Cycle',time:'45 min'},
+    {id:'ra_m3',title:'Leverage Ratios: Debt, Coverage & Credit Risk',time:'45 min'},
+    {id:'ra_m4',title:'Liquidity Ratios: Short-Term Solvency',time:'30 min'},
+    {id:'ra_m5',title:'DuPont Analysis: Decomposing Return on Equity',time:'40 min'},
+    {id:'ra_m6',title:'Goldman Simulation: Vantage Industrial Analysis',time:'60 min'},
+  ]},
+  {id:'m_val1',title:'Valuation I: Intrinsic Value & DCF',lessons:[
+    {id:'val_m3_l1',title:'Why DCF Is the Foundation of All Valuation',time:'20 min'},
+    {id:'val_m3_l2',title:'Revenue Forecasting: Top-Down & Bottom-Up',time:'25 min'},
+    {id:'val_m3_l3',title:'Margins, CapEx & Working Capital',time:'25 min'},
+    {id:'val_m3_l4',title:'Building Free Cash Flow to the Firm',time:'20 min'},
+    {id:'val_m3_l5',title:'WACC: Deriving the Discount Rate',time:'30 min'},
+    {id:'val_m3_l6',title:'Terminal Value: GGM & Exit Multiple Methods',time:'25 min'},
+    {id:'val_m3_l7',title:'Sensitivity Analysis & Model Interpretation',time:'20 min'},
+  ]},
+  {id:'m_val2',title:'Valuation II: Multiples & Comparable Companies',lessons:[
+    {id:'ib_m4_l1',title:'Why Multiples Exist: The Logic of Relative Value',time:'9 min'},
+    {id:'ib_m4_l2',title:'EV/EBITDA, EV/Revenue & P/E: Selecting the Right Multiple',time:'13 min'},
+    {id:'ib_m4_l3',title:'Building a Comparable Companies Table',time:'14 min'},
+    {id:'ib_m4_l4',title:'Precedent Transactions Analysis',time:'11 min'},
+    {id:'ib_m4_l5',title:'The Football Field Chart',time:'8 min'},
+  ]},
+];
+const TOTAL=MODULES.reduce((a,m)=>a+m.lessons.length,0);
+
+/* ── LESSON CONTENT (key lessons with full content, others with compact stubs) ── */
+const lessonCache={};
+const lessonFileMap={
+  l1_1:'data/module_foundations.json',l1_2:'data/module_foundations.json',
+  l1_3:'data/module_foundations.json',l1_4:'data/module_foundations.json',
+  l1_5:'data/module_foundations.json',l1_6:'data/module_foundations.json',
+  l1_7:'data/module_foundations.json',
+  l2_1:'data/module_investing.json',l2_2:'data/module_investing.json',
+  l2_3:'data/module_investing.json',l2_4:'data/module_investing.json',
+  l2_5:'data/module_investing.json',l2_6:'data/module_investing.json',
+  l2_7:'data/module_investing.json',
+  l3_1:'data/module_risk.json',l3_2:'data/module_risk.json',
+  l3_3:'data/module_risk.json',l3_4:'data/module_risk.json',
+  l3_5:'data/module_risk.json',l3_6:'data/module_risk.json',
+  l3_7:'data/module_risk.json',
+  l4_1:'data/module_applied.json',l4_2:'data/module_applied.json',
+  l4_3:'data/module_applied.json',l4_4:'data/module_applied.json',
+  l4_5:'data/module_applied.json',l4_6:'data/module_applied.json',
+  l4_7:'data/module_applied.json',
+  hf2_l1:'data/module_hf2.json',hf2_l2:'data/module_hf2.json',
+  hf2_l3:'data/module_hf2.json',hf2_l4:'data/module_hf2.json',
+  hf2_l5:'data/module_hf2.json',hf2_l6:'data/module_hf2.json',
+  hf2_l7:'data/module_hf2.json',hf2_l8:'data/module_hf2.json',
+  hf2_l9:'data/module_hf2.json',
+  fs_m1:'data/module_fs.json',fs_m2:'data/module_fs.json',
+  fs_m3:'data/module_fs.json',fs_m4:'data/module_fs.json',
+  fs_m5:'data/module_fs.json',fs_m6:'data/module_fs.json',
+  fs_m7:'data/module_fs.json',
+  ra_m1:'data/module_ra.json',ra_m2:'data/module_ra.json',
+  ra_m3:'data/module_ra.json',ra_m4:'data/module_ra.json',
+  ra_m5:'data/module_ra.json',ra_m6:'data/module_ra.json',
+  val_m3_l1:'data/module_val1.json',val_m3_l2:'data/module_val1.json',
+  val_m3_l3:'data/module_val1.json',val_m3_l4:'data/module_val1.json',
+  val_m3_l5:'data/module_val1.json',val_m3_l6:'data/module_val1.json',
+  val_m3_l7:'data/module_val1.json',
+  ib_m4_l1:'data/module_val2.json',ib_m4_l2:'data/module_val2.json',
+  ib_m4_l3:'data/module_val2.json',ib_m4_l4:'data/module_val2.json',
+  ib_m4_l5:'data/module_val2.json',
+};
+
+async function fetchLesson(id){
+  if(lessonCache[id])return lessonCache[id];
+  const file=lessonFileMap[id];
+  if(!file){console.warn('No file mapped for lesson:',id);return null;}
+  if(!lessonCache['__file__'+file]){
+    try{
+      const res=await fetch(file);
+      if(!res.ok)throw new Error('HTTP '+res.status+' loading '+file);
+      const data=await res.json();
+      Object.keys(data).forEach(k=>{lessonCache[k]=data[k];});
+      lessonCache['__file__'+file]=true;
+    }catch(e){
+      console.error('Error loading lesson data:',e);
+      return null;
+    }
+  }
+  return lessonCache[id]||null;
+}
+
+
+const GLOSSARY=[
+  {w:'Alpha',d:'Return exceeding what systematic risk exposure predicts.'},{w:'Annuity',d:'Series of equal cash flows at regular intervals.'},
+  {w:'Antifragility',d:'Property of gaining from volatility and disorder.'},{w:'Asset Allocation',d:'Distribution of portfolio across asset classes.'},
+  {w:'Beta',d:'Sensitivity of returns relative to a market benchmark.'},{w:'Black Swan',d:'High-impact, unpredictable event rationalized in retrospect.'},
+  {w:'CAGR',d:'Compound Annual Growth Rate.'},{w:'Compounding',d:'Earning returns on previously earned returns.'},
+  {w:'Correlation',d:'How two assets move together. Range: -1 to +1.'},{w:'DCF',d:'Discounted Cash Flow valuation method.'},
+  {w:'Diversification',d:'Spreading investments across uncorrelated assets.'},{w:'Drawdown',d:'Decline from peak value to subsequent trough.'},
+  {w:'ERP',d:'Equity Risk Premium \u2014 excess return equities provide above risk-free rate.'},{w:'Expected Value',d:'Probability-weighted average of all possible outcomes.'},
+  {w:'FCF',d:'Free Cash Flow \u2014 operating cash flow minus capital expenditures.'},{w:'Inflation',d:'General price increase reducing purchasing power.'},
+  {w:'Intrinsic Value',d:'PV of all future cash flows a business will generate.'},{w:'Kelly Criterion',d:'Formula for optimal position sizing.'},
+  {w:'Leverage',d:'Use of debt to amplify potential returns. Amplifies both gains and losses.'},{w:'Loss Aversion',d:'Feeling losses ~2\u00d7 as intensely as equivalent gains.'},
+  {w:'Margin of Safety',d:'Discount between purchase price and estimated intrinsic value.'},{w:'Maximum Drawdown',d:'Largest historical peak-to-trough decline.'},
+  {w:'Net Worth',d:'Total assets minus total liabilities.'},{w:'P/E Ratio',d:'Price divided by earnings per share.'},
+  {w:'Present Value',d:'Current worth of a future sum, discounted at required return.'},{w:'ROIC',d:'Return on Invested Capital \u2014 NOPAT / Invested Capital.'},
+  {w:'Savings Rate',d:'Savings as percentage of gross income.'},{w:'Sharpe Ratio',d:'(Return \u2212 Risk-Free Rate) / Standard Deviation.'},
+  {w:'Terminal Value',d:'Value of all cash flows beyond the DCF forecast period.'},{w:'Volatility Drag',d:'Reduction in compounded returns caused by variance.'},
+  {w:'WACC',d:'Weighted Average Cost of Capital \u2014 blended required return on all capital.'},
+];
+
+const COURSE_LESSONS={
+  ib1:['l1_1','l1_2','l1_3','l1_4','l1_5','l1_6','l1_7'],
+  ib2:['fs_m1','fs_m2','fs_m3','fs_m4','fs_m5','fs_m6','fs_m7','ra_m1','ra_m2','ra_m3','ra_m4','ra_m5','ra_m6','val_m3_l1','val_m3_l2','val_m3_l3','val_m3_l4','val_m3_l5','val_m3_l6','val_m3_l7','ib_m4_l1','ib_m4_l2','ib_m4_l3','ib_m4_l4','ib_m4_l5'],
+  ib3:['l4_5','l4_6','l4_7'],
+  pe1:['l1_1','l1_2','l1_3','l1_4'],
+  pe2:['l4_3','l4_4','l4_5'],
+  hf1:['l2_1','l2_2','l2_3','l2_4','l2_5','l2_6','l2_7'],
+  hf2:['hf2_l1','hf2_l2','hf2_l3','hf2_l4','hf2_l5','hf2_l6','hf2_l7','hf2_l8','hf2_l9'],
+  hf3:['l3_1','l3_2','l3_3','l3_4'],
+  hf4:['l3_5','l3_6','l3_7','l4_6'],
+  cf1:['l1_1','l1_3','l1_4','l1_6'],
+  cf2:['l1_2','l1_5','l4_1','l4_2'],
+  cf3:['l4_3','l4_4','l4_5'],
+  vc1:['l2_1','l2_7','l3_3'],
+  vc2:['l2_2','l2_3','l3_1','l3_2'],
+  vc3:['l4_3','l4_4','l4_5'],
+};
+
+const TRACKS=[
+  {id:'ib',label:'Investment Banking',short:'IB',icon:'\u2B21',accent:'#2563eb',accentBg:'rgba(37,99,235,.08)',
+   desc:'Master the complete IB skill set \u2014 financial modeling, M&A, LBO, pitch books, and live deal execution.',
+   outcomes:['Build 3-statement, DCF, LBO, and merger models','Read and analyze 10-Ks like a senior analyst','Construct and present a full pitch book','Structure and price leveraged buyout transactions'],
+   prereqs:['No prerequisites for Course 1','Excel familiarity helpful'],
+   courses:[
+    {id:'ib1',title:'Financial Foundations',pretitle:'Course 1 of 5',level:'Foundations',diff:'Introductory',hours:'8 hrs',modules:7,lessons:7,prereq:null,prereqLabel:null,hasContent:true,
+     desc:'Time value of money, three-statement literacy, ratio analysis, and accounting framework.',
+     skills:['TVM','Three Statements','Ratio Analysis','Working Capital','Accounting'],
+     outcomes:['Understand how the three statements link','Calculate key ratios','Identify red flags'],
+     moduleList:[{n:1,t:'Time Value of Money',l:1},{n:2,t:'Cash Flow & Savings',l:1},{n:3,t:'Debt & Credit',l:1},{n:4,t:'Balance Sheet',l:1},{n:5,t:'Inflation & Real Returns',l:1},{n:6,t:'Taxes',l:1},{n:7,t:'Insurance & Risk',l:1}]},
+    {id:'ib2',title:'Financial Modeling I \u2014 DCF & Valuation',pretitle:'Course 2 of 5',level:'Core',diff:'Intermediate',hours:'12 hrs',modules:4,lessons:4,prereq:'ib1',prereqLabel:'Financial Foundations',hasContent:true,
+     desc:'Build a complete 3-statement model and DCF valuation. Every cell, every formula explained.',
+     skills:['3-Statement Analysis','DCF Construction','WACC','Sensitivity Analysis','Comps'],
+     outcomes:['Analyze financial statements professionally','Build a DCF from scratch','Construct a full comps table'],
+     moduleList:[{n:1,t:'Reading Financial Statements',l:1},{n:2,t:'Financial Ratio Analysis',l:1},{n:3,t:'Valuation: Intrinsic Value & DCF',l:1},{n:4,t:'Valuation: Multiples & Comparables',l:1}]},
+    {id:'ib3',title:'Financial Modeling II \u2014 M&A & Capital',pretitle:'Course 3 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:3,lessons:3,prereq:'ib2',prereqLabel:'Financial Modeling I',hasContent:true,
+     desc:'Capital allocation frameworks, macroeconomic regime analysis, and complete investment thesis.',
+     skills:['Capital Allocation','ROIC & EVA','Macro Frameworks','Investment Thesis'],
+     outcomes:['Apply ROIC-WACC framework','Use macro regime analysis','Write a complete thesis'],
+     moduleList:[{n:1,t:'Capital Allocation',l:1},{n:2,t:'Macroeconomics & Cycles',l:1},{n:3,t:'Investment Thesis',l:1}]},
+    {id:'ib4',title:'LBO Modeling',pretitle:'Course 4 of 5',level:'Advanced',diff:'Advanced',hours:'11 hrs',modules:5,lessons:22,prereq:'ib3',prereqLabel:'M&A & Capital',hasContent:false,
+     desc:'Build a leveraged buyout model from scratch.',skills:['LBO Construction','Debt Structuring','IRR & MOIC'],
+     outcomes:['Build a complete LBO model','Structure a leveraged buyout','Calculate sponsor IRR and MOIC'],
+     moduleList:[{n:1,t:'LBO Fundamentals',l:4},{n:2,t:'Sources & Uses',l:4},{n:3,t:'Operating Model',l:5},{n:4,t:'Debt Schedule',l:5},{n:5,t:'Returns Analysis',l:4}]},
+    {id:'ib5',title:'Pitch Book & Deal Execution',pretitle:'Course 5 of 5',level:'Applied',diff:'Advanced',hours:'9 hrs',modules:4,lessons:16,prereq:'ib4',prereqLabel:'LBO Modeling',hasContent:false,
+     desc:'Full deal workflow \u2014 pitch books, CIM analysis, management presentations.',skills:['Pitch Books','CIM Analysis','Deal Process'],
+     outcomes:['Build a complete pitch book','Analyze a CIM','Manage sell-side M&A process'],
+     moduleList:[{n:1,t:'Pitch Book Architecture',l:4},{n:2,t:'Sell-Side M&A',l:4},{n:3,t:'Capital Markets',l:4},{n:4,t:'Full Deal Simulation',l:4}]},
+  ]},
+  {id:'pe',label:'Private Equity',short:'PE',icon:'\u25C8',accent:'#7c3aed',accentBg:'rgba(124,58,237,.08)',
+   desc:'From LBO construction to portfolio company value creation, operational improvement, and exit strategy.',
+   outcomes:['Source and structure PE investments','Build operating improvement models','Manage portfolio companies','Understand LP/GP economics'],
+   prereqs:['Financial Foundations recommended','LBO experience helpful for Course 2+'],
+   courses:[
+    {id:'pe1',title:'PE Fundamentals',pretitle:'Course 1 of 5',level:'Foundations',diff:'Introductory',hours:'7 hrs',modules:4,lessons:4,prereq:null,prereqLabel:null,hasContent:true,
+     desc:'PE industry structure, fund economics, LP/GP relationships.',skills:['Fund Structure','LP/GP Economics','Investment Mandates'],
+     outcomes:['Explain PE fund structure','Differentiate buyout, growth, distressed','Understand TVM as PE foundation'],
+     moduleList:[{n:1,t:'Time Value of Money',l:1},{n:2,t:'Cash Flow',l:1},{n:3,t:'Debt & Credit',l:1},{n:4,t:'Balance Sheet',l:1}]},
+    {id:'pe2',title:'LBO Modeling & Deal Structuring',pretitle:'Course 2 of 5',level:'Core',diff:'Intermediate',hours:'13 hrs',modules:3,lessons:3,prereq:'pe1',prereqLabel:'PE Fundamentals',hasContent:true,
+     desc:'Valuation frameworks for PE deal analysis.',skills:['DCF Valuation','Comps','Capital Allocation'],
+     outcomes:['Apply DCF to PE targets','Use ROIC-WACC framework','Analyze capital allocation from PE perspective'],
+     moduleList:[{n:1,t:'DCF Valuation',l:1},{n:2,t:'Multiples & Comparables',l:1},{n:3,t:'Capital Allocation',l:1}]},
+    {id:'pe3',title:'Due Diligence',pretitle:'Course 3 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:5,lessons:20,prereq:'pe2',prereqLabel:'LBO Modeling',hasContent:false,
+     desc:'Commercial, financial, and operational due diligence.',skills:['Commercial DD','Financial DD','Investment Memo'],
+     outcomes:['Conduct due diligence','Write investment memorandum','Assess management quality'],
+     moduleList:[{n:1,t:'DD Process',l:4},{n:2,t:'Market Analysis',l:4},{n:3,t:'Financial DD',l:4},{n:4,t:'Management Assessment',l:4},{n:5,t:'Investment Memo',l:4}]},
+    {id:'pe4',title:'Value Creation',pretitle:'Course 4 of 5',level:'Advanced',diff:'Advanced',hours:'9 hrs',modules:4,lessons:16,prereq:'pe3',prereqLabel:'Due Diligence',hasContent:false,
+     desc:'Post-acquisition value creation.',skills:['100-Day Plans','Operational Improvement','Add-on M&A'],
+     outcomes:['Design 100-day plan','Model operational improvements','Structure management incentives'],
+     moduleList:[{n:1,t:'100-Day Plan',l:4},{n:2,t:'Revenue & Margin',l:4},{n:3,t:'Add-on Acquisitions',l:4},{n:4,t:'Board Governance',l:4}]},
+    {id:'pe5',title:'Exit Strategy & Fund Management',pretitle:'Course 5 of 5',level:'Applied',diff:'Advanced',hours:'8 hrs',modules:4,lessons:14,prereq:'pe4',prereqLabel:'Value Creation',hasContent:false,
+     desc:'Exit process and fund lifecycle management.',skills:['Exit Process','IPO Preparation','LP Reporting'],
+     outcomes:['Manage exit process','Prepare LP reports','Monitor portfolio performance'],
+     moduleList:[{n:1,t:'Exit Strategy',l:4},{n:2,t:'Sale Process',l:4},{n:3,t:'IPO Execution',l:3},{n:4,t:'Fund Management',l:3}]},
+  ]},
+  {id:'hf',label:'Hedge Fund / Public Markets',short:'HF',icon:'\u25CE',accent:'#059669',accentBg:'rgba(5,150,105,.08)',
+   desc:'Long/short equity, macro frameworks, portfolio construction, and generating actionable investment ideas.',
+   outcomes:['Generate long and short ideas with full thesis','Construct risk-controlled equity portfolio','Apply macro frameworks','Build quantitative screens'],
+   prereqs:['No prerequisites for Course 1','Financial Foundations recommended for Course 2+'],
+   courses:[
+    {id:'hf1',title:'Investment Fundamentals',pretitle:'Course 1 of 5',level:'Foundations',diff:'Introductory',hours:'9 hrs',modules:7,lessons:7,prereq:null,prereqLabel:null,hasContent:true,
+     desc:'Asset classes, market structure, portfolio theory, and foundational frameworks.',skills:['Asset Classes','Market Mechanics','Portfolio Theory','Risk & Return'],
+     outcomes:['Explain risk-return tradeoff','Apply MPT to portfolios','Understand market pricing'],
+     moduleList:[{n:1,t:'Asset Classes',l:1},{n:2,t:'Compounding',l:1},{n:3,t:'Equity Markets',l:1},{n:4,t:'Fixed Income',l:1},{n:5,t:'Portfolio Construction',l:1},{n:6,t:'Index Funds & ETFs',l:1},{n:7,t:'Alternatives',l:1}]},
+    {id:'hf2',title:'Fundamental Equity Analysis',pretitle:'Course 2 of 5',level:'Core',diff:'Intermediate',hours:'18 hrs',modules:3,lessons:9,prereq:'hf1',prereqLabel:'Investment Fundamentals',hasContent:true,
+     desc:'Complete HF equity toolkit \u2014 moats, earnings quality, segment analysis, thesis construction.',skills:['Moat Analysis','Earnings Quality','Balance Sheet Forensics','Short Thesis','Investment Memo'],
+     outcomes:['Identify durable competitive advantages','Detect earnings manipulation','Build complete investment thesis'],
+     moduleList:[{n:1,t:'Business Quality Assessment',l:3},{n:2,t:'Financial Statement Analysis',l:3},{n:3,t:'Variant Perception & Thesis',l:3}]},
+    {id:'hf3',title:'Short Selling & Risk Analysis',pretitle:'Course 3 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:4,lessons:4,prereq:'hf2',prereqLabel:'Fundamental Equity Analysis',hasContent:true,
+     desc:'Risk-return, drawdown, expected value, and behavioral biases.',skills:['Risk-Return','Drawdown & VaR','Expected Value','Behavioral Finance'],
+     outcomes:['Quantify investment risk','Apply expected value thinking','Identify behavioral biases'],
+     moduleList:[{n:1,t:'Risk-Return Tradeoff',l:1},{n:2,t:'Volatility & Drawdown',l:1},{n:3,t:'Expected Value',l:1},{n:4,t:'Behavioral Biases',l:1}]},
+    {id:'hf4',title:'Macro, Models & Tail Risk',pretitle:'Course 4 of 5',level:'Advanced',diff:'Advanced',hours:'11 hrs',modules:4,lessons:4,prereq:'hf3',prereqLabel:'Short Selling & Risk',hasContent:true,
+     desc:'Mental models, stress testing, tail risk, and macroeconomic frameworks.',skills:['Mental Models','Scenario Analysis','Tail Risk','Black Swan Theory'],
+     outcomes:['Apply multi-disciplinary mental models','Stress-test portfolios','Understand macro regime changes'],
+     moduleList:[{n:1,t:'Mental Models',l:1},{n:2,t:'Scenario Analysis',l:1},{n:3,t:'Tail Risk & Black Swans',l:1},{n:4,t:'Macroeconomics & Cycles',l:1}]},
+    {id:'hf5',title:'Portfolio Management',pretitle:'Course 5 of 5',level:'Applied',diff:'Advanced',hours:'9 hrs',modules:4,lessons:16,prereq:'hf4',prereqLabel:'Macro & Models',hasContent:false,
+     desc:'Running a book \u2014 position sizing, risk limits, performance attribution.',skills:['Position Sizing','Risk Limits','Performance Attribution'],
+     outcomes:['Manage risk-controlled equity book','Monitor VaR and drawdown','Prepare quarterly investor letters'],
+     moduleList:[{n:1,t:'Position Sizing',l:4},{n:2,t:'Risk Management',l:4},{n:3,t:'Performance Attribution',l:4},{n:4,t:'Investor Relations',l:4}]},
+  ]},
+  {id:'cf',label:'Corporate Finance / FP&A',short:'CF',icon:'\u25C7',accent:'#d97706',accentBg:'rgba(217,119,6,.08)',
+   desc:'Internal finance function \u2014 budgeting, forecasting, capital allocation, and decision-support analytics.',
+   outcomes:['Build and manage budgets and forecasts','Present analysis to C-suite','Evaluate capital allocation with ROI frameworks','Lead investor relations'],
+   prereqs:['No prerequisites for Course 1','Excel proficiency recommended'],
+   courses:[
+    {id:'cf1',title:'Accounting & Financial Reporting',pretitle:'Course 1 of 5',level:'Foundations',diff:'Introductory',hours:'8 hrs',modules:4,lessons:4,prereq:null,prereqLabel:null,hasContent:true,
+     desc:'TVM, debt mechanics, balance sheet construction, and tax strategy.',skills:['GAAP','TVM','Debt Mechanics','Balance Sheet','Tax Strategy'],
+     outcomes:['Apply TVM to corporate decisions','Construct balance sheets','Understand debt and tax optimization'],
+     moduleList:[{n:1,t:'Time Value of Money',l:1},{n:2,t:'Debt & Credit',l:1},{n:3,t:'Balance Sheet',l:1},{n:4,t:'Taxes',l:1}]},
+    {id:'cf2',title:'FP&A: Budgeting & Forecasting',pretitle:'Course 2 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:4,lessons:4,prereq:'cf1',prereqLabel:'Accounting',hasContent:true,
+     desc:'Driver-based budgeting, variance analysis, and management reporting.',skills:['Driver-Based Budgeting','Variance Analysis','Management Reporting'],
+     outcomes:['Build driver-based budget','Understand inflation impact','Produce management reporting'],
+     moduleList:[{n:1,t:'Cash Flow & Savings',l:1},{n:2,t:'Inflation',l:1},{n:3,t:'Financial Statements',l:1},{n:4,t:'Ratio Analysis',l:1}]},
+    {id:'cf3',title:'Capital Allocation & Investment Analysis',pretitle:'Course 3 of 5',level:'Core',diff:'Intermediate',hours:'9 hrs',modules:3,lessons:3,prereq:'cf2',prereqLabel:'FP&A Budgeting',hasContent:true,
+     desc:'DCF valuation, comparable multiples, and ROIC-WACC framework.',skills:['NPV & IRR','Capital Budgeting','DCF','ROIC & EVA'],
+     outcomes:['Evaluate capital investments with DCF','Build rigorous business cases','Apply ROIC-WACC framework'],
+     moduleList:[{n:1,t:'DCF Valuation',l:1},{n:2,t:'Multiples & Comparables',l:1},{n:3,t:'Capital Allocation',l:1}]},
+    {id:'cf4',title:'Treasury & Working Capital',pretitle:'Course 4 of 5',level:'Advanced',diff:'Advanced',hours:'8 hrs',modules:4,lessons:16,prereq:'cf3',prereqLabel:'Capital Allocation',hasContent:false,
+     desc:'Cash management, liquidity forecasting, hedging.',skills:['Cash Management','Liquidity','FX Hedging'],
+     outcomes:['Build 13-week cash forecast','Design FX hedging program','Optimize working capital'],
+     moduleList:[{n:1,t:'Treasury',l:4},{n:2,t:'Debt Capital Markets',l:4},{n:3,t:'Hedging',l:4},{n:4,t:'Working Capital',l:4}]},
+    {id:'cf5',title:'Investor Relations',pretitle:'Course 5 of 5',level:'Applied',diff:'Advanced',hours:'8 hrs',modules:4,lessons:14,prereq:'cf4',prereqLabel:'Treasury',hasContent:false,
+     desc:'Earnings calls, investor days, and financial communications.',skills:['Earnings Calls','Investor Days','Strategic Planning'],
+     outcomes:['Execute quarterly earnings','Run investor day','Communicate strategy to markets'],
+     moduleList:[{n:1,t:'IR Fundamentals',l:4},{n:2,t:'Earnings Process',l:4},{n:3,t:'Investor Days',l:3},{n:4,t:'Strategic Finance',l:3}]},
+  ]},
+  {id:'vc',label:'Venture Capital',short:'VC',icon:'\u25EC',accent:'#0ea5e9',accentBg:'rgba(14,165,233,.08)',
+   desc:'Early-stage investing \u2014 sourcing, founder assessment, term sheets, and power-law economics.',
+   outcomes:['Evaluate early-stage companies','Negotiate term sheets','Manage venture portfolio','Understand fund economics'],
+   prereqs:['No prerequisites for Course 1'],
+   courses:[
+    {id:'vc1',title:'VC Fundamentals',pretitle:'Course 1 of 5',level:'Foundations',diff:'Introductory',hours:'7 hrs',modules:3,lessons:3,prereq:null,prereqLabel:null,hasContent:true,
+     desc:'VC industry, power-law returns, and foundational analytical frameworks.',skills:['VC Fund Structure','Power-Law','Expected Value'],
+     outcomes:['Explain VC fund economics','Understand power-law distributions','Apply expected value thinking'],
+     moduleList:[{n:1,t:'Asset Classes',l:1},{n:2,t:'Alternatives',l:1},{n:3,t:'Expected Value',l:1}]},
+    {id:'vc2',title:'Startup Evaluation',pretitle:'Course 2 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:4,lessons:4,prereq:'vc1',prereqLabel:'VC Fundamentals',hasContent:true,
+     desc:'Evaluating startups \u2014 compounding, market mechanics, risk-return.',skills:['Compounding','Market Mechanics','Risk-Return'],
+     outcomes:['Apply return analysis to startups','Understand equity market structure','Analyze risk-return tradeoffs'],
+     moduleList:[{n:1,t:'Compounding',l:1},{n:2,t:'Equity Markets',l:1},{n:3,t:'Risk-Return',l:1},{n:4,t:'Drawdown',l:1}]},
+    {id:'vc3',title:'Startup Valuation',pretitle:'Course 3 of 5',level:'Core',diff:'Intermediate',hours:'10 hrs',modules:3,lessons:3,prereq:'vc2',prereqLabel:'Startup Evaluation',hasContent:true,
+     desc:'DCF, multiples, and capital allocation for portfolio decisions.',skills:['VC Valuation','Revenue Multiples','Capital Allocation'],
+     outcomes:['Apply DCF to early-stage companies','Use ROIC-WACC for reinvestment decisions','Construct venture investment thesis'],
+     moduleList:[{n:1,t:'DCF Valuation',l:1},{n:2,t:'Multiples',l:1},{n:3,t:'Capital Allocation',l:1}]},
+    {id:'vc4',title:'Portfolio Management',pretitle:'Course 4 of 5',level:'Advanced',diff:'Advanced',hours:'9 hrs',modules:4,lessons:16,prereq:'vc3',prereqLabel:'Valuation',hasContent:false,
+     desc:'Follow-on decisions, reserves, board governance.',skills:['Follow-on Framework','Reserve Allocation','Board Governance'],
+     outcomes:['Build reserve model','Apply follow-on framework','Provide board-level support'],
+     moduleList:[{n:1,t:'Reserves & Follow-ons',l:4},{n:2,t:'Board Governance',l:4},{n:3,t:'Portfolio Support',l:4},{n:4,t:'Portfolio Monitoring',l:4}]},
+    {id:'vc5',title:'Exits, Returns & Fund Ops',pretitle:'Course 5 of 5',level:'Applied',diff:'Advanced',hours:'8 hrs',modules:4,lessons:14,prereq:'vc4',prereqLabel:'Portfolio Management',hasContent:false,
+     desc:'Exit processes, return metrics, and fund lifecycle.',skills:['Exit Processes','DPI/TVPI/IRR','Carry Waterfall'],
+     outcomes:['Manage IPO/M&A exit','Calculate DPI, TVPI, IRR','Execute Fund II fundraise'],
+     moduleList:[{n:1,t:'Exit Processes',l:4},{n:2,t:'Return Metrics',l:4},{n:3,t:'Secondary Markets',l:3},{n:4,t:'Fund Lifecycle',l:3}]},
+  ]},
+];
+// ─── UPGRADED SPREADSHEET-STYLE DCF MODEL ─────────────────────────────────────
+function DCFModel({companyName}){
+  const defaults={
+    baseRev:500, g:[18,16,14,12,10],
+    ebitMargin:[22,22,22,22,22], taxRate:25,
+    capexPct:8, nwcPct:3,
+    wacc:9.5, termGrowth:3.0,
+    shares:85, netDebt:200, curPrice:32.00
+  };
+  const [inp,setInp]=React.useState({...defaults});
+  const [showOrientation,setShowOrientation]=React.useState(false);
+  const [showFormulas,setShowFormulas]=React.useState(false);
+  const [showSens,setShowSens]=React.useState(true);
+  const [hover,setHover]=React.useState(null);
+  const [activeCell,setActiveCell]=React.useState(null);
+
+  function upd(path,val){
+    const n=parseFloat(val);
+    if(isNaN(n))return;
+    setInp(p=>{
+      const next={...p};
+      if(Array.isArray(path)){
+        const arr=[...next[path[0]]];
+        arr[path[1]]=n;
+        next[path[0]]=arr;
+      } else {
+        next[path]=n;
+      }
+      return next;
+    });
+  }
+
+  // ── COMPUTE ──
+  const model=React.useMemo(()=>{
+    const {baseRev,g,ebitMargin,taxRate,capexPct,nwcPct,wacc,termGrowth,shares,netDebt}=inp;
+    const w=wacc/100, tg=termGrowth/100, tax=taxRate/100;
+    const cp=capexPct/100, nw=nwcPct/100;
+
+    let revs=[baseRev], ebit=[], nopat=[], capex=[], dwc=[], fcf=[], df=[], pvFcf=[];
+    for(let i=0;i<5;i++){
+      const rev=revs[i]*(1+g[i]/100);
+      revs.push(rev);
+      const eb=rev*(ebitMargin[i]/100);
+      const np=eb*(1-tax);
+      const cx=rev*cp;
+      const wc=rev*nw;
+      const fc=np-cx-wc;
+      const d=1/Math.pow(1+w,i+1);
+      ebit.push(eb);
+      nopat.push(np);
+      capex.push(cx);
+      dwc.push(wc);
+      fcf.push(fc);
+      df.push(d);
+      pvFcf.push(fc*d);
+    }
+
+    const lastFcf=fcf[4];
+    const tv=lastFcf*(1+tg)/(w-tg);
+    const pvTv=tv*df[4];
+    const sumPvFcf=pvFcf.reduce((a,b)=>a+b,0);
+    const ev=sumPvFcf+pvTv;
+    const eqVal=ev-netDebt;
+    const ivps=eqVal/shares;
+    const tvPctEV=pvTv/ev*100;
+    const upside=(ivps-inp.curPrice)/inp.curPrice*100;
+    const revGrowthY5=revs[5];
+    const impliedRevCAGR=(Math.pow(revGrowthY5/baseRev,1/5)-1)*100;
+
+    return{revs,ebit,nopat,capex,dwc,fcf,df,pvFcf,tv,pvTv,sumPvFcf,ev,eqVal,ivps,tvPctEV,upside,impliedRevCAGR};
+  },[inp]);
+
+  // ── SENSITIVITY ──
+  const sensData=React.useMemo(()=>{
+    const wRange=[-2,-1,-0.5,0,0.5,1,2].map(d=>inp.wacc+d);
+    const tgRange=[-1.5,-1,-0.5,0,0.5,1,1.5].map(d=>inp.termGrowth+d);
+    return{wRange,tgRange,grid:wRange.map(w=>{
+      const wi=w/100;
+      return tgRange.map(tg=>{
+        if(tg/100>=wi)return null;
+        const lastFcf=model.fcf[4];
+        const tv2=lastFcf*(1+tg/100)/(wi-tg/100);
+        const pvTv2=tv2*model.df[4]*(Math.pow(1+inp.wacc/100,5)/Math.pow(1+wi,5));
+        // Recompute PV of FCFs with new WACC
+        let spv=0;
+        for(let i=0;i<5;i++){spv+=model.fcf[i]/Math.pow(1+wi,i+1);}
+        const pvTvNew=tv2/Math.pow(1+wi,5);
+        const evN=spv+pvTvNew;
+        const eqN=evN-inp.netDebt;
+        return(eqN/inp.shares);
+      });
+    })};
+  },[inp,model]);
+
+  // ── FORMATTING ──
+  const fM=(n)=>n>=1000?`$${(n/1000).toFixed(1)}B`:n>=0?`$${n.toFixed(1)}M`:`($${Math.abs(n).toFixed(1)}M)`;
+  const fB=(n)=>`$${(n/1000).toFixed(2)}B`;
+  const fP=(n)=>`${n.toFixed(1)}%`;
+  const fS=(n)=>`$${n.toFixed(2)}`;
+  const fX=(n)=>`${n.toFixed(3)}x`;
+
+  const BLUE='#1e40af';
+  const BLUE_BG='rgba(37,99,235,.06)';
+  const BLUE_BORDER='rgba(37,99,235,.25)';
+  const HD_BG='#09090e';
+  const SEC_BG='#f1f0ec';
+  const ROW_ALT='rgba(248,247,244,.6)';
+
+  const TOOLTIPS={
+    rev:'Revenue = Prior Year Revenue × (1 + Growth Rate). The top line of the business.',
+    gRate:'Revenue growth rate — how fast the company is growing year over year.',
+    ebit:'EBIT = Revenue × EBIT Margin. Operating profit before interest and taxes.',
+    ebitM:'EBIT Margin — operating profitability as a percentage of revenue.',
+    nopat:'NOPAT = EBIT × (1 − Tax Rate). Net Operating Profit After Tax.',
+    capex:'Capital Expenditure = Revenue × CapEx %. Investment in long-lived assets.',
+    dwc:'Change in Net Working Capital = Revenue × NWC %. Cash tied up in operations.',
+    fcf:'Free Cash Flow = NOPAT − CapEx − ΔNWC. Cash available to all capital providers.',
+    df:'Discount Factor = 1/(1+WACC)^n. Converts future cash to present value.',
+    pvFcf:'PV of FCF = FCF × Discount Factor. What each year\'s cash flow is worth today.',
+    tv:'Terminal Value = FCF₅×(1+g)/(WACC−g). Value of all cash flows beyond Year 5.',
+    pvTv:'PV of Terminal Value = TV/(1+WACC)⁵. Terminal value in today\'s dollars.',
+    ev:'Enterprise Value = Σ PV of FCFs + PV of Terminal Value. Total business value.',
+    eqVal:'Equity Value = Enterprise Value − Net Debt. Value belonging to shareholders.',
+    ivps:'Implied Share Price = Equity Value / Shares Outstanding.',
+  };
+  const FORMULAS={
+    rev:'= Prior Year Rev × (1 + Growth %)',
+    ebit:'= Revenue × EBIT Margin %',
+    nopat:'= EBIT × (1 − Tax Rate)',
+    capex:'= Revenue × CapEx %',
+    dwc:'= Revenue × NWC %',
+    fcf:'= NOPAT − CapEx − ΔNWC',
+    df:'= 1 / (1 + WACC)^Year',
+    pvFcf:'= FCF × Discount Factor',
+  };
+
+  // ── CELL COMPONENTS ──
+  function EditCell({value,field,idx,min=-100,max=100,step=0.5,suffix='',prefix=''}){
+    const key=idx!==undefined?`${field}_${idx}`:field;
+    const isActive=activeCell===key;
+    const path=idx!==undefined?[field,idx]:field;
+    // Validation
+    let invalid=false, errMsg='';
+    if(field==='wacc'&&value>30){invalid=true;errMsg='Max 30%';}
+    if(field==='termGrowth'&&value>=inp.wacc){invalid=true;errMsg='Must be < WACC';}
+    if((field==='g')&&Math.abs(value)>100){invalid=true;errMsg='Max ±100%';}
+    return(
+      <td onClick={()=>setActiveCell(key)} style={{
+        background:BLUE_BG, color:invalid?'#dc2626':BLUE, fontWeight:600,
+        fontFamily:'var(--f-mono)', fontSize:'11px', padding:'5px 8px',
+        cursor:'pointer', minWidth:'68px', textAlign:'right',
+        outline:isActive?`2px solid ${BLUE}`:invalid?'2px solid #dc2626':'1px solid '+BLUE_BORDER,
+        outlineOffset:'-1px', position:'relative', whiteSpace:'nowrap'
+      }}>
+        {isActive?(
+          <input type="number" value={value} min={min} max={max} step={step}
+            autoFocus
+            onChange={e=>upd(path,e.target.value)}
+            onBlur={()=>setActiveCell(null)}
+            onKeyDown={e=>{if(e.key==='Enter'||e.key==='Tab'){e.preventDefault();setActiveCell(null);}}}
+            style={{width:'52px',border:'none',background:'transparent',color:BLUE,
+              fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,
+              textAlign:'right',outline:'none'}}/>
+        ):(
+          <span>{prefix}{typeof value==='number'?value.toFixed(1):value}{suffix}</span>
+        )}
+        {invalid&&!isActive&&<div style={{position:'absolute',bottom:'-14px',right:'2px',fontSize:'8px',color:'#dc2626',whiteSpace:'nowrap'}}>{errMsg}</div>}
+      </td>
+    );
+  }
+
+  function OutCell({value,highlight,bold,dim}){
+    return(
+      <td style={{
+        color:highlight?'#059669':dim?'var(--text4)':'var(--text1)',
+        fontFamily:'var(--f-mono)', fontSize:'11px', padding:'5px 8px',
+        textAlign:'right', fontWeight:bold?700:400, whiteSpace:'nowrap',
+        background:highlight?'rgba(5,150,105,.03)':'transparent'
+      }}>{value}</td>
+    );
+  }
+
+  function LabelCell({text,tooltip,formula,indent}){
+    const tt=tooltip&&TOOLTIPS[tooltip];
+    const fm=formula&&showFormulas&&FORMULAS[formula];
+    return(
+      <td style={{
+        padding:`5px 8px 5px ${indent?'24px':'8px'}`, fontSize:'11px',
+        color:'var(--text2)', whiteSpace:'nowrap', position:'relative',
+        fontWeight:indent?300:400, minWidth:'200px'
+      }}
+        onMouseEnter={()=>tt&&setHover(tooltip)}
+        onMouseLeave={()=>setHover(null)}>
+        <span>{text}</span>
+        {fm&&<span style={{marginLeft:'8px',fontSize:'9px',color:'var(--text5)',fontFamily:'var(--f-mono)'}}>{fm}</span>}
+        {hover===tooltip&&tt&&(
+          <div style={{position:'absolute',left:'0',bottom:'100%',background:'var(--ink)',color:'rgba(255,255,255,.85)',padding:'8px 12px',fontSize:'10px',lineHeight:'1.5',maxWidth:'280px',zIndex:20,borderRadius:'2px',fontFamily:'var(--f-body)',fontWeight:300,boxShadow:'0 4px 16px rgba(0,0,0,.3)',whiteSpace:'normal'}}>{tt}</div>
+        )}
+      </td>
+    );
+  }
+
+  function SectionHeader({text,cols}){
+    return(
+      <tr><td colSpan={cols} style={{
+        padding:'6px 8px', background:HD_BG, color:'rgba(255,255,255,.55)',
+        fontFamily:'var(--f-mono)', fontSize:'9px', letterSpacing:'.12em',
+        textTransform:'uppercase', fontWeight:600, borderBottom:'1px solid var(--border-dark)'
+      }}>{text}</td></tr>
+    );
+  }
+
+  const years=['Base','Year 1','Year 2','Year 3','Year 4','Year 5'];
+  const yrsOnly=['Year 1','Year 2','Year 3','Year 4','Year 5'];
+  const COLS=8; // label + base + 5 years + terminal
+
+  // ── ASSESSMENT ──
+  const assessment=model.upside>15?{label:'Undervalued',color:'#059669',bg:'rgba(5,150,105,.08)'}:
+    model.upside<-15?{label:'Overvalued',color:'#dc2626',bg:'rgba(220,38,38,.08)'}:
+    {label:'Fairly Valued',color:'#d97706',bg:'rgba(217,119,6,.08)'};
+
+  return(
+    <div style={{margin:'28px 0'}}>
+      {/* ── ORIENTATION PANEL ── */}
+      <div style={{border:'1px solid var(--border)',marginBottom:'16px',background:'#fff'}}>
+        <button onClick={()=>setShowOrientation(p=>!p)} style={{
+          width:'100%',padding:'14px 20px',background:'none',border:'none',cursor:'pointer',
+          display:'flex',alignItems:'center',justifyContent:'space-between',
+          fontFamily:'var(--f-body)',fontSize:'12px',fontWeight:600,color:'var(--text1)',textAlign:'left'
+        }}>
+          <span style={{display:'flex',alignItems:'center',gap:'8px'}}>
+            <span style={{fontSize:'14px'}}>📘</span> What Is a DCF Model? — Orientation Guide
+          </span>
+          <span style={{fontSize:'10px',color:'var(--text4)'}}>{showOrientation?'▼ Hide':'▶ Show'}</span>
+        </button>
+        {showOrientation&&(
+          <div style={{padding:'0 20px 20px',fontSize:'13px',color:'var(--text2)',lineHeight:1.7,fontWeight:300}}>
+            <p style={{marginBottom:'12px'}}>A <strong>Discounted Cash Flow (DCF)</strong> model estimates what a business is worth today by projecting its future cash flows and discounting them back to present value. It is the foundational valuation methodology used in investment banking, private equity, and hedge fund analysis.</p>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'12px',margin:'16px 0'}}>
+              {[
+                {n:'1',t:'Revenue & FCF Build',d:'Project revenue growth, then calculate free cash flow — the actual cash the business generates after all operating costs and reinvestment.'},
+                {n:'2',t:'Terminal Value',d:'Estimate the value of all cash flows beyond the explicit forecast period. This typically represents 60–80% of total value — the single most important assumption.'},
+                {n:'3',t:'Valuation Bridge',d:'Sum the present values, subtract net debt, and divide by shares outstanding to get an implied share price.'}
+              ].map(s=>(
+                <div key={s.n} style={{background:'var(--surface2)',padding:'14px',border:'1px solid var(--border)'}}>
+                  <div style={{fontFamily:'var(--f-display)',fontSize:'22px',color:'rgba(201,170,113,.15)',marginBottom:'6px'}}>{s.n}</div>
+                  <div style={{fontSize:'11px',fontWeight:600,color:'var(--text1)',marginBottom:'4px'}}>{s.t}</div>
+                  <div style={{fontSize:'10px',color:'var(--text3)',lineHeight:1.6}}>{s.d}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{background:'var(--ink)',padding:'14px 18px',borderLeft:'3px solid var(--gold)'}}>
+              <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--gold)',letterSpacing:'.12em',textTransform:'uppercase',marginBottom:'6px'}}>The Single Most Important Thing</div>
+              <div style={{fontSize:'12px',color:'rgba(255,255,255,.75)',lineHeight:1.7,fontWeight:300}}>Terminal value typically represents <strong style={{color:'var(--gold)'}}>60–80%</strong> of total DCF value. This means the terminal growth rate and WACC assumptions dominate the output. Change the model below and watch how sensitive the share price is to these two inputs.</div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── MODEL HEADER ── */}
+      <div style={{border:'1px solid var(--border)',background:'#fff',overflow:'hidden'}}>
+        <div style={{padding:'14px 20px',background:'var(--ink)',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'10px'}}>
+          <div>
+            <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'rgba(255,255,255,.35)',letterSpacing:'.14em',textTransform:'uppercase',marginBottom:'3px'}}>Interactive DCF Model</div>
+            <div style={{fontFamily:'var(--f-display)',fontSize:'16px',color:'#fff'}}>Apex Software — Discounted Cash Flow Valuation</div>
+          </div>
+          <div style={{display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
+            <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',padding:'3px 8px',borderRadius:'2px',background:BLUE_BG,color:BLUE,border:'1px solid '+BLUE_BORDER}}>BLUE = Your Inputs</div>
+            <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',padding:'3px 8px',borderRadius:'2px',background:'rgba(255,255,255,.05)',color:'rgba(255,255,255,.45)'}}>BLACK = Formulas</div>
+            <button onClick={()=>setShowFormulas(p=>!p)} style={{fontFamily:'var(--f-mono)',fontSize:'9px',padding:'3px 8px',borderRadius:'2px',background:showFormulas?'rgba(201,170,113,.15)':'rgba(255,255,255,.05)',color:showFormulas?'var(--gold)':'rgba(255,255,255,.35)',border:'1px solid '+(showFormulas?'rgba(201,170,113,.3)':'rgba(255,255,255,.1)'),cursor:'pointer'}}>
+              {showFormulas?'✓ Formulas':'Show Formulas'}
+            </button>
+            <button onClick={()=>setInp({...defaults})} style={{fontFamily:'var(--f-mono)',fontSize:'9px',padding:'3px 8px',borderRadius:'2px',background:'rgba(255,255,255,.05)',color:'rgba(255,255,255,.35)',border:'1px solid rgba(255,255,255,.1)',cursor:'pointer'}}>↻ Reset</button>
+          </div>
+        </div>
+
+        {/* ── SPREADSHEET GRID ── */}
+        <div style={{overflowX:'auto'}}>
+          <table style={{width:'100%',borderCollapse:'collapse',fontSize:'11px',minWidth:'720px'}}>
+            <thead>
+              <tr style={{background:SEC_BG}}>
+                <th style={{padding:'7px 8px',textAlign:'left',fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text4)',letterSpacing:'.1em',fontWeight:500,minWidth:'200px',position:'sticky',left:0,background:SEC_BG,zIndex:2}}>LINE ITEM</th>
+                {years.map(y=><th key={y} style={{padding:'7px 8px',textAlign:'right',fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text4)',letterSpacing:'.08em',fontWeight:500,minWidth:'72px'}}>{y}</th>)}
+                <th style={{padding:'7px 8px',textAlign:'right',fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text4)',letterSpacing:'.08em',fontWeight:500}}>Terminal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* ── REVENUE BUILD ── */}
+              <SectionHeader text="Revenue Build" cols={COLS}/>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="Revenue Growth Rate (%)" tooltip="gRate"/>
+                <td style={{padding:'5px 8px',textAlign:'right',fontSize:'10px',color:'var(--text5)',fontFamily:'var(--f-mono)'}}>—</td>
+                {inp.g.map((v,i)=><EditCell key={i} value={v} field="g" idx={i} min={-50} max={100} suffix="%"/>)}
+                <OutCell value={fP(inp.termGrowth)} dim/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="Revenue ($M)" tooltip="rev" formula="rev"/>
+                <OutCell value={fM(model.revs[0])} bold/>
+                {model.revs.slice(1).map((r,i)=><OutCell key={i} value={fM(r)} bold/>)}
+                <OutCell value="—" dim/>
+              </tr>
+
+              {/* ── FCF BUILD ── */}
+              <SectionHeader text="Free Cash Flow Build" cols={COLS}/>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="EBIT Margin (%)" tooltip="ebitM"/>
+                <td style={{padding:'5px 8px',textAlign:'right',fontSize:'10px',color:'var(--text5)',fontFamily:'var(--f-mono)'}}>—</td>
+                {inp.ebitMargin.map((v,i)=><EditCell key={i} value={v} field="ebitMargin" idx={i} min={-50} max={80} suffix="%"/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="EBIT ($M)" tooltip="ebit" formula="ebit" indent/>
+                <td/>
+                {model.ebit.map((v,i)=><OutCell key={i} value={fM(v)}/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="Tax Rate (%)" indent/>
+                <td/>
+                <td colSpan={5} style={{textAlign:'center'}}>
+                  <span onClick={()=>setActiveCell('taxRate')} style={{cursor:'pointer',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,background:BLUE_BG,padding:'2px 8px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='taxRate'?(
+                      <input type="number" value={inp.taxRate} min={0} max={50} step={0.5} autoFocus
+                        onChange={e=>upd('taxRate',e.target.value)} onBlur={()=>setActiveCell(null)}
+                        onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}}
+                        style={{width:'40px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,textAlign:'center',outline:'none'}}/>
+                    ):`${inp.taxRate.toFixed(1)}%`}
+                  </span>
+                </td>
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="NOPAT ($M)" tooltip="nopat" formula="nopat" indent/>
+                <td/>
+                {model.nopat.map((v,i)=><OutCell key={i} value={fM(v)}/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text={`Less: CapEx (${inp.capexPct}% of Rev)`} tooltip="capex" formula="capex" indent/>
+                <td/>
+                {model.capex.map((v,i)=><OutCell key={i} value={`(${fM(v).replace('$','$')})`}/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text={`Less: ΔNWC (${inp.nwcPct}% of Rev)`} tooltip="dwc" formula="dwc" indent/>
+                <td/>
+                {model.dwc.map((v,i)=><OutCell key={i} value={`(${fM(v).replace('$','$')})`}/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'2px solid var(--border)'}}>
+                <LabelCell text="Free Cash Flow ($M)" tooltip="fcf" formula="fcf"/>
+                <td/>
+                {model.fcf.map((v,i)=><OutCell key={i} value={fM(v)} bold highlight={v>0}/>)}
+                <td/>
+              </tr>
+
+              {/* ── ASSUMPTIONS ROW ── */}
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <td style={{padding:'5px 8px',fontSize:'10px',color:'var(--text4)'}}>CapEx % of Revenue</td>
+                <td/>
+                <td colSpan={3} style={{textAlign:'center'}}>
+                  <span onClick={()=>setActiveCell('capexPct')} style={{cursor:'pointer',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,background:BLUE_BG,padding:'2px 8px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='capexPct'?<input type="number" value={inp.capexPct} min={0} max={50} step={0.5} autoFocus onChange={e=>upd('capexPct',e.target.value)} onBlur={()=>setActiveCell(null)} onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}} style={{width:'40px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,textAlign:'center',outline:'none'}}/>:`${inp.capexPct.toFixed(1)}%`}
+                  </span>
+                </td>
+                <td style={{padding:'5px 8px',fontSize:'10px',color:'var(--text4)',textAlign:'right'}}>NWC % of Revenue</td>
+                <td style={{textAlign:'center'}}>
+                  <span onClick={()=>setActiveCell('nwcPct')} style={{cursor:'pointer',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,background:BLUE_BG,padding:'2px 8px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='nwcPct'?<input type="number" value={inp.nwcPct} min={0} max={30} step={0.5} autoFocus onChange={e=>upd('nwcPct',e.target.value)} onBlur={()=>setActiveCell(null)} onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}} style={{width:'40px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'11px',fontWeight:600,textAlign:'center',outline:'none'}}/>:`${inp.nwcPct.toFixed(1)}%`}
+                  </span>
+                </td>
+                <td/>
+              </tr>
+
+              {/* ── DISCOUNTING ── */}
+              <SectionHeader text="Discounting & Present Value" cols={COLS}/>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="WACC" tooltip="df"/>
+                <td colSpan={6} style={{textAlign:'center'}}>
+                  <span onClick={()=>setActiveCell('wacc')} style={{cursor:'pointer',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'12px',fontWeight:700,background:BLUE_BG,padding:'3px 12px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='wacc'?<input type="number" value={inp.wacc} min={1} max={30} step={0.25} autoFocus onChange={e=>upd('wacc',e.target.value)} onBlur={()=>setActiveCell(null)} onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}} style={{width:'50px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'12px',fontWeight:700,textAlign:'center',outline:'none'}}/>:`${inp.wacc.toFixed(1)}%`}
+                  </span>
+                </td>
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="Discount Factor" tooltip="df" formula="df" indent/>
+                <td/>
+                {model.df.map((d,i)=><OutCell key={i} value={fX(d)}/>)}
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'2px solid var(--border)'}}>
+                <LabelCell text="PV of Free Cash Flow ($M)" tooltip="pvFcf" formula="pvFcf"/>
+                <td/>
+                {model.pvFcf.map((p,i)=><OutCell key={i} value={fM(p)} bold/>)}
+                <OutCell value={fM(model.sumPvFcf)} bold highlight/>
+              </tr>
+
+              {/* ── TERMINAL VALUE ── */}
+              <SectionHeader text="Terminal Value (Gordon Growth Model)" cols={COLS}/>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="Terminal Growth Rate"/>
+                <td colSpan={6} style={{textAlign:'center'}}>
+                  <span onClick={()=>setActiveCell('termGrowth')} style={{cursor:'pointer',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'12px',fontWeight:700,background:BLUE_BG,padding:'3px 12px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='termGrowth'?<input type="number" value={inp.termGrowth} min={0} max={inp.wacc-0.5} step={0.25} autoFocus onChange={e=>upd('termGrowth',e.target.value)} onBlur={()=>setActiveCell(null)} onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}} style={{width:'50px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'12px',fontWeight:700,textAlign:'center',outline:'none'}}/>:`${inp.termGrowth.toFixed(1)}%`}
+                  </span>
+                </td>
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="Terminal Value ($M)" tooltip="tv" indent/>
+                <td colSpan={5}/>
+                <td/>
+                <OutCell value={fM(model.tv)} bold/>
+              </tr>
+
+              <tr style={{borderBottom:'2px solid var(--border)'}}>
+                <LabelCell text="PV of Terminal Value ($M)" tooltip="pvTv"/>
+                <td colSpan={5} style={{padding:'5px 8px',fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text5)',textAlign:'right'}}>
+                  TV as % of EV: <span style={{color:model.tvPctEV>80?'#dc2626':model.tvPctEV>70?'#d97706':'var(--text3)',fontWeight:600}}>{model.tvPctEV.toFixed(1)}%</span>
+                </td>
+                <td/>
+                <OutCell value={fM(model.pvTv)} bold highlight/>
+              </tr>
+
+              {/* ── VALUATION BRIDGE ── */}
+              <SectionHeader text="Valuation Bridge" cols={COLS}/>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="Enterprise Value" tooltip="ev"/>
+                <td colSpan={6} style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text5)',textAlign:'right',padding:'5px 8px'}}>Σ PV FCFs ({fM(model.sumPvFcf)}) + PV TV ({fM(model.pvTv)})</td>
+                <OutCell value={fB(model.ev)} bold highlight/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="Less: Net Debt ($M)"/>
+                <td colSpan={5}/>
+                <EditCell value={inp.netDebt} field="netDebt" min={-10000} max={100000} step={10} prefix="$" suffix="M"/>
+                <td/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)',background:ROW_ALT}}>
+                <LabelCell text="Equity Value" tooltip="eqVal"/>
+                <td colSpan={6}/>
+                <OutCell value={fB(model.eqVal)} bold highlight/>
+              </tr>
+
+              <tr style={{borderBottom:'1px solid var(--border)'}}>
+                <LabelCell text="Shares Outstanding (M)"/>
+                <td colSpan={5}/>
+                <EditCell value={inp.shares} field="shares" min={1} max={10000} step={1} suffix="M"/>
+                <td/>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* ── OUTPUT PANEL ── */}
+        <div style={{padding:'20px 24px',background:'linear-gradient(135deg,#09090e 0%,#1a1a24 100%)',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'16px'}}>
+          <div>
+            <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'rgba(255,255,255,.35)',letterSpacing:'.14em',textTransform:'uppercase',marginBottom:'6px'}}>Implied Intrinsic Value Per Share</div>
+            <div style={{display:'flex',alignItems:'baseline',gap:'16px'}}>
+              <div style={{fontFamily:'var(--f-display)',fontSize:'48px',color:'#c9aa71',lineHeight:1}}>{fS(model.ivps)}</div>
+              <div style={{padding:'4px 10px',borderRadius:'2px',background:assessment.bg,fontFamily:'var(--f-mono)',fontSize:'10px',fontWeight:600,color:assessment.color}}>
+                {model.upside>=0?'▲':'▼'} {Math.abs(model.upside).toFixed(1)}% vs. ${inp.curPrice.toFixed(2)} · {assessment.label}
+              </div>
+            </div>
+          </div>
+          <div style={{display:'flex',gap:'28px',flexWrap:'wrap'}}>
+            {[
+              {l:'Enterprise Value',v:fB(model.ev)},
+              {l:'Equity Value',v:fB(model.eqVal)},
+              {l:'TV % of EV',v:fP(model.tvPctEV)},
+              {l:'Current Price',v:fS(inp.curPrice),edit:true},
+            ].map(s=>(
+              <div key={s.l} style={{textAlign:'right'}}>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'rgba(255,255,255,.3)',letterSpacing:'.06em',textTransform:'uppercase',marginBottom:'3px'}}>{s.l}</div>
+                {s.edit?(
+                  <span onClick={()=>setActiveCell('curPrice')} style={{cursor:'pointer',fontFamily:'var(--f-mono)',fontSize:'14px',color:BLUE,fontWeight:600,background:BLUE_BG,padding:'2px 6px',borderRadius:'2px',border:'1px solid '+BLUE_BORDER}}>
+                    {activeCell==='curPrice'?<input type="number" value={inp.curPrice} min={0.01} max={10000} step={0.5} autoFocus onChange={e=>upd('curPrice',e.target.value)} onBlur={()=>setActiveCell(null)} onKeyDown={e=>{if(e.key==='Enter')setActiveCell(null);}} style={{width:'50px',border:'none',background:'transparent',color:BLUE,fontFamily:'var(--f-mono)',fontSize:'14px',fontWeight:600,textAlign:'right',outline:'none'}}/>:fS(inp.curPrice)}
+                  </span>
+                ):(
+                  <div style={{fontFamily:'var(--f-mono)',fontSize:'14px',color:'rgba(255,255,255,.8)',fontWeight:600}}>{s.v}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── SENSITIVITY TABLE ── */}
+        <div style={{borderTop:'1px solid var(--border)'}}>
+          <button onClick={()=>setShowSens(p=>!p)} style={{width:'100%',padding:'10px 20px',background:'none',border:'none',cursor:'pointer',fontFamily:'var(--f-mono)',fontSize:'10px',color:'var(--text3)',letterSpacing:'.1em',textTransform:'uppercase',textAlign:'left',display:'flex',alignItems:'center',gap:'8px'}}>
+            <span style={{fontSize:'11px'}}>{showSens?'▼':'▶'}</span>
+            Sensitivity Analysis — Implied Share Price (WACC × Terminal Growth Rate)
+          </button>
+          {showSens&&(
+            <div style={{overflowX:'auto',padding:'0 20px 16px'}}>
+              <table style={{borderCollapse:'collapse',fontSize:'11px',margin:'0 auto'}}>
+                <thead>
+                  <tr>
+                    <th style={{padding:'5px 10px',background:SEC_BG,fontFamily:'var(--f-mono)',fontSize:'8px',color:'var(--text4)',letterSpacing:'.08em',textAlign:'center',border:'1px solid var(--border)'}}>WACC ↓ \ g →</th>
+                    {sensData.tgRange.map(tg=>(
+                      <th key={tg} style={{padding:'5px 10px',background:tg===inp.termGrowth?BLUE_BG:SEC_BG,fontFamily:'var(--f-mono)',fontSize:'9px',color:tg===inp.termGrowth?BLUE:'var(--text4)',letterSpacing:'.06em',textAlign:'center',border:'1px solid var(--border)',fontWeight:tg===inp.termGrowth?700:400}}>{tg.toFixed(1)}%</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {sensData.grid.map((row,wi)=>{
+                    const wv=sensData.wRange[wi];
+                    const isBaseW=wv===inp.wacc;
+                    return(
+                      <tr key={wi}>
+                        <td style={{padding:'5px 10px',background:isBaseW?BLUE_BG:SEC_BG,fontFamily:'var(--f-mono)',fontSize:'9px',color:isBaseW?BLUE:'var(--text4)',border:'1px solid var(--border)',textAlign:'center',fontWeight:isBaseW?700:400}}>{wv.toFixed(1)}%</td>
+                        {row.map((val,ti)=>{
+                          const tgv=sensData.tgRange[ti];
+                          const isBase=isBaseW&&tgv===inp.termGrowth;
+                          if(val===null)return<td key={ti} style={{padding:'5px 10px',background:'#f8f7f4',border:'1px solid var(--border)',textAlign:'center',fontSize:'9px',color:'var(--text5)'}}>n/a</td>;
+                          const pctDiff=(val-inp.curPrice)/inp.curPrice;
+                          const bg=isBase?'rgba(201,170,113,.15)':pctDiff>0.10?'rgba(5,150,105,.06)':pctDiff<-0.10?'rgba(220,38,38,.06)':pctDiff>-0.10&&pctDiff<0.10?'rgba(217,119,6,.04)':'transparent';
+                          const color=isBase?'#a88b52':pctDiff>0.10?'#059669':pctDiff<-0.10?'#dc2626':'#d97706';
+                          return(<td key={ti} style={{padding:'5px 10px',fontFamily:'var(--f-mono)',fontSize:'11px',color,background:bg,border:'1px solid var(--border)',textAlign:'center',fontWeight:isBase?700:400}}>{fS(val)}</td>);
+                        })}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <div style={{display:'flex',gap:'16px',justifyContent:'center',padding:'8px 0',fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text4)'}}>
+                <span><span style={{display:'inline-block',width:'8px',height:'8px',background:'rgba(5,150,105,.15)',border:'1px solid #059669',marginRight:'4px'}}/>Upside {'>'}10%</span>
+                <span><span style={{display:'inline-block',width:'8px',height:'8px',background:'rgba(217,119,6,.1)',border:'1px solid #d97706',marginRight:'4px'}}/>±10%</span>
+                <span><span style={{display:'inline-block',width:'8px',height:'8px',background:'rgba(220,38,38,.1)',border:'1px solid #dc2626',marginRight:'4px'}}/>Downside {'>'}10%</span>
+                <span><span style={{display:'inline-block',width:'8px',height:'8px',background:'rgba(201,170,113,.2)',border:'1px solid #a88b52',marginRight:'4px'}}/>Base Case</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── DYNAMIC INSIGHTS ── */}
+      <div style={{marginTop:'16px',border:'1px solid var(--border)',background:'#fff',padding:'20px 24px'}}>
+        <div style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'var(--text4)',letterSpacing:'.12em',textTransform:'uppercase',marginBottom:'14px'}}>Key Insights — Dynamic Analysis</div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'12px'}}>
+          <div style={{padding:'14px',background:model.tvPctEV>80?'rgba(220,38,38,.05)':model.tvPctEV>70?'rgba(217,119,6,.05)':'rgba(5,150,105,.05)',border:'1px solid var(--border)'}}>
+            <div style={{fontSize:'10px',fontWeight:600,color:'var(--text1)',marginBottom:'4px'}}>Terminal Value Concentration</div>
+            <div style={{fontFamily:'var(--f-display)',fontSize:'22px',color:model.tvPctEV>80?'#dc2626':model.tvPctEV>70?'#d97706':'#059669',marginBottom:'4px'}}>{model.tvPctEV.toFixed(1)}%</div>
+            <div style={{fontSize:'10px',color:'var(--text3)',lineHeight:1.5}}>
+              {model.tvPctEV>80?'⚠️ Terminal value exceeds 80% of EV — model is heavily dependent on terminal assumptions. Scrutinize WACC and terminal growth carefully.':
+               model.tvPctEV>70?'Terminal value in the 70–80% range — typical for growth companies. Sensitivity to terminal assumptions is meaningful.':
+               'Terminal value below 70% — explicit forecast period cash flows carry significant weight. Model is relatively robust.'}
+            </div>
+          </div>
+          <div style={{padding:'14px',background:'var(--surface2)',border:'1px solid var(--border)'}}>
+            <div style={{fontSize:'10px',fontWeight:600,color:'var(--text1)',marginBottom:'4px'}}>Implied Revenue CAGR</div>
+            <div style={{fontFamily:'var(--f-display)',fontSize:'22px',color:model.impliedRevCAGR>20?'#d97706':'var(--text1)',marginBottom:'4px'}}>{model.impliedRevCAGR.toFixed(1)}%</div>
+            <div style={{fontSize:'10px',color:'var(--text3)',lineHeight:1.5}}>
+              {model.impliedRevCAGR>25?'Growth rate exceeds most industries. Verify against TAM and competitive dynamics.':
+               model.impliedRevCAGR>15?'Strong growth implied. Typical for mid-stage software but aggressive for mature businesses.':
+               'Moderate growth. Reasonable for established businesses with pricing power.'}
+            </div>
+          </div>
+          <div style={{padding:'14px',background:'var(--surface2)',border:'1px solid var(--border)'}}>
+            <div style={{fontSize:'10px',fontWeight:600,color:'var(--text1)',marginBottom:'4px'}}>WACC Assessment</div>
+            <div style={{fontFamily:'var(--f-display)',fontSize:'22px',color:'var(--text1)',marginBottom:'4px'}}>{inp.wacc.toFixed(1)}%</div>
+            <div style={{fontSize:'10px',color:'var(--text3)',lineHeight:1.5}}>
+              {inp.wacc<8?'Below-average WACC — appropriate for low-risk businesses with stable cash flows (utilities, consumer staples).':
+               inp.wacc<11?'Mid-range WACC — typical for established technology and industrial companies with moderate growth.':
+               'Elevated WACC — appropriate for high-growth or high-risk businesses. Increases the discount on future cash flows.'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   UI COMPONENTS
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+function QuizBlock({quiz,lessonId}){
+  const key='apex_quiz_'+lessonId;
+  const [answers,setAnswers]=useState(()=>{try{return JSON.parse(localStorage.getItem(key))||{};}catch{return{};}});
+  const handleAnswer=(qi,oi)=>{if(answers[qi]!==undefined)return;const next={...answers,[qi]:oi};setAnswers(next);try{localStorage.setItem(key,JSON.stringify(next));}catch{}};
+  const correct=quiz.filter((q,i)=>answers[i]===q.ans).length;
+  const answered=Object.keys(answers).length;
+  return(
+    <div className="quiz-wrap">
+      <div className="quiz-head">
+        <span className="quiz-head-title">Knowledge Check \u2014 {quiz.length} Questions</span>
+        {answered>0&&<span className="quiz-head-score">{correct}/{answered} correct{answered===quiz.length?` \u00b7 ${Math.round(correct/quiz.length*100)}%`:''}</span>}
+      </div>
+      {quiz.map((q,qi)=>{const chosen=answers[qi];return(
+        <div key={qi} className="quiz-q">
+          <div className="quiz-qn">Q{qi+1} of {quiz.length}</div>
+          <div className="quiz-qtext">{q.q}</div>
+          <div className="quiz-opts">
+            {q.opts.map((opt,oi)=>{let cls='quiz-opt';if(chosen!==undefined){if(oi===q.ans)cls+=' cr';if(chosen===oi&&oi!==q.ans)cls+=' sw';if(chosen===oi&&oi===q.ans)cls+=' sc';}
+              return(<button key={oi} className={cls} onClick={()=>handleAnswer(qi,oi)} disabled={chosen!==undefined}><span className="quiz-letter">{String.fromCharCode(65+oi)}</span>{opt}</button>);})}
+          </div>
+          {chosen!==undefined&&<div className={`quiz-fb ${chosen===q.ans?'ok':'no'}`}>{chosen===q.ans?'\u2713 Correct \u2014 ':'\u2717 Incorrect \u2014 '}{q.exp}</div>}
+        </div>
+      );})}
+    </div>
+  );
+}
+
+function renderBody(body){
+  if(!body)return null;
+  const blocks=[];
+  // Split body into segments by detecting special block patterns
+  const lines=body.split('\n');
+  let current=[];
+  let i=0;
+
+  const flushProse=()=>{
+    if(current.length===0)return;
+    const text=current.join('\n').trim();
+    if(text){
+      blocks.push({type:'prose',text});
+    }
+    current=[];
+  };
+
+  while(i<lines.length){
+    const line=lines[i];
+
+    // Detect FORMULA block: starts with ═══ or === border line
+    const isFormulaStart=
+      /^[=═]{6,}/.test(line)||
+      (line.includes('═══')||line.includes('==='));
+
+    if(isFormulaStart){
+      flushProse();
+      const formulaLines=[line];
+      i++;
+      while(i<lines.length){
+        formulaLines.push(lines[i]);
+        // End after second closing border line
+        if((/^[=═]{6,}/.test(lines[i])||lines[i].includes('═══'))&&formulaLines.length>1){
+          i++;
+          break;
+        }
+        i++;
+      }
+      blocks.push({type:'formula',text:formulaLines.join('\n')});
+      continue;
+    }
+
+    // Detect standalone formula/structure: indented lines with arrows or math
+    const isStructuredLine=
+      /^\s{2,}/.test(line)&&
+      (line.includes('→')||line.includes('←')||line.includes('×')||
+       line.includes('=')||line.includes('─')||line.includes('+')||
+       /\$[0-9]/.test(line));
+
+    if(isStructuredLine&&current.length===0){
+      // Collect a block of structured lines
+      const structLines=[line];
+      i++;
+      while(i<lines.length&&(
+        /^\s{2,}/.test(lines[i])||
+        /^[─━]+/.test(lines[i])||
+        lines[i].trim()===''&&structLines.length<20
+      )){
+        if(lines[i].trim()===''&&i+1<lines.length&&!/^\s{2,}/.test(lines[i+1]))break;
+        structLines.push(lines[i]);
+        i++;
+      }
+      if(structLines.length>1){
+        blocks.push({type:'formula',text:structLines.join('\n')});
+        continue;
+      } else {
+        current.push(line);
+        i++;
+        continue;
+      }
+    }
+
+    // Detect single-line HTML blocks (lines starting with <tag)
+    if(/^<[a-zA-Z]/.test(line)){
+      flushProse();
+      blocks.push({type:'html',text:line});
+      i++;
+      continue;
+    }
+
+    // Detect CALLOUT block: [LABEL TEXT] on its own line followed by quoted text
+    const calloutMatch=line.match(/^\[([A-Z][A-Z\s:]+)\]$/);
+    if(calloutMatch){
+      flushProse();
+      const label=calloutMatch[1];
+      i++;
+      const calloutLines=[];
+      while(i<lines.length&&lines[i].trim()!==''){
+        calloutLines.push(lines[i]);
+        i++;
+      }
+      blocks.push({type:'callout',label,text:calloutLines.join('\n').replace(/^"|"$/g,'').trim()});
+      continue;
+    }
+
+    // Detect EXAMPLE block: [EXAMPLE: TITLE]
+    const exampleMatch=line.match(/^\[EXAMPLE:\s*(.*?)\]$/);
+    if(exampleMatch){
+      flushProse();
+      const label=exampleMatch[1];
+      i++;
+      const exLines=[];
+      // Collect until blank line or next special block
+      while(i<lines.length&&!lines[i].match(/^\[/)&&!lines[i].match(/^[=═]{10,}/)){
+        exLines.push(lines[i]);
+        i++;
+      }
+      blocks.push({type:'example',label,text:exLines.join('\n').trim()});
+      continue;
+    }
+
+    current.push(line);
+    i++;
+  }
+  flushProse();
+
+  return blocks.map((block,bi)=>{
+    if(block.type==='prose'){
+      // Split on double newlines first, then treat single newlines as breaks
+      // Single newlines that look like new thoughts (not mid-sentence) become paragraphs
+      const paras=block.text
+        .split(/\n\n+/)
+        .flatMap(chunk=>{
+          // Further split on single newlines that start a new sentence/concept
+          // i.e. lines that aren't continuation of a list or mid-sentence
+          const lines=chunk.split('\n');
+          if(lines.length<=1)return[chunk];
+          // Group lines: if a line starts with capital or is a label, new para
+          const groups=[];
+          let current=lines[0];
+          for(let i=1;i<lines.length;i++){
+            const line=lines[i];
+            const isNewPara=
+              /^[A-Z\[\(]/.test(line)||  // starts with capital or bracket
+              /^Question \d/.test(line)||  // numbered questions
+              /^(D&A|Stock|Working|Changes|Operating|Investing|Financing)/.test(line)||
+              line.trim()==='';
+            if(isNewPara&&current.trim()){
+              groups.push(current);
+              current=line;
+            } else {
+              current=current+' '+line;
+            }
+          }
+          if(current.trim())groups.push(current);
+          return groups;
+        })
+        .filter(p=>p.trim());
+      return paras.map((para,pi)=>{
+        // Auto-bold leading "Label: ..." pattern (e.g. "Gross Margin answers: ...")
+        const defPat=/^([A-Z][A-Za-z\/\s&(),'"-]{2,50}?):\s/;
+        const html=defPat.test(para.trim())
+          ?para.trim().replace(defPat,'<strong>$1:</strong> ')
+          :para.trim();
+        return<p key={bi+'-'+pi} className="l-body" dangerouslySetInnerHTML={{__html:html}}/>;
+      });
+    }
+    if(block.type==='html'){
+      return<div key={bi} dangerouslySetInnerHTML={{__html:block.text}}/>;
+    }
+    if(block.type==='formula'){
+      return<div key={bi} className="l-formula">{block.text}</div>;
+    }
+    if(block.type==='callout'){
+      return(
+        <div key={bi} className="l-callout">
+          <div className="l-callout-bar"/>
+          <div className="l-callout-content">
+            <div className="l-callout-label">{block.label}</div>
+            <div className="l-callout-text">{block.text}</div>
+          </div>
+        </div>
+      );
+    }
+    if(block.type==='example'){
+      return(
+        <div key={bi} className="l-example">
+          <div className="l-example-label">{block.label}</div>
+          <div className="l-example-body"
+            dangerouslySetInnerHTML={{__html:block.text.replace(/\n/g,'<br/>')}}/>
+        </div>
+      );
+    }
+    return null;
+  });
+}
+
+function LessonView({lesson,modTitle,completed,onComplete,onNext,onPrev}){
+  const [data,setData]=useState(null);
+  const [loading,setLoading]=useState(true);
+  useEffect(()=>{
+    let cancelled=false;
+    setLoading(true);
+    setData(null);
+    window.scrollTo({top:58,behavior:'smooth'});
+    fetchLesson(lesson.id).then(d=>{if(!cancelled){setData(d);setLoading(false);}});
+    return()=>{cancelled=true;};
+  },[lesson.id]);
+  if(loading)return(
+    <div style={{padding:'80px 48px',textAlign:'center'}}>
+      <div style={{fontFamily:'var(--f-mono)',fontSize:'10px',color:'var(--text5)',letterSpacing:'.14em',textTransform:'uppercase',marginBottom:'12px'}}>Loading lesson content</div>
+      <div style={{width:'40px',height:'2px',background:'var(--gold)',margin:'0 auto',animation:'fadeIn .8s ease infinite alternate'}}/>
+    </div>
+  );
+  if(!data)return<div style={{padding:'48px',color:'var(--text4)'}}>Content not available yet — check back soon.</div>;
+  return(
+    <div className="lesson-view ai">
+      <div className="l-breadcrumb">{modTitle}<span>›</span>{lesson.title}</div>
+      <h1 className="l-title">{lesson.title}</h1>
+      <div className="l-meta">
+        <span className="l-tag gold">Finance</span>
+        <span className="l-tag">{modTitle}</span>
+        <span className="l-readtime">~{lesson.time}</span>
+        {completed&&<span className="l-tag green">✓ Complete</span>}
+      </div>
+      <div className="l-hook">
+        <div className="l-hook-label">Analyst Brief</div>
+        <div className="l-hook-text">{data.hook}</div>
+      </div>
+      {data.terms&&data.terms.length>0&&(<><h2 className="l-sec-h">Key Terms</h2><div className="l-terms">{data.terms.map(t=><div key={t.w} className="l-term"><div className="l-term-word">{t.w}</div><div className="l-term-def">{t.d}</div></div>)}</div></>)}
+      {data.sections&&data.sections.map((s,si)=>(
+        <div key={si}>
+          <h2 className="l-sec-h">{s.h}</h2>
+          {renderBody(s.body)}
+          {s.formula&&<div className="l-formula">{s.formula}</div>}
+          {s.callout&&<div className="l-callout"><div className="l-callout-bar"/><div className="l-callout-content"><div className="l-callout-label">{s.callout.label}</div><div className="l-callout-text" dangerouslySetInnerHTML={{__html:s.callout.text}}/></div></div>}
+          {s.list&&<ul className="l-list">{s.list.map((item,li)=><li key={li}>{item}</li>)}</ul>}
+        </div>
+      ))}
+      {data.table&&(<><h2 className="l-sec-h">Reference Data</h2><div style={{overflowX:'auto'}}><table className="l-table"><thead><tr>{data.table.headers.map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{data.table.rows.map((row,ri)=><tr key={ri}>{row.map((cell,ci)=><td key={ci}>{cell}</td>)}</tr>)}</tbody></table></div></>)}
+      {data.example&&(<><h2 className="l-sec-h">Worked Example</h2><div className="l-example"><div className="l-example-label">{data.example.label}</div><div className="l-example-body" dangerouslySetInnerHTML={{__html:data.example.text.replace(/\n\n/g,'<br/><br/>').replace(/\n/g,'<br/>')}}/></div></>)}
+      {data.interactive==='dcf'&&(<><h2 className="l-sec-h">Interactive DCF Model</h2><p className="l-body" style={{marginBottom:'4px'}}>Build the model yourself. Blue cells are your inputs — click any one to edit. All outputs recalculate instantly.</p><DCFModel companyName={data.modelCompany||'DCF Valuation'}/></>)}
+      {data.quiz&&data.quiz.length>0&&<QuizBlock quiz={data.quiz} lessonId={lesson.id}/>}
+      <div className="l-foot">
+        <div style={{display:'flex',gap:'8px'}}>
+          {onPrev&&<button onClick={onPrev} style={{background:'none',border:'1px solid var(--border)',color:'var(--text3)',cursor:'pointer',fontFamily:'var(--f-body)',fontSize:'11px',fontWeight:500,padding:'10px 20px',borderRadius:'2px',letterSpacing:'.05em',textTransform:'uppercase'}}>← Previous</button>}
+          <button className={`btn-complete ${completed?'done':''}`} onClick={!completed?onComplete:undefined}>{completed?'✓ Completed':'Mark as Complete'}</button>
+        </div>
+        {onNext&&<button className="btn-next-l" onClick={onNext}>Next Lesson →</button>}
+      </div>
+    </div>
+  );
+}
+
+function CRing({pct,size=48,sw=3,color='#c9aa71',track='#e2e0da'}){
+  const r=size/2-sw,c=2*Math.PI*r;
+  return(<svg width={size} height={size} className="cring-svg"><circle cx={size/2} cy={size/2} r={r} fill="none" stroke={track} strokeWidth={sw}/><circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={sw} strokeDasharray={c} strokeDashoffset={c*(1-pct/100)} strokeLinecap="round" style={{transition:'stroke-dashoffset .6s var(--ease)'}}/></svg>);
+}
+
+const DS={'Introductory':{bg:'rgba(5,150,105,.08)',color:'#059669'},'Intermediate':{bg:'rgba(37,99,235,.08)',color:'#2563eb'},'Advanced':{bg:'rgba(220,38,38,.08)',color:'#dc2626'}};
+const LS={'Foundations':{bg:'rgba(201,170,113,.1)',color:'#a88b52'},'Core':{bg:'rgba(9,9,14,.06)',color:'#3a3a4a'},'Advanced':{bg:'rgba(220,38,38,.06)',color:'#dc2626'},'Applied':{bg:'rgba(124,58,237,.07)',color:'#7c3aed'}};
+
+function CourseCard({course,idx,unlocked,complete,accent,onStart}){
+  const ds=DS[course.diff]||DS['Introductory'],ls=LS[course.level]||LS['Foundations'];
+  const hasLessons=course.hasContent&&COURSE_LESSONS[course.id];
+  return(
+    <div className={`ccard ${unlocked&&hasLessons?'clickable':''} ${!unlocked?'locked':''}`} onClick={unlocked&&hasLessons?()=>onStart(course):undefined}>
+      {!unlocked&&course.prereqLabel&&<div className="clock-tip">Complete "{course.prereqLabel}" to unlock</div>}
+      <div className="ccard-inner">
+        <div className="ccard-nc"><div className={`ccard-n ${complete?'done':unlocked?'ok':'no'}`}>{complete?'\u2713':idx+1}</div></div>
+        <div className="ccard-body">
+          <div className="ccard-row">
+            <div><div className="ccard-pretitle" style={{color:unlocked?accent:'var(--text5)'}}>{course.pretitle}</div><div className={`ccard-title${!unlocked?' dim':''}`}>{course.title}{!hasLessons&&unlocked&&<span className="cs-chip" style={{marginLeft:8}}>Coming Soon</span>}</div></div>
+            <div className="ccard-badges"><span className="cbadge" style={{background:ls.bg,color:ls.color}}>{course.level}</span><span className="cbadge" style={{background:ds.bg,color:ds.color}}>{course.diff}</span>{complete&&<span className="cbadge" style={{background:'var(--green-bg)',color:'var(--green)'}}>\u2713 Done</span>}</div>
+          </div>
+          <div className={`ccard-desc${!unlocked?' dim':''}`}>{course.desc}</div>
+          <div className="ccard-meta"><div className="ccard-mi">\u23F1 {course.hours}</div><div className="ccard-sep"/><div className="ccard-mi">\u25EB {course.modules} modules</div><div className="ccard-sep"/><div className="ccard-mi">\u25A4 {course.lessons} lessons</div>{!unlocked&&course.prereqLabel&&<><div className="ccard-sep"/><div className="ccard-mi" style={{color:'var(--text5)'}}>\ud83d\udd12 {course.prereqLabel}</div></>}</div>
+          {unlocked&&hasLessons&&<div className="ccard-skills">{course.skills.map(s=><span key={s} className="cskill">{s}</span>)}</div>}
+        </div>
+        <div className="ccard-ac">
+          {unlocked?(hasLessons?(<><div className="cring-wrap"><CRing pct={complete?100:0} color={complete?'#1d6348':accent}/><div className="cring-pct" style={{color:complete?'var(--green)':accent}}>{complete?'\u2713':'0%'}</div></div><button className="cbtn-start" style={{background:accent}} onClick={e=>{e.stopPropagation();onStart(course)}}>{complete?'Review':'Start'}</button></>):(<><div style={{fontSize:'13px',opacity:.4}}>\ud83d\udd1c</div><button className="cbtn-locked" disabled>Coming Soon</button></>)):(<><div style={{fontSize:'14px'}}>🔒</div><button className="cbtn-locked" disabled>Locked</button>{course.prereqLabel&&<div style={{fontSize:'9px',color:'var(--text5)',textAlign:'center',lineHeight:1.4}}>Finish<br/><span style={{color:'var(--text3)'}}>{course.prereqLabel}</span></div>}</>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CourseModal({course,track,onClose,onStart}){
+  if(!course)return null;
+  return(
+    <div className="cmodal-overlay" onClick={onClose}>
+      <div className="cmodal" onClick={e=>e.stopPropagation()}>
+        <div className="cmodal-head"><div><div className="cmodal-pre" style={{color:track.accent}}>{course.pretitle} \u00b7 {track.label}</div><div className="cmodal-title">{course.title}</div></div><button className="cmodal-x" onClick={onClose}>\u00d7</button></div>
+        <div className="cmodal-body">
+          <div className="cmodal-stats">{[{l:'Duration',v:course.hours},{l:'Modules',v:course.modules},{l:'Lessons',v:course.lessons},{l:'Level',v:course.diff}].map(s=><div key={s.l} className="cmodal-stat"><div className="cms-l">{s.l}</div><div className="cms-v">{s.v}</div></div>)}</div>
+          <div className="cmodal-desc">{course.desc}</div>
+          <div className="cmodal-sec">Curriculum</div>
+          <div>{course.moduleList.map(m=><div key={m.n} className="cmod-row"><div className="cmod-n">{m.n}</div><div className="cmod-name">{m.t}</div><div className="cmod-lessons">{m.l} lesson{m.l!==1?'s':''}</div></div>)}</div>
+          <div className="cmodal-sec">Skills Covered</div>
+          <div className="cmodal-skills">{course.skills.map(s=><span key={s} className="cmodal-skill">{s}</span>)}</div>
+          <div className="cmodal-sec">What You'll Be Able to Do</div>
+          <div className="cmodal-outcomes">{course.outcomes.map((o,i)=><div key={i} className="cmodal-outcome"><span style={{color:track.accent,fontWeight:600,flexShrink:0}}>\u2192</span>{o}</div>)}</div>
+          <div className="cmodal-cta">
+            {course.hasContent?<button className="cmbtn" style={{background:track.accent}} onClick={()=>{onStart(course);onClose();}}>Start Course</button>:<button className="cmbtn" style={{background:'var(--text4)',cursor:'not-allowed'}} disabled>Coming Soon</button>}
+            <button className="cmbtn-ghost" onClick={onClose}>Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CatalogView({completed,onStartCourse}){
+  const [tid,setTid]=useState('ib');
+  const [modal,setModal]=useState(null);
+  const track=TRACKS.find(t=>t.id===tid);
+  const trackDone=track?track.courses.filter(c=>{const ls=COURSE_LESSONS[c.id];return ls&&ls.length>0&&ls.every(lid=>completed.has(lid));}).length:0;
+  const trackTotal=track?track.courses.length:0;
+  const trackHours=track?track.courses.reduce((a,c)=>a+parseInt(c.hours),0):0;
+  function isUnlocked(course){if(!course.prereq)return true;const pls=COURSE_LESSONS[course.prereq];if(!pls||pls.length===0)return completed.has(course.prereq+'_done');return pls.every(lid=>completed.has(lid));}
+  function isCourseComplete(course){const ls=COURSE_LESSONS[course.id];if(!ls)return false;return ls.every(lid=>completed.has(lid));}
+  return(
+    <div className="ai" style={{background:'var(--surface)'}}>
+      <div className="cat-hero"><div className="cat-hero-grid"/>
+        <div className="ch-tag au au1">APEX Capital Society \u00b7 Career Track Curriculum</div>
+        <h1 className="ch-h1 au au2">Choose your<br/><em>career track.</em><br/>Build real skills.</h1>
+        <p className="ch-sub au au3">Five structured career tracks. Each course uses real content from our lesson library \u2014 sequenced from foundations through execution-ready.</p>
+        <div className="ch-stats au au4">{[{n:'5',l:'Career Tracks'},{n:'25',l:'Total Courses'},{n:'37',l:'Live Lessons'},{n:'30+',l:'Key Terms'}].map(s=><div key={s.l}><div className="chs-n">{s.n}</div><div className="chs-l">{s.l}</div></div>)}</div>
+      </div>
+      <div className="track-sel">
+        <div className="track-sel-label">Select a career track</div>
+        <div className="track-tabs">{TRACKS.map(t=>{const active=tid===t.id;return(<button key={t.id} className={`ttrack-tab${active?' active':''}`} style={active?{borderBottomColor:t.accent}:{}} onClick={()=>setTid(t.id)}><div className="ttt-top"><span className="ttt-icon" style={active?{color:t.accent}:{}}>{t.icon}</span><span className="ttt-name">{t.short} \u2014 {t.label}</span></div><div className="ttt-count">{t.courses.length} courses</div></button>);})}</div>
+      </div>
+      {track&&(
+        <div className="cat-body ai" key={tid}>
+          <div className="track-hd">
+            <div><div className="thd-badge" style={{background:track.accentBg,color:track.accent}}>{track.icon} {track.label} Track</div><h2 className="thd-h2">{track.label}</h2><p className="thd-sub">{track.desc}</p></div>
+            <div className="thd-right"><div className="thd-right-label">Prerequisites</div>{track.prereqs.map((p,i)=><div key={i} className="thd-right-row"><span style={{color:track.accent,fontSize:'10px'}}>\u2192</span>{p}</div>)}</div>
+          </div>
+          <div className="tprog"><span className="tprog-label">Track Progress</span><div className="tprog-bar"><div className="tprog-fill" style={{width:`${trackTotal>0?(trackDone/trackTotal)*100:0}%`,background:track.accent}}/></div><div style={{display:'flex',gap:'18px',flexShrink:0}}><div><div className="tprog-stat-n" style={{color:track.accent}}>{trackDone}/{trackTotal}</div><div className="tprog-stat-l">Courses</div></div><div><div className="tprog-stat-n">{trackHours}+</div><div className="tprog-stat-l">Hours</div></div></div></div>
+          <div className="clist">{track.courses.map((course,idx)=><CourseCard key={course.id} course={course} idx={idx} unlocked={isUnlocked(course)} complete={isCourseComplete(course)} accent={track.accent} onStart={()=>onStartCourse(course,track)}/>)}</div>
+          <div className="outcomes-section"><div className="outcomes-label">What You'll Achieve</div><div className="outcomes-g">{track.outcomes.map((o,i)=><div key={i} className="outcome-r"><span style={{color:track.accent,fontWeight:600,flexShrink:0}}>\u2192</span>{o}</div>)}</div></div>
+        </div>
+      )}
+      {modal&&<CourseModal course={modal} track={track} onClose={()=>setModal(null)} onStart={(c)=>{onStartCourse(c,track);setModal(null);}}/>}
+    </div>
+  );
+}
+
+function CourseLessonView({course,track,completed,onComplete,onFinishCourse}){
+  const lessonIds=COURSE_LESSONS[course.id]||[];
+  const allLessons=MODULES.flatMap(m=>m.lessons.map(l=>({...l,modId:m.id,modTitle:m.title})));
+  const courseLessons=lessonIds.map(lid=>allLessons.find(l=>l.id===lid)).filter(Boolean);
+  const [activeId,setActiveId]=useState(courseLessons[0]?.id||null);
+  const [sideTab,setSideTab]=useState('modules');
+  const [glossSearch,setGlossSearch]=useState('');
+  const active=courseLessons.find(l=>l.id===activeId)||courseLessons[0];
+  const activeIdx=courseLessons.findIndex(l=>l.id===activeId);
+  const prevLesson=courseLessons[activeIdx-1]||null;
+  const nextLesson=courseLessons[activeIdx+1]||null;
+  const doneLessons=courseLessons.filter(l=>completed.has(l.id)).length;
+  const totalPct=courseLessons.length>0?Math.round(doneLessons/courseLessons.length*100):0;
+  const allDone=doneLessons===courseLessons.length&&courseLessons.length>0;
+  const filteredGloss=useMemo(()=>{if(!glossSearch.trim())return GLOSSARY;const q=glossSearch.toLowerCase();return GLOSSARY.filter(g=>g.w.toLowerCase().includes(q)||g.d.toLowerCase().includes(q));},[glossSearch]);
+  const glossByLetter=useMemo(()=>{const m={};filteredGloss.forEach(g=>{const l=g.w[0].toUpperCase();if(!m[l])m[l]=[];m[l].push(g);});return m;},[filteredGloss]);
+  if(!active)return<div style={{padding:'48px',color:'var(--text4)'}}>No lessons found.</div>;
+  return(
+    <div style={{display:'flex'}}>
+      <aside className="sidebar">
+        <div className="sidebar-head">
+          <div className="sidebar-head-label">{course.title}</div>
+          <div><div className="sidebar-bar-track"><div className="sidebar-bar-fill" style={{width:`${totalPct}%`,background:track.accent}}/></div><div className="sidebar-bar-stats"><span>{doneLessons}/{courseLessons.length} lessons</span><span style={{color:track.accent}}>{totalPct}%</span></div></div>
+        </div>
+        <div className="sidebar-tabs">{[['modules','Modules'],['glossary','Glossary']].map(([id,label])=><button key={id} className={`sidebar-tab ${sideTab===id?'active':''}`} style={sideTab===id?{color:track.accent,borderBottomColor:track.accent}:{}} onClick={()=>setSideTab(id)}>{label}</button>)}</div>
+        <div className="sidebar-scroll">
+          {sideTab==='modules'&&(<div>
+            {courseLessons.map((lesson,li)=>{const isDone=completed.has(lesson.id);const isActive=activeId===lesson.id;return(
+              <button key={lesson.id} className={`lesson-item${isActive?' active':''}${isDone?' done-item':''}`} onClick={()=>setActiveId(lesson.id)}>
+                <span className={`lesson-dot${isDone?' done':isActive?' cur':''}`} style={isDone?{background:track.accent,borderColor:track.accent}:isActive?{borderColor:track.accent}:{}}/>
+                <div><div className="lesson-item-name">{li+1}. {lesson.title}</div><div className="lesson-item-time">{lesson.time}</div></div>
+              </button>
+            );})}
+            {allDone&&<div style={{padding:'16px',margin:'8px',background:'var(--green-bg)',border:'1px solid rgba(29,99,72,.2)',borderRadius:'2px'}}><div style={{fontSize:'10px',color:'var(--green)',fontWeight:600,marginBottom:'6px'}}>\ud83c\udf93 Course Complete!</div><button onClick={onFinishCourse} style={{width:'100%',background:'var(--green)',color:'#fff',border:'none',cursor:'pointer',fontFamily:'var(--f-body)',fontSize:'10px',fontWeight:600,padding:'8px',borderRadius:'2px',letterSpacing:'.06em',textTransform:'uppercase'}}>Back to Catalog</button></div>}
+          </div>)}
+          {sideTab==='glossary'&&(<>
+            <div className="gloss-search"><input placeholder="Search terms..." value={glossSearch} onChange={e=>setGlossSearch(e.target.value)}/></div>
+            {Object.keys(glossByLetter).sort().map(letter=><div key={letter}><div className="gloss-letter">{letter}</div>{glossByLetter[letter].map(g=><div key={g.w} className="gloss-term"><div className="gloss-term-word">{g.w}</div><div className="gloss-term-def">{g.d}</div></div>)}</div>)}
+          </>)}
+        </div>
+      </aside>
+      <main className="content-area"><LessonView key={activeId} lesson={active} modTitle={active.modTitle} completed={completed.has(activeId)} onComplete={()=>onComplete(activeId)} onNext={nextLesson?()=>setActiveId(nextLesson.id):null} onPrev={prevLesson?()=>setActiveId(prevLesson.id):null}/></main>
+    </div>
+  );
+}
+
+function UnifiedDashboard({completed,onNavigate}){
+  const [flipped,setFlipped]=React.useState(false);
+  const [tilt,setTilt]=React.useState({rx:0,ry:0});
+  const cardRef=React.useRef(null);
+  const rafRef=React.useRef(null);
+
+  const totalLessons=TOTAL;
+  const doneLessons=[...completed].filter(k=>MODULES.some(m=>m.lessons.some(l=>l.id===k))).length;
+  const totalPct=totalLessons>0?Math.round(doneLessons/totalLessons*100):0;
+  const moduleProgress=MODULES.map(m=>{
+    const done=m.lessons.filter(l=>completed.has(l.id)).length;
+    const pct=m.lessons.length>0?Math.round(done/m.lessons.length*100):0;
+    return{...m,done,total:m.lessons.length,pct,complete:pct===100};
+  });
+  const achievements=[];
+  if(doneLessons>=1)achievements.push({id:'first',label:'Initiated',icon:'◆',desc:'First lesson complete'});
+  if(doneLessons>=5)achievements.push({id:'five',label:'Analyst I',icon:'◈',desc:'5 lessons complete'});
+  if(doneLessons>=15)achievements.push({id:'fifteen',label:'Analyst II',icon:'✦',desc:'15 lessons complete'});
+  if(moduleProgress.filter(m=>m.complete).length>=1)achievements.push({id:'mod1',label:'Module Clear',icon:'❋',desc:'First module cleared'});
+  if(moduleProgress.filter(m=>m.complete).length>=3)achievements.push({id:'mod3',label:'Triple Clear',icon:'⬡',desc:'Three modules cleared'});
+  if(totalPct>=50)achievements.push({id:'half',label:'Midpoint',icon:'⊕',desc:'Halfway through'});
+  if(totalPct>=100)achievements.push({id:'full',label:'Complete',icon:'★',desc:'Full curriculum done'});
+
+  const courseShort=[
+    'Financial Foundations','Investing Fundamentals','Risk & Decisions',
+    'Applied Finance','Equity Analysis','Financial Statements',
+    'Ratio Analysis','DCF Valuation','Multiples & Comps',
+  ];
+  const memberNo=`ACS-${String(doneLessons).padStart(4,'0')}-BETA`;
+
+  React.useEffect(()=>{
+    const onMove=(e)=>{
+      if(!cardRef.current)return;
+      const rect=cardRef.current.getBoundingClientRect();
+      const nx=Math.max(-1,Math.min(1,(e.clientX-(rect.left+rect.width/2))/(rect.width/2)));
+      const ny=Math.max(-1,Math.min(1,(e.clientY-(rect.top+rect.height/2))/(rect.height/2)));
+      if(rafRef.current)cancelAnimationFrame(rafRef.current);
+      rafRef.current=requestAnimationFrame(()=>setTilt({rx:ny*6,ry:-nx*9}));
+    };
+    const onLeave=()=>{
+      if(rafRef.current)cancelAnimationFrame(rafRef.current);
+      rafRef.current=requestAnimationFrame(()=>setTilt({rx:0,ry:0}));
+    };
+    window.addEventListener('mousemove',onMove);
+    document.addEventListener('mouseleave',onLeave);
+    return()=>{window.removeEventListener('mousemove',onMove);document.removeEventListener('mouseleave',onLeave);};
+  },[]);
+
+  /* ── Blue-tinted glass face ── */
+  const glassFace={
+    position:'absolute',inset:0,borderRadius:28,
+    background:'linear-gradient(135deg,rgba(80,120,255,.2),rgba(50,90,200,.08) 40%,rgba(100,160,255,.18))',
+    border:'1px solid rgba(120,170,255,.28)',
+    boxShadow:'0 48px 120px rgba(0,0,80,.85),0 8px 32px rgba(0,20,80,.55),0 0 60px rgba(80,120,255,.14)',
+    backdropFilter:'blur(28px)',WebkitBackdropFilter:'blur(28px)',
+    overflow:'hidden',
+    backfaceVisibility:'hidden',WebkitBackfaceVisibility:'hidden',
+  };
+  const sheen={
+    position:'absolute',inset:0,
+    background:'radial-gradient(circle at 72% 18%,rgba(180,210,255,.28),transparent 30%),linear-gradient(120deg,rgba(120,170,255,.12),rgba(80,120,255,.04) 40%,rgba(160,210,255,.2) 75%,rgba(80,120,255,.04))',
+    pointerEvents:'none',
+  };
+  const innerBorder={
+    position:'absolute',inset:0,borderRadius:28,
+    boxShadow:'inset 0 0 0 1px rgba(180,210,255,.2)',
+    pointerEvents:'none',
+  };
+  const flipAngle=flipped?180:0;
+  const transform=`rotateX(${tilt.rx}deg) rotateY(${tilt.ry+flipAngle}deg)`;
+  const isSettled=tilt.rx===0&&tilt.ry===0;
+  const transition=flipped||(!flipped&&isSettled)?'transform .65s cubic-bezier(.4,0,.2,1)':'transform .08s linear';
+
+  /* ── Scattered shard positions for award gallery ── */
+  const shardPositions=[
+    {left:0,  top:4,   w:158,h:94, rotate:-2,  rx:'20px 14px 18px 12px'},
+    {left:168,top:0,   w:146,h:88, rotate:1.5, rx:'14px 22px 12px 18px'},
+    {left:324,top:6,   w:134,h:98, rotate:-1,  rx:'18px 12px 20px 16px'},
+    {left:18, top:112, w:150,h:92, rotate:2,   rx:'12px 18px 20px 14px'},
+    {left:180,top:106, w:142,h:96, rotate:-1.5,rx:'16px 12px 14px 22px'},
+    {left:332,top:110, w:128,h:88, rotate:1,   rx:'20px 16px 12px 18px'},
+    {left:70, top:216, w:192,h:78, rotate:-0.5,rx:'14px 18px 22px 12px'},
+  ];
+
+  return(
+    <div style={{minHeight:'calc(100vh - 56px)',width:'100%',background:'linear-gradient(135deg,#0a0f1e 0%,#0d1535 40%,#0a1228 70%,#060c1a 100%)',color:'#EFF4FF',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'48px 24px',gap:28,position:'relative',overflow:'hidden'}}>
+
+      {/* Blue ambient orbs */}
+      <div style={{position:'absolute',top:'-12%',left:'8%',width:'640px',height:'640px',borderRadius:'50%',background:'radial-gradient(circle,rgba(80,120,255,.18) 0%,transparent 70%)',filter:'blur(90px)',pointerEvents:'none'}}/>
+      <div style={{position:'absolute',top:'28%',right:'4%',width:'440px',height:'440px',borderRadius:'50%',background:'radial-gradient(circle,rgba(100,60,255,.14) 0%,transparent 70%)',filter:'blur(80px)',pointerEvents:'none'}}/>
+      <div style={{position:'absolute',bottom:'4%',left:'28%',width:'520px',height:'320px',borderRadius:'50%',background:'radial-gradient(circle,rgba(80,140,255,.10) 0%,transparent 70%)',filter:'blur(80px)',pointerEvents:'none'}}/>
+      {/* Subtle neon accent orb */}
+      <div style={{position:'absolute',top:'55%',left:'60%',width:'280px',height:'280px',borderRadius:'50%',background:'radial-gradient(circle,rgba(111,255,0,.06) 0%,transparent 70%)',filter:'blur(60px)',pointerEvents:'none'}}/>
+
+      {/* Passport label */}
+      <div style={{fontFamily:'var(--f-mono)',fontSize:9,letterSpacing:'.28em',textTransform:'uppercase',color:'rgba(239,244,255,.28)',textAlign:'center',animation:'splashFadeIn .6s ease both'}}>APEX Capital Society — Member Passport</div>
+
+      {/* Card */}
+      <div style={{perspective:1400,cursor:'pointer'}} onClick={()=>setFlipped(f=>!f)}>
+        <div style={{animation:'splashFloat 5s ease-in-out infinite'}}>
+          <div ref={cardRef} style={{position:'relative',width:580,height:364,flexShrink:0,borderRadius:28,transform,transition,transformStyle:'preserve-3d',WebkitTransformStyle:'preserve-3d'}}>
+
+            {/* ── FRONT ── */}
+            <div style={{...glassFace}}>
+              <div style={sheen}/>
+              <div style={innerBorder}/>
+              {/* Neon top edge accent */}
+              <div style={{position:'absolute',top:0,left:'18%',right:'18%',height:1,background:'linear-gradient(90deg,transparent,rgba(111,255,0,.45),transparent)',pointerEvents:'none'}}/>
+
+              {/* APEX wordmark */}
+              <div style={{position:'absolute',left:36,top:30,zIndex:10}}>
+                <div style={{fontFamily:'var(--f-display)',fontSize:54,fontWeight:300,lineHeight:1,letterSpacing:'-.01em',color:'#EFF4FF'}}>APEX</div>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:8.5,letterSpacing:'.3em',textTransform:'uppercase',color:'rgba(111,255,0,.75)',marginTop:5}}>PASSPORT</div>
+              </div>
+
+              {/* Course pills */}
+              <div style={{position:'absolute',left:36,top:115,zIndex:10}}>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:7,letterSpacing:'.18em',color:'rgba(239,244,255,.22)',textTransform:'uppercase',marginBottom:8}}>FOUNDING ACCESS</div>
+                <div style={{display:'flex',flexWrap:'wrap',gap:'5px',maxWidth:290}}>
+                  {moduleProgress.map((m,i)=>(
+                    <div key={m.id} style={{
+                      fontFamily:'var(--f-mono)',fontSize:7,letterSpacing:'.05em',
+                      padding:'3px 8px',borderRadius:4,
+                      background:m.complete?'rgba(111,255,0,.12)':m.done>0?'rgba(80,120,255,.14)':'rgba(255,255,255,.04)',
+                      border:`1px solid ${m.complete?'rgba(111,255,0,.4)':m.done>0?'rgba(80,120,255,.3)':'rgba(255,255,255,.08)'}`,
+                      color:m.complete?'rgba(111,255,0,.9)':m.done>0?'rgba(140,180,255,.75)':'rgba(239,244,255,.22)',
+                    }}>{courseShort[i]||m.title}{m.complete?' ✦':''}</div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right column */}
+              <div style={{position:'absolute',right:30,top:30,zIndex:10,display:'flex',flexDirection:'column',alignItems:'flex-end',gap:8}}>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:8.5,letterSpacing:'.2em',color:'rgba(239,244,255,.35)',textTransform:'uppercase'}}>TIER I</div>
+                {achievements.length>0&&(
+                  <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:6,marginTop:10}}>
+                    <div style={{fontFamily:'var(--f-mono)',fontSize:6.5,letterSpacing:'.16em',color:'rgba(239,244,255,.2)',textTransform:'uppercase'}}>Awards</div>
+                    <div style={{display:'flex',gap:5,flexWrap:'wrap',justifyContent:'flex-end',maxWidth:140}}>
+                      {achievements.map(a=>(
+                        <div key={a.id} title={a.label} style={{
+                          width:26,height:26,borderRadius:'50%',
+                          background:'radial-gradient(circle at 35% 35%,rgba(111,255,0,.2),rgba(80,120,255,.1))',
+                          border:'1px solid rgba(111,255,0,.35)',
+                          display:'flex',alignItems:'center',justifyContent:'center',
+                          fontSize:11,color:'rgba(111,255,0,.92)',
+                          boxShadow:'0 0 10px rgba(111,255,0,.2)',
+                        }}>{a.icon}</div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Bottom */}
+              <div style={{position:'absolute',left:36,bottom:26,zIndex:10}}>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:18,letterSpacing:'.34em',color:'rgba(239,244,255,.6)',lineHeight:1}}>{'BETA  2026'}</div>
+              </div>
+              <div style={{position:'absolute',right:30,bottom:26,zIndex:10,textAlign:'right'}}>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:8,letterSpacing:'.09em',color:'rgba(239,244,255,.28)',marginBottom:2}}>{memberNo}</div>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:7,letterSpacing:'.1em',color:'rgba(111,255,0,.55)'}}>{totalPct}% complete</div>
+              </div>
+
+              {/* Neon bottom edge accent */}
+              <div style={{position:'absolute',bottom:0,left:'28%',right:'28%',height:1,background:'linear-gradient(90deg,transparent,rgba(111,255,0,.3),transparent)',pointerEvents:'none'}}/>
+            </div>
+
+            {/* ── BACK: Glass Award Shards ── */}
+            <div style={{...glassFace,transform:'rotateY(180deg)'}}>
+              <div style={sheen}/>
+              <div style={innerBorder}/>
+
+              {/* Header */}
+              <div style={{position:'absolute',left:28,top:18,right:28,zIndex:10,display:'flex',alignItems:'center',justifyContent:'space-between',borderBottom:'1px solid rgba(120,170,255,.14)',paddingBottom:10}}>
+                <div style={{fontFamily:'var(--f-display)',fontSize:15,color:'#EFF4FF',letterSpacing:'.05em'}}>Award Gallery</div>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:7,color:'rgba(111,255,0,.7)',letterSpacing:'.14em',textTransform:'uppercase'}}>{achievements.length} / 7 unlocked</div>
+              </div>
+
+              {/* Glass shard area */}
+              <div style={{position:'absolute',left:22,top:56,right:22,bottom:46,zIndex:10,overflow:'hidden'}}>
+                {achievements.length===0?(
+                  <div style={{height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:14}}>
+                    <div style={{
+                      width:72,height:72,borderRadius:'50%',
+                      background:'rgba(80,120,255,.09)',
+                      border:'1px solid rgba(120,170,255,.2)',
+                      backdropFilter:'blur(12px)',
+                      display:'flex',alignItems:'center',justifyContent:'center',
+                      fontSize:26,color:'rgba(239,244,255,.18)',
+                    }}>◇</div>
+                    <div style={{fontFamily:'var(--f-mono)',fontSize:8.5,color:'rgba(239,244,255,.22)',letterSpacing:'.14em',textTransform:'uppercase',textAlign:'center',lineHeight:1.9}}>Complete lessons<br/>to unlock awards</div>
+                  </div>
+                ):(
+                  <div style={{position:'relative',width:'100%',height:'100%'}}>
+                    {achievements.map((a,i)=>{
+                      const pos=shardPositions[i%shardPositions.length];
+                      return(
+                        <div key={a.id} style={{
+                          position:'absolute',
+                          left:pos.left,top:pos.top,width:pos.w,height:pos.h,
+                          borderRadius:pos.rx,
+                          background:'linear-gradient(135deg,rgba(80,120,255,.22),rgba(50,80,200,.09) 50%,rgba(100,160,255,.18))',
+                          border:'1px solid rgba(140,180,255,.24)',
+                          backdropFilter:'blur(18px)',WebkitBackdropFilter:'blur(18px)',
+                          boxShadow:'0 4px 28px rgba(0,0,80,.55),inset 0 1px 1px rgba(180,210,255,.22)',
+                          transform:`rotate(${pos.rotate}deg)`,
+                          display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:5,
+                          overflow:'hidden',
+                        }}>
+                          {/* Shard top sheen */}
+                          <div style={{position:'absolute',top:0,left:0,right:0,height:'46%',background:'linear-gradient(180deg,rgba(255,255,255,.15),transparent)',borderRadius:'inherit',pointerEvents:'none'}}/>
+                          {/* Neon top edge */}
+                          <div style={{position:'absolute',top:0,left:'12%',right:'12%',height:1,background:'linear-gradient(90deg,transparent,rgba(111,255,0,.4),transparent)',pointerEvents:'none'}}/>
+                          <div style={{fontSize:20,color:'rgba(111,255,0,.92)',zIndex:1,filter:'drop-shadow(0 0 6px rgba(111,255,0,.45))'}}>{a.icon}</div>
+                          <div style={{fontFamily:'var(--f-mono)',fontSize:7.5,color:'rgba(239,244,255,.75)',letterSpacing:'.1em',textTransform:'uppercase',zIndex:1}}>{a.label}</div>
+                          <div style={{fontFamily:'var(--f-mono)',fontSize:6.5,color:'rgba(239,244,255,.32)',letterSpacing:'.06em',textTransform:'uppercase',zIndex:1,textAlign:'center',padding:'0 10px'}}>{a.desc}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Progress footer */}
+              <div style={{position:'absolute',left:28,bottom:14,right:28,zIndex:10,display:'flex',alignItems:'center',gap:10}}>
+                <div style={{flex:1,height:1.5,background:'rgba(255,255,255,.06)',borderRadius:1,overflow:'hidden'}}>
+                  <div style={{height:'100%',width:`${totalPct}%`,background:'linear-gradient(90deg,rgba(80,120,255,.65),rgba(111,255,0,.75))',borderRadius:1,transition:'width 1s ease'}}/>
+                </div>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:8.5,color:'rgba(111,255,0,.72)',letterSpacing:'.1em',flexShrink:0}}>{totalPct}%</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div style={{fontFamily:'var(--f-mono)',fontSize:8.5,letterSpacing:'.18em',color:'rgba(239,244,255,.18)',textTransform:'uppercase',textAlign:'center',userSelect:'none'}}>
+        {flipped?'Click card to flip back':'Click card to view awards'}
+      </div>
+
+      {/* Access Passport button */}
+      <button
+        onClick={onNavigate}
+        onMouseEnter={e=>{e.currentTarget.style.background='rgba(80,120,255,.2)';e.currentTarget.style.borderColor='rgba(111,255,0,.45)';e.currentTarget.style.color='#6FFF00';e.currentTarget.style.boxShadow='0 0 32px rgba(80,120,255,.2)';}}
+        onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,.06)';e.currentTarget.style.borderColor='rgba(120,170,255,.25)';e.currentTarget.style.color='#EFF4FF';e.currentTarget.style.boxShadow='0 0 24px rgba(80,120,255,.1)';}}
+        style={{fontFamily:'Anton,sans-serif',fontSize:13,letterSpacing:'.22em',textTransform:'uppercase',color:'#EFF4FF',background:'rgba(255,255,255,.06)',border:'1px solid rgba(120,170,255,.25)',backdropFilter:'blur(16px)',borderRadius:100,padding:'14px 40px',cursor:'pointer',boxShadow:'0 0 24px rgba(80,120,255,.1)',transition:'all .2s ease'}}
+      >
+        Access Passport →
+      </button>
+
+    </div>
+  );
+}
+function SplashView({onEnter}){
+  const [phase,setPhase]=useState('idle');
+  const [tilt,setTilt]=useState({rx:0,ry:0,nx:0,ny:0});
+  const cardRef=useRef(null);
+  const rafRef=useRef(null);
+
+  // track mouse globally — card tilts relative to card center
+  useEffect(()=>{
+    const onMove=(e)=>{
+      if(phase!=='idle'||!cardRef.current)return;
+      const rect=cardRef.current.getBoundingClientRect();
+      const cx=rect.left+rect.width/2;
+      const cy=rect.top+rect.height/2;
+      // normalize -1..1 relative to card half-dimensions
+      const nx=(e.clientX-cx)/(rect.width/2);
+      const ny=(e.clientY-cy)/(rect.height/2);
+      // clamp so max tilt is at card edge; slight effect from far away
+      const cx2=Math.max(-1,Math.min(1,nx));
+      const cy2=Math.max(-1,Math.min(1,ny));
+      const rx= cy2*7;
+      const ry=-cx2*9;
+      if(rafRef.current)cancelAnimationFrame(rafRef.current);
+      rafRef.current=requestAnimationFrame(()=>setTilt({rx,ry,nx:cx2,ny:cy2}));
+    };
+    const onLeave=()=>{
+      if(rafRef.current)cancelAnimationFrame(rafRef.current);
+      rafRef.current=requestAnimationFrame(()=>setTilt({rx:0,ry:0}));
+    };
+    window.addEventListener('mousemove',onMove);
+    document.addEventListener('mouseleave',onLeave);
+    return()=>{window.removeEventListener('mousemove',onMove);document.removeEventListener('mouseleave',onLeave);};
+  },[phase]);
+
+  const triggerFlip=()=>{
+    if(phase!=='idle')return;
+    setTilt({rx:0,ry:0,nx:0,ny:0});
+    setPhase('flipping');
+    setTimeout(()=>setPhase('leaving'),700);
+    setTimeout(onEnter,1100);
+  };
+  const isFlipping=phase==='flipping';
+  const isLeaving=phase==='leaving';
+
+  const CardFace=()=>(
+    <div style={{position:'absolute',inset:0,borderRadius:30,overflow:'hidden',background:'rgba(255,255,255,.28)',backdropFilter:'blur(72px)',WebkitBackdropFilter:'blur(72px)',border:'1px solid rgba(255,255,255,.35)'}}>
+      <div style={{position:'absolute',left:40,top:40,right:40,zIndex:20}}>
+        <div style={{fontSize:76,fontWeight:400,letterSpacing:'-.01em',lineHeight:1,fontFamily:"'Anton', sans-serif"}}>APEX</div>
+        <div style={{marginTop:10,fontSize:26,letterSpacing:'.12em',textTransform:'uppercase',color:'rgba(255,255,255,.84)',fontFamily:"'Anton', sans-serif"}}>Capital Society</div>
+        <div style={{marginTop:16,fontSize:17,letterSpacing:'.42em',textTransform:'uppercase',color:'rgba(255,255,255,.62)',fontFamily:"'Anton', sans-serif"}}>Founding Access</div>
+      </div>
+      <div style={{position:'absolute',left:40,bottom:44,fontSize:34,letterSpacing:'.35em',color:'rgba(255,255,255,.80)',zIndex:20,fontFamily:"'Anton', sans-serif"}}>BETA 2026</div>
+      <div style={{position:'absolute',right:40,bottom:44,fontSize:26,letterSpacing:'.18em',color:'rgba(255,255,255,.60)',zIndex:20,fontFamily:"'Anton', sans-serif"}}>TIER I</div>
+    </div>
+  );
+
+  return(
+    <div style={{minHeight:'100vh',width:'100%',background:'#000',color:'#fff',overflow:'hidden',position:'relative',display:'flex',alignItems:'center',justifyContent:'center',padding:'0 24px',opacity:isLeaving?0:1,transition:isLeaving?'opacity .42s ease':'none'}}>
+      <video style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',zIndex:0}} src="Multi-Shot_Video_-_lightly_animate_so_the_trees_and_planet_calmly_move.mp4" autoPlay loop muted playsInline/>
+
+      <div style={{position:'relative',zIndex:10,display:'flex',flexDirection:'column',alignItems:'center',gap:40}}>
+
+        {/* tilt wrapper — perspective lives here, separate from float */}
+        <div style={{
+          perspective:1200,
+          transformStyle:'preserve-3d',
+          cursor: phase==='idle'?'pointer':'default',
+        }} onClick={triggerFlip}>
+          {/* float animation wrapper — only translateY, no conflict with tilt/flip transform */}
+          <div style={{animation:isFlipping?'none':'splashFloat 4.5s ease-in-out infinite',transformStyle:'preserve-3d'}}>
+            {/* tilt/flip transform lives here */}
+            <div ref={cardRef} style={{
+              position:'relative',width:720,height:450,flexShrink:0,
+              borderRadius:30,
+              transform:isFlipping?undefined:`rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
+              transition:isFlipping?'none':tilt.rx===0&&tilt.ry===0?'transform .55s ease':'transform .08s linear',
+              animation:isFlipping?'splashFlip 0.7s cubic-bezier(.4,0,.2,1) forwards':undefined,
+              transformStyle:'preserve-3d',
+              willChange:'transform',
+            }}>
+              {/* card face */}
+              <div style={{position:'absolute',inset:0}}>
+                <CardFace/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* hint text — not clickable */}
+        <div style={{fontFamily:'var(--f-mono)',fontSize:10,color:'rgba(255,255,255,.22)',letterSpacing:'.22em',textTransform:'uppercase',animation:'splashFadeIn .7s .8s ease both',opacity:isFlipping||isLeaving?0:1,transition:'opacity .3s'}}>
+          Click the card to enter
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const NFT_CARDS=[
+  {video:'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_053923_22c0a6a5-313c-474c-85ff-3b50d25e944a.mp4',score:'8.7/10'},
+  {video:'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_054411_511c1b7a-fb2f-42ef-bf6c-32c0b1a06e79.mp4',score:'9/10'},
+  {video:'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_055427_ac7035b5-9f3b-4289-86fc-941b2432317d.mp4',score:'8.2/10'},
+];
+const DECO='Pitch real startups to Silicon Valley venture capitalists';
+const NAV_LINKS=['Homepage','Gallery','Buy NFT','FAQ','Contact'];
+
+function RegisterCard({onEnter}){
+  const wrapRef=useRef(null);
+  const rafRef=useRef(null);
+  const [scrollRx,setScrollRx]=useState(0);
+  const [mouseTilt,setMouseTilt]=useState({rx:0,ry:0});
+
+  // scroll-driven tilt: card tilts forward as it exits top of viewport
+  useEffect(()=>{
+    const onScroll=()=>{
+      if(!wrapRef.current)return;
+      if(rafRef.current)cancelAnimationFrame(rafRef.current);
+      rafRef.current=requestAnimationFrame(()=>{
+        const rect=wrapRef.current.getBoundingClientRect();
+        const viewH=window.innerHeight;
+        // tilt starts when card top drops below 55% of viewport height
+        const trigger=viewH*0.55;
+        const travel=viewH*0.7; // degrees ramp over this many px of scroll
+        const progress=Math.max(0,Math.min(1,(trigger-rect.top)/travel));
+        setScrollRx(progress*28);
+      });
+    };
+    window.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+    return()=>{window.removeEventListener('scroll',onScroll);if(rafRef.current)cancelAnimationFrame(rafRef.current);};
+  },[]);
+
+  // mouse tilt — subtle, matches splash card feel
+  const onMouseMove=e=>{
+    if(!wrapRef.current)return;
+    const rect=wrapRef.current.getBoundingClientRect();
+    const nx=Math.max(-1,Math.min(1,(e.clientX-(rect.left+rect.width/2))/(rect.width/2)));
+    const ny=Math.max(-1,Math.min(1,(e.clientY-(rect.top+rect.height/2))/(rect.height/2)));
+    setMouseTilt({rx:ny*4,ry:-nx*6});
+  };
+  const onMouseLeave=()=>setMouseTilt({rx:0,ry:0});
+
+  const rx=scrollRx+mouseTilt.rx;
+  const ry=mouseTilt.ry;
+  const isIdle=mouseTilt.rx===0&&mouseTilt.ry===0;
+  const transition=isIdle?'transform .55s ease':'transform .08s linear';
+
+  return(
+    <div style={{perspective:1200,transformStyle:'preserve-3d',width:'100%'}}>
+      <div style={{animation:'apexFloat 4s ease-in-out infinite',transformStyle:'preserve-3d'}}>
+        <div
+          ref={wrapRef}
+          onMouseMove={onMouseMove}
+          onMouseLeave={onMouseLeave}
+          style={{
+            width:'100%',backdropFilter:'blur(40px)',WebkitBackdropFilter:'blur(40px)',
+            background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.14)',
+            borderRadius:'32px',padding:'56px 64px',display:'flex',flexDirection:'column',
+            gap:'32px',position:'relative',overflow:'hidden',
+            transform:`rotateX(${rx}deg) rotateY(${ry}deg)`,
+            transition,
+            transformStyle:'preserve-3d',
+            willChange:'transform',
+          }}
+        >
+          <div style={{position:'absolute',top:'-60px',right:'-60px',width:'300px',height:'300px',borderRadius:'50%',background:'radial-gradient(circle,rgba(99,130,255,0.12) 0%,transparent 70%)',pointerEvents:'none'}}/>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'24px',textAlign:'left'}}>
+            {[
+              {label:'Program',value:'APEX Summer Cohort 2025'},
+              {label:'Format',value:'Startup Pitch + Mentorship'},
+              {label:'For',value:'Selected High School Founders'},
+              {label:'Cohort Size',value:'50 Founders'},
+            ].map(f=>(
+              <div key={f.label} style={{backdropFilter:'blur(12px)',WebkitBackdropFilter:'blur(12px)',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'16px',padding:'20px 24px',boxShadow:'none',transition:'box-shadow 0.2s'}}
+                onMouseEnter={e=>e.currentTarget.style.boxShadow='0 8px 32px rgba(99,130,255,0.25)'}
+                onMouseLeave={e=>e.currentTarget.style.boxShadow='none'}
+              >
+                <div className="font-mono text-[11px] uppercase tracking-[.25em] text-cream" style={{opacity:0.4,marginBottom:'6px'}}>{f.label}</div>
+                <div className="font-grotesk text-[18px] uppercase text-cream">{f.value}</div>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={onEnter}
+            style={{alignSelf:'center',backdropFilter:'blur(16px)',WebkitBackdropFilter:'blur(16px)',background:'rgba(255,255,255,0.14)',border:'1px solid rgba(255,255,255,0.6)',borderRadius:'100px',padding:'26px 80px',cursor:'pointer',color:'#EFF4FF',fontFamily:'Anton, sans-serif',fontSize:'20px',letterSpacing:'.2em',textTransform:'uppercase',transition:'all .2s',boxShadow:'0 0 24px rgba(255,255,255,0.35), 0 0 60px rgba(255,255,255,0.15), inset 0 0 20px rgba(255,255,255,0.08)'}}
+            onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,0.24)';e.currentTarget.style.boxShadow='0 0 40px rgba(255,255,255,0.55), 0 0 100px rgba(255,255,255,0.25), inset 0 0 30px rgba(255,255,255,0.12)'}}
+            onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,0.14)';e.currentTarget.style.boxShadow='0 0 24px rgba(255,255,255,0.35), 0 0 60px rgba(255,255,255,0.15), inset 0 0 20px rgba(255,255,255,0.08)'}}
+          >
+            Register Now →
+          </button>
+          <div className="font-mono text-[11px] uppercase tracking-[.2em] text-cream" style={{opacity:0.4,textAlign:'center'}}>Real VCs. Real feedback. Real stakes.</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TypewriterText({text,className,style}){
+  const [displayed,setDisplayed]=React.useState('');
+  const [cycle,setCycle]=React.useState(0);
+  React.useEffect(()=>{
+    let i=0;
+    setDisplayed('');
+    const interval=setInterval(()=>{
+      i++;
+      setDisplayed(text.slice(0,i));
+      if(i>=text.length){
+        clearInterval(interval);
+        setTimeout(()=>setCycle(c=>c+1),5000);
+      }
+    },45);
+    return()=>clearInterval(interval);
+  },[text,cycle]);
+  return(
+    <p className={className} style={style}>
+      {displayed}<span style={{animation:'blink 0.7s step-end infinite'}}>|</span>
+    </p>
+  );
+}
+
+function ThreeStageScaffold(){
+  const stages=[
+    {
+      num:'01',
+      label:'Build Your Pitch',
+      desc:'Answer 5 questions about your startup in 45 minutes. No business plan. No team required. Just your idea and your conviction.',
+      border:'rgba(255,255,255,0.35)',
+      glow:'rgba(255,255,255,0.07)',
+      hoverShadow:'0 24px 60px rgba(200,220,255,0.22), 0 0 0 1px rgba(255,255,255,0.22)',
+      bg:'rgba(255,255,255,0.09)',
+      borderColor:'rgba(255,255,255,0.18)',
+    },
+    {
+      num:'02',
+      label:'Face Real VCs',
+      desc:'Top 20 pitches go directly to Silicon Valley venture capitalists. They read your answers, score your thinking, and leave written feedback.',
+      border:'rgba(99,130,255,0.65)',
+      glow:'rgba(99,130,255,0.08)',
+      hoverShadow:'0 24px 60px rgba(99,130,255,0.28), 0 0 0 1px rgba(99,130,255,0.28)',
+      bg:'rgba(255,255,255,0.05)',
+      borderColor:'rgba(99,130,255,0.18)',
+    },
+    {
+      num:'03',
+      label:'Get Recognized',
+      desc:'Winners receive public VC feedback, a verified founder profile, and a track record that follows them into college applications and beyond.',
+      border:'rgba(201,170,113,0.45)',
+      glow:'rgba(201,170,113,0.06)',
+      hoverShadow:'0 24px 60px rgba(201,170,113,0.24), 0 0 0 1px rgba(201,170,113,0.30)',
+      bg:'rgba(255,255,255,0.03)',
+      borderColor:'rgba(201,170,113,0.22)',
+      badge:'Top Performers Only',
+    },
+  ];
+  const [visible,setVisible]=React.useState(0);
+  const ref=React.useRef(null);
+  React.useEffect(()=>{
+    const el=ref.current;
+    if(!el)return;
+    const obs=new IntersectionObserver(([entry])=>{
+      if(entry.isIntersecting){
+        setVisible(0);
+        let i=0;
+        const t=setInterval(()=>{i++;setVisible(i);if(i>=stages.length)clearInterval(t);},220);
+      }else{setVisible(0);}
+    },{threshold:0.2});
+    obs.observe(el);
+    return()=>obs.disconnect();
+  },[]);
+  return(
+    <div ref={ref}>
+      <div style={{display:'grid',gridTemplateColumns:'1fr auto 1fr auto 1fr',alignItems:'stretch',gap:0}}>
+        {stages.map((s,i)=>(
+          <React.Fragment key={s.num}>
+            <div
+              style={{backdropFilter:'blur(36px)',WebkitBackdropFilter:'blur(36px)',background:s.bg,border:`1px solid ${s.borderColor}`,borderTop:`2px solid ${s.border}`,borderRadius:'24px',padding:'2.5rem',position:'relative',overflow:'hidden',transition:'box-shadow .3s ease, transform .3s ease, opacity 0.5s ease, translateY 0.5s ease',opacity:visible>i?1:0,transform:visible>i?'translateY(0)':'translateY(32px)',transitionDelay:`${i*80}ms`}}
+              onMouseEnter={e=>{e.currentTarget.style.boxShadow=s.hoverShadow;e.currentTarget.style.transform='translateY(-4px)';}}
+              onMouseLeave={e=>{e.currentTarget.style.boxShadow='none';e.currentTarget.style.transform='translateY(0)';}}
+            >
+              <div style={{position:'absolute',top:0,right:0,width:'160px',height:'160px',borderRadius:'50%',background:`radial-gradient(circle,${s.glow} 0%,transparent 70%)`,transform:'translate(30%,-30%)'}}/>
+              {s.badge&&<div style={{position:'absolute',top:'1.5rem',right:'1.5rem',background:'rgba(201,170,113,0.08)',border:'1px solid rgba(201,170,113,0.22)',borderRadius:'100px',padding:'3px 10px',fontFamily:"'JetBrains Mono',monospace",fontSize:'9px',letterSpacing:'.15em',textTransform:'uppercase',color:'rgba(201,170,113,0.65)'}}>{s.badge}</div>}
+              <div className="font-grotesk text-[28px] uppercase text-cream" style={{marginBottom:'1rem'}}>{s.label}</div>
+              <div className="font-mono text-[13px] text-cream leading-relaxed" style={{opacity:0.55}}>{s.desc}</div>
+            </div>
+            {i<stages.length-1&&(
+              <div style={{display:'flex',alignItems:'center',padding:'0 28px',flexShrink:0,opacity:visible>i?1:0,transition:'opacity 0.4s ease',transitionDelay:`${i*80+120}ms`}}>
+                <span style={{color:'rgba(255,255,255,0.18)',fontSize:'22px'}}>→</span>
+              </div>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function QuestionScaffold({onEnter}){
+  const questions=[
+    {q:'What are you building?',weight:20,desc:"Your product definition is the foundation every judge evaluates first. Judges expect a single, jargon-free sentence that captures the core mechanic — what it does, for whom, and how. Vague answers like a platform that connects people score near zero. Strong answers identify a specific action. If your answer requires follow-up to understand, your pitch has already lost momentum before it started. Judges will not give you the benefit of the doubt — clarity is the signal."},
+    {q:'Why does it matter?',weight:25,desc:"This is the highest-weighted category because most founding teams misunderstand it. Mattering is not about the size of a market — it is about the intensity of the pain and the urgency of the timing. Judges score on three axes: Is the problem real and recurring? Why has no incumbent solved it? And why does the window to solve it exist right now? A pitch that answers all three earns full marks. A pitch that only describes market size without diagnosing the pain earns partial credit at best."},
+    {q:"Who's your customer?",weight:20,desc:"Customer definition is where founders most often lie to themselves. SMBs, consumers, and enterprise are not customers — they are categories. Judges want a beachhead: the tightest possible segment that has the problem most acutely, has budget authority, and can be reached through a repeatable channel. You should be able to name the job title, the industry vertical, the company size, and the trigger event that makes them buy. A beachhead you can own beats a market you can only describe."},
+    {q:'How do you make money?',weight:20,desc:"Revenue model scoring rewards logical rigor over optimism. Walk judges through the pricing mechanism, the unit economics at scale, and the path to contribution margin. Judges penalize founders who present ARR projections without explaining the assumptions underneath them. They reward founders who can articulate CAC, LTV, gross margin, and payback period — even at early stages with honest estimates. The model does not have to be perfect. It has to be internally consistent and defensible under direct questioning."},
+    {q:"What's your unfair advantage?",weight:15,desc:"An unfair advantage is something structural — not effort, not vision, not working harder. It is a moat that makes your position harder to replicate over time. Common defensible advantages include proprietary data that improves with usage, a distribution relationship a competitor cannot buy, a regulatory approval that takes years to obtain, or a founding team with unique domain insight. Judges discount advantages a well-capitalized competitor could acquire in six months. They reward advantages that compound the longer you operate."},
+  ];
+  const [visible,setVisible]=React.useState(0);
+  const [open,setOpen]=React.useState(null);
+  const ref=React.useRef(null);
+  React.useEffect(()=>{
+    const el=ref.current;
+    if(!el)return;
+    const obs=new IntersectionObserver(([entry])=>{
+      if(entry.isIntersecting){
+        setVisible(0);
+        let i=0;
+        const t=setInterval(()=>{i++;setVisible(i);if(i>=questions.length)clearInterval(t);},180);
+      }else{setVisible(0);}
+    },{threshold:0.25});
+    obs.observe(el);
+    return()=>obs.disconnect();
+  },[]);
+  return(
+    <div ref={ref}>
+      <div style={{marginBottom:'44px'}}>
+        <h2 style={{fontFamily:"'Anton',sans-serif",fontSize:'clamp(52px,7vw,96px)',textTransform:'uppercase',color:'#EFF4FF',lineHeight:0.95,margin:'0 0 14px',letterSpacing:'.01em'}}>The 5 Questions</h2>
+        <div className="font-mono text-[10px] uppercase tracking-[.3em] text-cream" style={{opacity:0.28}}>Click any card to see judging criteria · Grade weight listed</div>
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
+        {questions.map((item,i)=>{
+          const isOpen=open===i;
+          return(
+            <div
+              key={i}
+              onClick={()=>setOpen(isOpen?null:i)}
+              style={{
+                backdropFilter:'blur(40px)',
+                WebkitBackdropFilter:'blur(40px)',
+                background:isOpen?'rgba(99,130,255,0.09)':'rgba(255,255,255,0.04)',
+                border:'1px solid '+(isOpen?'rgba(99,130,255,0.28)':'rgba(255,255,255,0.08)'),
+                borderRadius:'24px',
+                overflow:'hidden',
+                cursor:'pointer',
+                opacity:visible>i?1:0,
+                transform:visible>i?'translateY(0)':'translateY(28px)',
+                transition:'opacity 0.45s ease, transform 0.45s ease, background 0.2s, border-color 0.2s',
+                transitionDelay:(i*80)+'ms',
+              }}
+            >
+              <div style={{padding:'40px 52px',display:'flex',alignItems:'center',gap:'40px'}}>
+                <span className="font-mono text-[12px] text-cream" style={{opacity:0.20,flexShrink:0,minWidth:'32px'}}>0{i+1}</span>
+                <span style={{flex:1,fontFamily:"'Anton',sans-serif",fontSize:'clamp(26px,2.8vw,44px)',textTransform:'uppercase',color:'#EFF4FF',lineHeight:1.05,letterSpacing:'.02em'}}>{item.q}</span>
+                <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',flexShrink:0,gap:'4px'}}>
+                  <span style={{fontFamily:"'Anton',sans-serif",fontSize:'26px',color:'rgba(99,130,255,0.85)',lineHeight:1}}>{item.weight}%</span>
+                  <span className="font-mono text-[9px] uppercase tracking-[.15em]" style={{color:'rgba(99,130,255,0.45)'}}>weight</span>
+                </div>
+                <span style={{color:'rgba(255,255,255,0.25)',fontSize:'26px',flexShrink:0,transform:isOpen?'rotate(90deg)':'rotate(0deg)',transition:'transform 0.25s',lineHeight:1}}>›</span>
+              </div>
+              {isOpen&&(
+                <div style={{padding:'0 52px 40px 128px',borderTop:'1px solid rgba(255,255,255,0.06)'}}>
+                  <div className="font-mono text-[13px] text-cream leading-relaxed" style={{opacity:0.52,paddingTop:'24px',maxWidth:'700px'}}>{item.desc}</div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function LandingView({onEnter,onSubmitPitch}){
+  return(
+    <div style={{backgroundColor:'#010828',color:'#EFF4FF'}}>
+      {/* Texture overlay */}
+      <div className="fixed inset-0 z-50 pointer-events-none" style={{backgroundImage:'url(/texture.png)',backgroundSize:'cover',mixBlendMode:'lighten',opacity:0.6}}/>
+      {/* Announcement bar — fixed */}
+      <div style={{position:'fixed',top:16,left:'50%',transform:'translateX(-50%)',zIndex:200,width:'90%',maxWidth:900}}>
+        <div onClick={onEnter} style={{backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',background:'rgba(255,255,255,0.10)',border:'1px solid rgba(255,255,255,0.16)',borderRadius:'100px',padding:'14px 32px',display:'flex',alignItems:'center',justifyContent:'center',gap:'16px',cursor:'pointer'}}>
+          <span style={{width:8,height:8,borderRadius:'50%',background:'#EFF4FF',display:'inline-block',flexShrink:0}}/>
+          <span className="font-grotesk text-[14px] uppercase tracking-[.25em] text-cream">Enter Competition — Summer 2025 Cohort Now Open</span>
+          <span style={{width:'1px',height:'16px',background:'rgba(255,255,255,0.25)',flexShrink:0}}/>
+          <span className="font-grotesk text-[14px] uppercase tracking-[.2em] text-cream" style={{opacity:0.7}}>Register →</span>
+        </div>
+      </div>
+
+      {/* ── SECTION 1: HERO ── */}
+      <section className="relative min-h-screen overflow-hidden rounded-b-[32px]">
+        <video className="absolute inset-0 w-full h-full object-cover" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_045634_e1c98c76-1265-4f5c-882a-4276f2080894.mp4" autoPlay loop muted playsInline/>
+        <div className="relative z-10 max-w-[1831px] mx-auto px-6 lg:px-12 flex flex-col min-h-screen">
+          {/* Navbar */}
+          <header className="flex items-center justify-between pt-8">
+          </header>
+          {/* Hero content */}
+          <div className="flex-1 flex items-start justify-center pt-16 lg:pt-24">
+            <div style={{display:'flex',flexDirection:'column',alignItems:'center',textAlign:'center'}}>
+              <div className="font-grotesk text-[28px] sm:text-[38px] md:text-[48px] lg:text-[56px] uppercase leading-[1.1] text-cream" style={{opacity:0.6,letterSpacing:'0.08em'}}>Startup Competition</div>
+              <div className="font-grotesk text-[80px] sm:text-[110px] md:text-[145px] lg:text-[180px] uppercase leading-[1.0] text-cream">APEX Cup</div>
+              <button onClick={onEnter} style={{marginTop:'48px',backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',background:'rgba(255,255,255,0.14)',border:'1px solid rgba(255,255,255,0.40)',borderRadius:'100px',padding:'20px 64px',cursor:'pointer',color:'#EFF4FF',fontFamily:'Anton, sans-serif',fontSize:'18px',letterSpacing:'.2em',textTransform:'uppercase',transition:'background .2s, box-shadow .2s',boxShadow:'0 0 32px rgba(255,255,255,0.12)'}}
+                onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,0.24)';e.currentTarget.style.boxShadow='0 0 52px rgba(255,255,255,0.22)';}}
+                onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,0.14)';e.currentTarget.style.boxShadow='0 0 32px rgba(255,255,255,0.12)';}}
+              >Register Now →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SECTION 2: REGISTER ── */}
+      <section style={{backgroundColor:'#010828',padding:'120px 24px'}}>
+        <div style={{maxWidth:'900px',margin:'0 auto',display:'flex',flexDirection:'column',alignItems:'center',textAlign:'center',gap:'48px'}}>
+          <div>
+            <div className="font-grotesk text-[13px] uppercase tracking-[.35em] text-cream" style={{opacity:0.45,marginBottom:'1rem'}}>No Prebuilt Startup Required</div>
+            <h2 className="font-grotesk text-[48px] sm:text-[64px] lg:text-[80px] uppercase leading-[1.0] text-cream" style={{margin:0}}>PITCH TO REAL<br/>VCs THIS SUMMER</h2>
+          </div>
+          <RegisterCard onEnter={onEnter}/>
+        </div>
+      </section>
+
+      {/* ── SECTION 3: ABOUT ── */}
+      <section className="relative min-h-screen overflow-hidden">
+        <video className="absolute inset-0 w-full h-full object-cover" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_151551_992053d1-3d3e-4b8c-abac-45f22158f411.mp4" autoPlay loop muted playsInline/>
+        <div className="relative z-10 max-w-[1831px] mx-auto px-6 lg:px-12 py-16 lg:py-24 flex flex-col min-h-screen justify-between">
+          <div className="flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-16">
+            <div className="relative">
+              <h2 className="font-grotesk text-[36px] sm:text-[52px] md:text-[64px] lg:text-[72px] uppercase leading-tight text-cream" style={{margin:0}}>
+                Made for Teens.<br/>Built for Teens.
+              </h2>
+            </div>
+            <TypewriterText text={DECO} className="font-mono text-[24px] lg:text-[28px] uppercase text-cream max-w-[300px] leading-relaxed flex-shrink-0" style={{margin:0}}/>
+          </div>
+          <div className="flex flex-row justify-between pt-16 pb-8">
+            <div className="flex-1 pr-4 lg:pr-8">
+              <p className="font-mono text-[14px] uppercase opacity-10 leading-relaxed text-[#010828] lg:text-cream" style={{margin:0}}>{DECO}</p>
+              <p className="font-mono text-[14px] uppercase opacity-10 leading-relaxed mt-4 text-[#010828] lg:text-cream" style={{margin:0}}>{DECO}</p>
+            </div>
+            <div className="hidden lg:flex flex-1 flex-col pl-8">
+              <p className="font-mono text-[14px] uppercase text-cream opacity-10 leading-relaxed" style={{margin:0}}>{DECO}</p>
+              <p className="font-mono text-[14px] uppercase text-cream opacity-10 leading-relaxed mt-4" style={{margin:0}}>{DECO}</p>
+            </div>
+          </div>
+          <div style={{display:'flex',justifyContent:'center',paddingBottom:'32px'}}>
+            <button onClick={onEnter} style={{backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',background:'rgba(255,255,255,0.10)',border:'1px solid rgba(255,255,255,0.30)',borderRadius:'100px',padding:'16px 52px',cursor:'pointer',color:'#EFF4FF',fontFamily:'Anton, sans-serif',fontSize:'15px',letterSpacing:'.2em',textTransform:'uppercase',transition:'background .2s',}}
+              onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,0.20)'}
+              onMouseLeave={e=>e.currentTarget.style.background='rgba(255,255,255,0.10)'}
+            >Register Now →</button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SECTION 3: NFT GRID ── */}
+      <section style={{backgroundColor:'#010828'}} className="py-16 lg:py-24">
+        <div className="max-w-[1831px] mx-auto px-6 lg:px-12">
+          <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between mb-12 gap-8">
+            <h2 className="font-grotesk text-[36px] sm:text-[52px] md:text-[64px] lg:text-[72px] uppercase leading-tight text-cream" style={{margin:0}}>
+              2026<br/>
+              <span className="ml-12 md:ml-24 lg:ml-32">
+                Judges
+              </span>
+            </h2>
+            <div className="flex flex-col items-start cursor-pointer group">
+              <div className="flex items-end gap-3">
+                <span className="font-grotesk text-[32px] sm:text-[45px] md:text-[55px] lg:text-[60px] uppercase text-cream leading-none">SEE</span>
+                <div className="flex flex-col leading-none pb-1">
+                  <span className="font-grotesk text-[20px] sm:text-[28px] md:text-[32px] lg:text-[36px] uppercase text-cream">ALL</span>
+                  <span className="font-grotesk text-[20px] sm:text-[28px] md:text-[32px] lg:text-[36px] uppercase text-cream">CREATORS</span>
+                </div>
+              </div>
+              <div className="w-full h-[6px] sm:h-[8px] lg:h-[10px] mt-2 bg-cream group-hover:opacity-60 transition-opacity duration-200"/>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {NFT_CARDS.map((card,i)=>(
+              <div key={i} className="liquid-glass rounded-[32px] p-[18px] hover:bg-white/10 transition-colors duration-200 cursor-pointer">
+                <div className="relative pb-[100%] rounded-[24px] overflow-hidden">
+                  <video className="absolute inset-0 w-full h-full object-cover" src={card.video} autoPlay loop muted playsInline/>
+                </div>
+                <div className="liquid-glass rounded-[20px] px-5 py-4 mt-3 flex items-center justify-between">
+                  <div>
+                    <p className="font-mono text-[11px] uppercase text-cream/70" style={{margin:0}}>RARITY SCORE:</p>
+                    <p className="font-mono text-[16px] text-cream" style={{margin:0}}>{card.score}</p>
+                  </div>
+                  <button className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/50 hover:scale-110 transition-transform duration-200" style={{background:'linear-gradient(135deg,#b724ff,#7c3aed)',border:'none',cursor:'pointer'}}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{textAlign:'center',padding:'48px 24px 72px'}}>
+          <button onClick={onEnter} style={{backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',background:'rgba(99,130,255,0.12)',border:'1px solid rgba(99,130,255,0.35)',borderRadius:'100px',padding:'18px 64px',cursor:'pointer',color:'rgba(180,200,255,0.9)',fontFamily:'Anton, sans-serif',fontSize:'16px',letterSpacing:'.2em',textTransform:'uppercase',transition:'background .2s, box-shadow .2s',boxShadow:'0 0 28px rgba(99,130,255,0.18)'}}
+            onMouseEnter={e=>{e.currentTarget.style.background='rgba(99,130,255,0.22)';e.currentTarget.style.boxShadow='0 0 48px rgba(99,130,255,0.35)';}}
+            onMouseLeave={e=>{e.currentTarget.style.background='rgba(99,130,255,0.12)';e.currentTarget.style.boxShadow='0 0 28px rgba(99,130,255,0.18)';}}
+          >Register for Summer 2026 →</button>
+        </div>
+      </section>
+
+      {/* ── SECTION 4: CTA ── */}
+      <section className="relative" style={{backgroundColor:'#010828'}}>
+        <video className="w-full h-auto block" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_055729_72d66327-b59e-4ae9-bb70-de6ccb5ecdb0.mp4" autoPlay loop muted playsInline/>
+        <div className="absolute inset-0 flex items-center justify-end px-6 lg:pl-[15%] lg:pr-[20%]">
+          <div className="relative text-right">
+            <h2 className="font-grotesk text-[20px] sm:text-[32px] md:text-[50px] lg:text-[68px] uppercase leading-tight text-cream" style={{margin:0}}>
+              <div className="mb-4 sm:mb-6 lg:mb-12">JOIN US.</div>
+              <div>REVEAL WHAT&#39;S HIDDEN.</div>
+              <div>DEFINE WHAT&#39;S NEXT.</div>
+              <div>FOLLOW THE SIGNAL.</div>
+            </h2>
+            <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:'16px',marginTop:'4rem'}}>
+              <button
+                onClick={onSubmitPitch}
+                style={{backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',background:'rgba(255,255,255,0.12)',border:'1px solid rgba(255,255,255,0.35)',borderRadius:'100px',padding:'18px 56px',cursor:'pointer',color:'#EFF4FF',fontFamily:'Anton, sans-serif',fontSize:'15px',letterSpacing:'.22em',textTransform:'uppercase',transition:'background .2s, box-shadow .2s',boxShadow:'0 0 32px rgba(99,130,255,0.18)'}}
+                onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,0.22)';e.currentTarget.style.boxShadow='0 0 52px rgba(99,130,255,0.38)';}}
+                onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,0.12)';e.currentTarget.style.boxShadow='0 0 32px rgba(99,130,255,0.18)';}}
+              >Submit a Pitch →</button>
+              <button
+                onClick={onEnter}
+                className="font-grotesk text-[11px] uppercase tracking-[.3em] text-cream"
+                style={{background:'none',border:'none',borderBottom:'1px solid rgba(255,255,255,0.25)',paddingBottom:3,cursor:'pointer',opacity:0.45}}
+              >Access Curriculum</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  );
+}
+
+function HomeView({onEnter,onSubmitPitch}){
+  const sectionBase = {
+    minHeight:'calc(100vh - var(--nav-h))',
+    display:'flex',
+    alignItems:'center',
+    color:'#EFF4FF',
+    position:'relative',
+  };
+  const inner = {
+    position:'relative',zIndex:1,maxWidth:'1400px',margin:'0 auto',padding:'64px 48px',width:'100%',
+  };
+  return(
+    <div style={{height:'calc(100vh - var(--nav-h))',overflowY:'scroll',scrollSnapType:'y mandatory',scrollBehavior:'smooth',background:'linear-gradient(160deg,#0a0f1e 0%,#0d1535 30%,#0a1228 65%,#060c1a 100%)'}}>
+
+      {/* ── SECTION 1: HERO ── */}
+      <div style={{...sectionBase,scrollSnapAlign:'start',scrollSnapStop:'always'}}>
+        <div style={{position:'absolute',top:'-10%',left:'15%',width:'500px',height:'500px',borderRadius:'50%',background:'radial-gradient(circle,rgba(99,130,255,0.18) 0%,transparent 70%)',filter:'blur(60px)',pointerEvents:'none'}}/>
+        <div style={{position:'absolute',top:'30%',right:'5%',width:'400px',height:'400px',borderRadius:'50%',background:'radial-gradient(circle,rgba(160,100,255,0.14) 0%,transparent 70%)',filter:'blur(80px)',pointerEvents:'none'}}/>
+        <div style={{...inner}}>
+          <div style={{backdropFilter:'blur(48px)',WebkitBackdropFilter:'blur(48px)',background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.12)',borderRadius:'32px',padding:'72px 64px',position:'relative',overflow:'hidden'}}>
+            <div style={{position:'absolute',inset:0,opacity:0.025,backgroundImage:'repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)',backgroundSize:'22px 22px',pointerEvents:'none'}}/>
+            <div style={{position:'absolute',top:'50%',right:'-8%',width:'420px',height:'420px',borderRadius:'50%',background:'radial-gradient(circle,rgba(99,130,255,0.13) 0%,transparent 70%)',filter:'blur(60px)',transform:'translateY(-50%)',pointerEvents:'none'}}/>
+            <h1 style={{fontFamily:"'Anton', sans-serif",fontSize:'clamp(72px,9vw,128px)',lineHeight:0.92,margin:'0 0 1.75rem',textTransform:'uppercase',letterSpacing:'.01em',maxWidth:960,position:'relative',color:'#EFF4FF'}}>
+              The Standard for<br/>Serious Analysts.
+            </h1>
+            <div className="home-stat-bar">
+              <span>70+ Lessons</span>
+              <span className="home-stat-dot"/>
+              <span>5 Career Tracks</span>
+              <span className="home-stat-dot"/>
+              <span>Live Competition</span>
+            </div>
+            <button className="home-cta home-cta-vibrant" onClick={onSubmitPitch||onEnter} style={{position:'relative'}}>
+              Submit Pitch <span className="home-cta-arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── SECTION 2: THREE STAGE CARDS ── */}
+      <div style={{...sectionBase,scrollSnapAlign:'start',scrollSnapStop:'always'}}>
+        <div style={{position:'absolute',top:'20%',left:'-5%',width:'500px',height:'500px',borderRadius:'50%',background:'radial-gradient(circle,rgba(99,130,255,0.12) 0%,transparent 70%)',filter:'blur(80px)',pointerEvents:'none'}}/>
+        <div style={{position:'absolute',bottom:'10%',right:'10%',width:'400px',height:'400px',borderRadius:'50%',background:'radial-gradient(circle,rgba(201,170,113,0.08) 0%,transparent 70%)',filter:'blur(80px)',pointerEvents:'none'}}/>
+        <div style={{...inner}}>
+          <ThreeStageScaffold />
+          <div style={{marginTop:'48px',display:'flex',justifyContent:'center'}}>
+            <button onClick={onSubmitPitch||onEnter} className="home-cta home-cta-vibrant">Submit Pitch <span className="home-cta-arrow">→</span></button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── SECTION 3: PITCH INTRO (left card only) ── */}
+      <div style={{...sectionBase,scrollSnapAlign:'start',scrollSnapStop:'always'}}>
+        <div style={{position:'absolute',top:'10%',right:'-5%',width:'500px',height:'500px',borderRadius:'50%',background:'radial-gradient(circle,rgba(99,130,255,0.14) 0%,transparent 70%)',filter:'blur(80px)',pointerEvents:'none'}}/>
+        <div style={{position:'absolute',bottom:'5%',left:'5%',width:'450px',height:'450px',borderRadius:'50%',background:'radial-gradient(circle,rgba(50,100,255,0.08) 0%,transparent 70%)',filter:'blur(80px)',pointerEvents:'none'}}/>
+        <div style={{...inner}}>
+          <div style={{backdropFilter:'blur(56px)',WebkitBackdropFilter:'blur(56px)',background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.13)',borderRadius:'32px',overflow:'hidden',boxShadow:'0 32px 80px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.10)'}}>
+            <div style={{borderBottom:'1px solid rgba(255,255,255,0.09)',padding:'22px 48px',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:12,background:'rgba(255,255,255,0.03)'}}>
+              <div style={{display:'flex',alignItems:'center',gap:14}}>
+                <span style={{width:9,height:9,borderRadius:'50%',background:'#4ade80',display:'inline-block',boxShadow:'0 0 12px rgba(74,222,128,0.9)',flexShrink:0,animation:'pulse 2s ease-in-out infinite'}}/>
+                <span className="font-grotesk text-[12px] uppercase tracking-[.25em]" style={{background:'rgba(74,222,128,0.10)',border:'1px solid rgba(74,222,128,0.28)',padding:'6px 16px',borderRadius:'100px',color:'rgba(74,222,128,0.9)',boxShadow:'0 0 12px rgba(74,222,128,0.15)'}}>Live Competition</span>
+                <span className="font-mono text-[11px] uppercase tracking-[.2em] text-cream" style={{opacity:0.35}}>Weekly · Every Sunday</span>
+              </div>
+              <span className="font-mono text-[10px] uppercase tracking-[.18em] text-cream" style={{opacity:0.25}}>Real VCs · Real Feedback · Real Stakes</span>
+            </div>
+            <div style={{padding:'64px 72px'}}>
+              <div className="font-grotesk uppercase text-cream" style={{fontSize:'clamp(42px,4.5vw,64px)',lineHeight:1.05,marginBottom:'2.5rem',letterSpacing:'.01em'}}>APEX Capital Society</div>
+              <WeeklyCycle timeline={true} />
+              <div style={{marginTop:'36px'}}>
+                <button onClick={onSubmitPitch||onEnter} className="home-cta home-cta-vibrant" style={{display:'inline-flex'}}>Submit Pitch <span className="home-cta-arrow">→</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── SECTION 4: 5 QUESTIONS (scaffold) ── */}
+      <div style={{...sectionBase,scrollSnapAlign:'start',scrollSnapStop:'always'}}>
+        <div style={{position:'absolute',top:'20%',right:'5%',width:'480px',height:'480px',borderRadius:'50%',background:'radial-gradient(circle,rgba(80,120,255,0.12) 0%,transparent 70%)',filter:'blur(90px)',pointerEvents:'none'}}/>
+        <div style={{...inner}}>
+          <QuestionScaffold onEnter={onEnter}/>
+          <div style={{marginTop:'40px',display:'flex',justifyContent:'flex-start'}}>
+            <button onClick={onSubmitPitch||onEnter} className="home-cta home-cta-vibrant">Submit Pitch <span className="home-cta-arrow">→</span></button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── SECTION 5: SUBMIT YOUR PITCH ── */}
+      <div id="submit-pitch-section" style={{...sectionBase,scrollSnapAlign:'start',scrollSnapStop:'always',alignItems:'stretch'}}>
+        <div style={{position:'absolute',top:'0',right:'20%',width:'600px',height:'600px',borderRadius:'50%',background:'radial-gradient(circle,rgba(99,130,255,0.13) 0%,transparent 70%)',filter:'blur(120px)',pointerEvents:'none'}}/>
+        <div style={{position:'absolute',bottom:'0',left:'5%',width:'500px',height:'400px',borderRadius:'50%',background:'radial-gradient(circle,rgba(50,80,255,0.08) 0%,transparent 70%)',filter:'blur(100px)',pointerEvents:'none'}}/>
+        <div style={{position:'relative',zIndex:1,width:'100%',maxWidth:'1400px',margin:'0 auto',padding:'64px 48px',display:'flex',flexDirection:'column',justifyContent:'space-between',height:'100%'}}>
+
+          {/* ── Top: headline ── */}
+          <div style={{display:'flex',alignItems:'flex-end',justifyContent:'space-between',gap:'32px',flexWrap:'wrap'}}>
+            <div>
+              <h2 className="font-grotesk text-[56px] sm:text-[72px] lg:text-[88px] uppercase text-cream" style={{margin:0,lineHeight:1.0,letterSpacing:'.02em'}}>Submit<br/>Your Pitch.</h2>
+            </div>
+            <p className="font-mono text-[14px] uppercase text-cream" style={{opacity:0.38,maxWidth:'260px',lineHeight:1.7,letterSpacing:'.06em',paddingBottom:'0.5rem'}}>Five questions.<br/>Forty-five minutes.<br/>Real stakes.</p>
+          </div>
+
+          {/* ── Middle: 4 instruction steps (diagonal scaffold) ── */}
+          {(()=>{
+            const steps=[
+              {num:'01',title:'Answer Five Questions',body:'What you\'re building, why it matters, who your customer is, how you make money, and what\'s your unfair advantage. Be direct. No fluff.'},
+              {num:'02',title:'Submit Before Thursday',body:'Competition opens every Sunday and closes Thursday at midnight. Late entries are not reviewed. No exceptions, no extensions.'},
+              {num:'03',title:'AI Screens Every Pitch',body:'Each submission is scored instantly across clarity, market insight, and founder conviction. The top 20 pitches advance to the VC panel.'},
+              {num:'04',title:'VCs Deliver the Verdict',body:'Silicon Valley venture capitalists read your pitch, score your thinking, and leave written feedback. Winners are announced Saturday evening.'},
+            ];
+            const [sv,setSv]=React.useState(0);
+            const stepsRef=React.useRef(null);
+            React.useEffect(()=>{
+              const el=stepsRef.current;
+              if(!el)return;
+              const obs=new IntersectionObserver(([entry])=>{
+                if(entry.isIntersecting){setSv(0);let i=0;const t=setInterval(()=>{i++;setSv(i);if(i>=steps.length)clearInterval(t);},180);}
+                else{setSv(0);}
+              },{threshold:0.15});
+              obs.observe(el);
+              return()=>obs.disconnect();
+            },[]);
+            return(
+              <div ref={stepsRef} style={{display:'flex',flexDirection:'column',gap:'18px',margin:'40px 0'}}>
+                {steps.map((s,i)=>{
+                  const isRight=i%2===0;
+                  return(
+                    <div key={i} style={{
+                      width:'80%',
+                      alignSelf:isRight?'flex-end':'flex-start',
+                      position:'relative',overflow:'hidden',
+                      backdropFilter:'blur(32px)',WebkitBackdropFilter:'blur(32px)',
+                      background:'rgba(255,255,255,0.04)',
+                      border:'1px solid rgba(255,255,255,0.09)',
+                      borderRadius:'22px',
+                      padding:'36px 48px',
+                      opacity:sv>i?1:0,
+                      transform:sv>i?'translate(0,0)':(isRight?'translate(52px,28px)':'translate(-52px,28px)'),
+                      transition:'opacity 0.5s ease, transform 0.5s ease, background .25s, border-color .25s',
+                      transitionDelay:(i*110)+'ms',
+                    }}
+                      onMouseEnter={e=>{e.currentTarget.style.background='rgba(99,130,255,0.07)';e.currentTarget.style.borderColor='rgba(99,130,255,0.22)';}}
+                      onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,0.04)';e.currentTarget.style.borderColor='rgba(255,255,255,0.09)';}}
+                    >
+                      <div style={{position:'absolute',bottom:'-16px',right:'20px',fontFamily:"'Anton',sans-serif",fontSize:'110px',lineHeight:1,color:'#EFF4FF',opacity:0.03,userSelect:'none',pointerEvents:'none'}}>{s.num}</div>
+                      <div className="font-mono text-[10px] uppercase tracking-[.3em] text-cream" style={{opacity:0.28,marginBottom:'12px'}}>{s.num}</div>
+                      <div style={{fontFamily:"'Anton',sans-serif",fontSize:'clamp(22px,2.2vw,34px)',textTransform:'uppercase',color:'#EFF4FF',letterSpacing:'.02em',marginBottom:'14px'}}>{s.title}</div>
+                      <div className="font-mono text-[13px] text-cream leading-relaxed" style={{opacity:0.48}}>{s.body}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+
+          {/* ── Bottom: CTA ── */}
+          <div style={{display:'flex',flexDirection:'column',gap:'20px'}}>
+            <div style={{height:'1px',background:'linear-gradient(90deg,transparent,rgba(255,255,255,0.10) 30%,rgba(99,130,255,0.20) 60%,transparent)'}}/>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'24px',flexWrap:'wrap'}}>
+              <p className="font-mono text-[11px] uppercase tracking-[.18em] text-cream" style={{opacity:0.28,margin:0}}>Opens Sunday · Closes Thursday · Winners Saturday</p>
+              <button
+                onClick={onEnter}
+                style={{flexShrink:0,backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',background:'rgba(255,255,255,0.10)',border:'1px solid rgba(255,255,255,0.30)',borderRadius:'100px',padding:'18px 64px',cursor:'pointer',color:'#EFF4FF',fontFamily:'Anton, sans-serif',fontSize:'15px',letterSpacing:'.22em',textTransform:'uppercase',transition:'background .2s, box-shadow .2s, border-color .2s',boxShadow:'0 0 32px rgba(99,130,255,0.15)'}}
+                onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,0.18)';e.currentTarget.style.boxShadow='0 0 48px rgba(99,130,255,0.35)';e.currentTarget.style.borderColor='rgba(255,255,255,0.50)';}}
+                onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,0.10)';e.currentTarget.style.boxShadow='0 0 32px rgba(99,130,255,0.15)';e.currentTarget.style.borderColor='rgba(255,255,255,0.30)';}}
+              >Submit a Pitch →</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ── SECTION 4: DISTINCTION ── */}
+      <div style={{...sectionBase,scrollSnapAlign:'start',scrollSnapStop:'always'}}>
+        <div style={{position:'absolute',top:'30%',right:'10%',width:'500px',height:'500px',borderRadius:'50%',background:'radial-gradient(circle,rgba(180,80,255,0.09) 0%,transparent 70%)',filter:'blur(90px)',pointerEvents:'none'}}/>
+        <div style={{position:'absolute',bottom:'0',left:'20%',width:'600px',height:'300px',borderRadius:'50%',background:'radial-gradient(circle,rgba(80,120,255,0.08) 0%,transparent 70%)',filter:'blur(80px)',pointerEvents:'none'}}/>
+        <div style={{...inner}}>
+          <div style={{backdropFilter:'blur(48px)',WebkitBackdropFilter:'blur(48px)',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'28px',padding:'64px'}}>
+            <div className="distinction-grid">
+              {[
+                {icon:'◈',label:'Selective',desc:'Cohort-based. Limited spots. Application required.'},
+                {icon:'⬡',label:'Structured',desc:'Institutional-depth curriculum. Written like research, not a course.'},
+                {icon:'◆',label:'Performance-Driven',desc:'Your work is tracked. Only the strongest participants advance.'},
+                {icon:'✦',label:'Real Output',desc:'Walk away with a case, a model, and a track record.'},
+              ].map(s=>(
+                <div key={s.label} className="distinction-grid-item">
+                  <div className="font-grotesk text-[56px] text-cream" style={{opacity:0.55,marginBottom:'1rem',lineHeight:1}}>{s.icon}</div>
+                  <div className="font-grotesk text-[24px] uppercase text-cream" style={{marginBottom:'0.75rem',letterSpacing:'.04em'}}>{s.label}</div>
+                  <div className="font-mono text-[13px] text-cream leading-relaxed" style={{opacity:0.5}}>{s.desc}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{marginTop:'52px',display:'flex',justifyContent:'center'}}>
+              <button onClick={onSubmitPitch||onEnter} className="home-cta home-cta-vibrant" style={{padding:'20px 72px',fontSize:'13px',letterSpacing:'.22em',display:'inline-flex'}}>Submit Pitch <span className="home-cta-arrow">→</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+function hasVisitedCookie(){return document.cookie.split(';').some(c=>c.trim().startsWith('apex_visited='));}
+function setVisitedCookie(){document.cookie='apex_visited=1;max-age=31536000;path=/';}
+
+// PITCH SUBMISSION
+function PitchCard({emoji,num,title,hint,children}){
+  return(
+    <div className="pitch-section-card">
+      <div style={{display:'flex',alignItems:'center',gap:'16px',marginBottom:'28px',paddingBottom:'20px',borderBottom:'1px solid rgba(255,255,255,0.07)'}}>
+        <span style={{fontSize:'30px',lineHeight:1,flexShrink:0}}>{emoji}</span>
+        <div>
+          <div className="pitch-label" style={{marginBottom:'4px'}}>Section {num}</div>
+          <div style={{fontFamily:"'Anton',sans-serif",fontSize:'22px',letterSpacing:'.04em',textTransform:'uppercase',color:'#EFF4FF'}}>{title}</div>
+        </div>
+      </div>
+      {hint&&<p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:'11px',color:'rgba(239,244,255,0.35)',lineHeight:1.7,margin:'0 0 24px',letterSpacing:'.04em'}}>{hint}</p>}
+      <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>{children}</div>
+    </div>
+  );
+}
+function PitchField({label,placeholder,value,onChange,type='text',rows}){
+  return(
+    <div className="pitch-field">
+      <label className="pitch-label">{label}</label>
+      {rows
+        ?<textarea className="pitch-textarea" rows={rows} value={value} onChange={onChange} placeholder={placeholder}/>
+        :<input type={type} className="pitch-input" value={value} onChange={onChange} placeholder={placeholder}/>
+      }
+    </div>
+  );
+}
+function PitchUpload({emoji,label,accept,value,onChange}){
+  return(
+    <div className="pitch-field">
+      <label className="pitch-label">{label}</label>
+      <label className="pitch-upload-zone">
+        <span style={{fontSize:'32px'}}>{emoji}</span>
+        <span className="pitch-upload-label">{value||'Click to upload'}</span>
+        <input type="file" accept={accept} style={{display:'none'}} onChange={onChange}/>
+      </label>
+    </div>
+  );
+}
+function PitchSubmissionView({onBack}){
+  const [form,setForm]=useState({
+    startupName:'',tagline:'',industry:'',
+    problem:'',solution:'',
+    productLink:'',productDesc:'',
+    targetUser:'',marketSize:'',
+    traction:'',
+    competition:'',competitionWhy:'',
+    businessModel:'',team:'',
+    pitchVideoName:'',pitchDeckName:'',
+    finalStatement:'',
+  });
+  const [submitted,setSubmitted]=useState(false);
+  const [submitting,setSubmitting]=useState(false);
+  const [submitError,setSubmitError]=useState('');
+  const upd=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
+  const updFile=k=>e=>setForm(f=>({...f,[k]:(e.target.files&&e.target.files[0]?e.target.files[0].name:'')}));
+  const SHEET_URL='https://script.google.com/macros/s/AKfycbxfubHLv5RI0hFafOQr3fS5k1LtZ-GgHmaZuEEwDqdZd_e6dmprOSP3485WIXqXnNvY/exec';
+  const handleSubmit=async()=>{
+    setSubmitting(true);setSubmitError('');
+    try{
+      await fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(form)});
+      setSubmitted(true);
+    }catch(err){
+      setSubmitError('Something went wrong. Please try again.');
+    }finally{setSubmitting(false);}
+  };
+
+  if(submitted){
+    return(
+      <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(160deg,#0a0f1e 0%,#0d1535 50%,#060c1a 100%)',padding:'48px 24px'}}>
+        <div style={{textAlign:'center',maxWidth:'560px'}}>
+          <div style={{fontSize:'72px',marginBottom:'28px'}}>🚀</div>
+          <h1 style={{fontFamily:"'Anton',sans-serif",fontSize:'clamp(48px,6vw,80px)',textTransform:'uppercase',lineHeight:0.92,color:'#EFF4FF',margin:'0 0 24px'}}>Pitch<br/>Submitted.</h1>
+          <p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:'12px',color:'rgba(239,244,255,0.45)',lineHeight:1.8,margin:'0 0 16px'}}>Your application is in. Our AI will score it immediately.<br/>Top 20 pitches go to real VC judges.</p>
+          <div style={{display:'flex',flexDirection:'column',gap:'8px',margin:'32px auto',maxWidth:'320px',textAlign:'left'}}>
+            {['Reviewed by AI · instantly','Scored across 5 dimensions','Top 20 go to VC panel','Winners announced Saturday'].map((s,i)=>(
+              <div key={i} style={{display:'flex',alignItems:'center',gap:'12px',fontFamily:"'JetBrains Mono',monospace",fontSize:'11px',color:'rgba(239,244,255,0.5)',letterSpacing:'.06em'}}>
+                <span style={{color:'rgba(74,222,128,0.8)',flexShrink:0}}>✓</span>{s}
+              </div>
+            ))}
+          </div>
+          <button onClick={onBack} className="home-cta home-cta-vibrant" style={{margin:'32px auto 0',display:'flex'}}>← Back to Home</button>
+        </div>
+      </div>
+    );
+  }
+
+  return(
+    <div style={{background:'linear-gradient(160deg,#0a0f1e 0%,#0d1535 30%,#0a1228 65%,#060c1a 100%)',minHeight:'100vh',color:'#EFF4FF',position:'relative',overflow:'hidden'}}>
+      <div style={{position:'fixed',top:'5%',left:'5%',width:'600px',height:'600px',borderRadius:'50%',background:'radial-gradient(circle,rgba(99,130,255,0.10) 0%,transparent 70%)',filter:'blur(90px)',pointerEvents:'none',zIndex:0}}/>
+      <div style={{position:'fixed',bottom:'10%',right:'5%',width:'500px',height:'500px',borderRadius:'50%',background:'radial-gradient(circle,rgba(160,100,255,0.08) 0%,transparent 70%)',filter:'blur(90px)',pointerEvents:'none',zIndex:0}}/>
+      <div style={{position:'relative',zIndex:1,maxWidth:'860px',margin:'0 auto',padding:'72px 24px 120px'}}>
+
+        {/* Header */}
+        <div style={{marginBottom:'72px',textAlign:'center'}}>
+          <div className="pitch-label" style={{marginBottom:'20px',fontSize:'11px',letterSpacing:'.28em'}}>APEX Capital Society · Summer 2026</div>
+          <h1 style={{fontFamily:"'Anton',sans-serif",fontSize:'clamp(56px,8vw,104px)',lineHeight:1.05,textTransform:'uppercase',color:'#EFF4FF',margin:'0 0 24px',letterSpacing:'.02em'}}>VC Pitch<br/>Submission</h1>
+          <p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:'12px',color:'rgba(239,244,255,0.38)',lineHeight:1.8,letterSpacing:'.06em'}}>Complete all sections · Be direct and specific<br/>Top 20 pitches go to real VC judges</p>
+        </div>
+
+        <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
+
+          <PitchCard emoji="🔥" num="01" title="Startup Overview">
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
+              <PitchField label="Startup Name" placeholder="Your company name" value={form.startupName} onChange={upd('startupName')}/>
+              <PitchField label="Industry / Category" placeholder="e.g. Fintech, AI, EdTech" value={form.industry} onChange={upd('industry')}/>
+            </div>
+            <PitchField label="Tagline" placeholder="What you do in one clear, compelling sentence" value={form.tagline} onChange={upd('tagline')}/>
+          </PitchCard>
+
+          <PitchCard emoji="🧠" num="02" title="The Problem" hint="Describe a real, specific problem. Who experiences it? Why does it matter? Why hasn't it been solved well yet?">
+            <PitchField label="What problem are you solving?" placeholder="Be specific and honest. 2–4 sentences." value={form.problem} onChange={upd('problem')} rows={5}/>
+          </PitchCard>
+
+          <PitchCard emoji="💡" num="03" title="Your Solution" hint="What did you build? How does it work? Why is it better than what exists?">
+            <PitchField label="Describe your product or idea" placeholder="Explain clearly and directly. 2–4 sentences." value={form.solution} onChange={upd('solution')} rows={5}/>
+          </PitchCard>
+
+          <PitchCard emoji="🛠" num="04" title="Product / Demo">
+            <PitchField label="Product Link or Demo (if available)" placeholder="Website, prototype, Figma, or video URL" value={form.productLink} onChange={upd('productLink')}/>
+            <PitchField label="Product Description" placeholder="What does a user see and do?" value={form.productDesc} onChange={upd('productDesc')} rows={3}/>
+          </PitchCard>
+
+          <PitchCard emoji="📈" num="05" title="Market">
+            <PitchField label="Who is your target user?" placeholder="Be specific — not 'everyone'" value={form.targetUser} onChange={upd('targetUser')} rows={2}/>
+            <PitchField label="How big is this opportunity?" placeholder="Why could this be large and scalable?" value={form.marketSize} onChange={upd('marketSize')} rows={3}/>
+          </PitchCard>
+
+          <PitchCard emoji="🚀" num="06" title="Traction" hint="Include users, revenue, growth, tests, experiments, or feedback. Even small traction counts — be honest and specific.">
+            <PitchField label="What proof do you have this works?" placeholder="List anything relevant. Be honest and concrete." value={form.traction} onChange={upd('traction')} rows={5}/>
+          </PitchCard>
+
+          <PitchCard emoji="⚔️" num="07" title="Competition">
+            <PitchField label="What alternatives exist today?" placeholder="Name real competitors and alternatives" value={form.competition} onChange={upd('competition')} rows={3}/>
+            <PitchField label="Why do you win?" placeholder="What makes you better, different, or defensible?" value={form.competitionWhy} onChange={upd('competitionWhy')} rows={3}/>
+          </PitchCard>
+
+          <PitchCard emoji="🧠" num="08" title="Business Model">
+            <PitchField label="How will you make money?" placeholder="Explain your revenue model clearly and simply." value={form.businessModel} onChange={upd('businessModel')} rows={4}/>
+          </PitchCard>
+
+          <PitchCard emoji="👥" num="09" title="Team">
+            <PitchField label="Who are you?" placeholder="Founder(s), skills, background, and why you're the right person to build this." value={form.team} onChange={upd('team')} rows={5}/>
+          </PitchCard>
+
+          <PitchCard emoji="🎥" num="10" title="Pitch Video" hint="60–90 seconds. Explain problem + solution clearly. Show confidence. Optionally show the product.">
+            <PitchField label="Pitch Video Link" placeholder="YouTube, Loom, or Google Drive link" value={form.pitchVideoName} onChange={upd('pitchVideoName')}/>
+          </PitchCard>
+
+          <PitchCard emoji="📊" num="11" title="Pitch Deck" hint="Cover: Problem · Solution · Product · Market · Traction · Business Model · Vision.">
+            <PitchField label="Pitch Deck Link" placeholder="Google Slides, Canva, or Drive link" value={form.pitchDeckName} onChange={upd('pitchDeckName')}/>
+          </PitchCard>
+
+          <PitchCard emoji="🎯" num="12" title="Final Statement" hint="Why should your startup be selected? Be direct, ambitious, and clear. 2–4 sentences.">
+            <PitchField label="Make your strongest case" placeholder="Be direct and ambitious." value={form.finalStatement} onChange={upd('finalStatement')} rows={5}/>
+          </PitchCard>
+
+          {/* Submit block */}
+          <div style={{backdropFilter:'blur(48px)',WebkitBackdropFilter:'blur(48px)',background:'rgba(99,130,255,0.07)',border:'1px solid rgba(99,130,255,0.22)',borderRadius:'24px',padding:'56px 48px',textAlign:'center',boxShadow:'0 0 80px rgba(99,130,255,0.10)'}}>
+            <div style={{fontSize:'52px',marginBottom:'20px'}}>🚀</div>
+            <h2 style={{fontFamily:"'Anton',sans-serif",fontSize:'36px',textTransform:'uppercase',letterSpacing:'.04em',color:'#EFF4FF',margin:'0 0 12px'}}>Ready to Submit?</h2>
+            <p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:'11px',color:'rgba(239,244,255,0.38)',lineHeight:1.8,margin:'0 0 36px',letterSpacing:'.06em'}}>Your pitch will be reviewed, scored by AI, and evaluated.<br/>Top submissions receive VC feedback and recognition.</p>
+            {submitError&&<p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:'11px',color:'#ff6b6b',marginBottom:'16px'}}>{submitError}</p>}
+            <button onClick={handleSubmit} disabled={submitting} className="home-cta home-cta-vibrant" style={{margin:'0 auto',padding:'20px 72px',fontSize:'13px',letterSpacing:'.22em',display:'flex',opacity:submitting?0.6:1,cursor:submitting?'not-allowed':'pointer'}}>
+              {submitting?'Submitting…':'Submit Application →'}
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+function App(){
+  const [view,setView]=useState('splash');
+  const [activeCourse,setActiveCourse]=useState(null);
+  const [activeTrack,setActiveTrack]=useState(null);
+  const [completed,setCompleted]=useState(()=>{try{return new Set(JSON.parse(localStorage.getItem('apex_v1_done'))||[]);}catch{return new Set();}});
+  const handleComplete=useCallback((lessonId)=>{setCompleted(prev=>{const next=new Set(prev);next.add(lessonId);try{localStorage.setItem('apex_v1_done',JSON.stringify([...next]));}catch{}return next;});},[]);
+  const handleStartCourse=(course,track)=>{setActiveCourse(course);setActiveTrack(track);setView('lesson');window.scrollTo({top:0,behavior:'smooth'});};
+  const handleBack=()=>{setView(activeCourse?'catalog':'home');window.scrollTo({top:0,behavior:'smooth'});};
+  const handleHome=()=>{setView('home');window.scrollTo({top:0,behavior:'smooth'});};
+  const totalDone=[...completed].filter(k=>MODULES.some(m=>m.lessons.some(l=>l.id===k))).length;
+  if(view==='splash')return<SplashView onEnter={()=>{setVisitedCookie();setView('landing');window.scrollTo({top:0,behavior:'smooth'});}}/>;
+  if(view==='landing')return<LandingView onEnter={()=>{setView('home');window.scrollTo({top:0,behavior:'smooth'});}} onSubmitPitch={()=>{setView('pitch');window.scrollTo({top:0,behavior:'smooth'});}}/>;
+  return(
+    <>
+      <nav className="nav">
+        <div className="nav-brand" onClick={handleHome}><div className="nav-mark">A</div><span className="nav-name">APEX Capital Society</span></div>
+        <div style={{display:'flex',alignItems:'center',gap:'8px',flex:1,justifyContent:'center'}}>
+          {view==='lesson'&&activeCourse&&activeTrack&&(
+            <div style={{display:'flex',alignItems:'center',gap:'6px'}}>
+              <button onClick={handleBack} style={{background:'none',border:'none',cursor:'pointer',fontFamily:'var(--f-mono)',fontSize:'9px',color:'rgba(255,255,255,.4)',letterSpacing:'.1em',textTransform:'uppercase'}}>\u2190 Catalog</button>
+              <span style={{color:'rgba(255,255,255,.2)',fontSize:'10px'}}>/</span>
+              <span style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:activeTrack.accent,letterSpacing:'.1em',textTransform:'uppercase'}}>{activeTrack.short}</span>
+              <span style={{color:'rgba(255,255,255,.2)',fontSize:'10px'}}>/</span>
+              <span style={{fontFamily:'var(--f-mono)',fontSize:'9px',color:'rgba(255,255,255,.5)',letterSpacing:'.08em',textTransform:'uppercase'}}>{activeCourse.title}</span>
+            </div>
+          )}
+        </div>
+        <div style={{display:'flex',alignItems:'center'}}>
+          <button
+            onClick={()=>{setView('pitch');window.scrollTo({top:0,behavior:'smooth'});}}
+            style={{backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',background:'rgba(99,130,255,0.08)',border:'1px solid rgba(99,130,255,0.30)',borderRadius:'100px',padding:'11px 48px',cursor:'pointer',color:'rgba(180,200,255,0.75)',fontFamily:'var(--f-mono)',fontSize:'11px',letterSpacing:'.18em',textTransform:'uppercase',fontWeight:400,transition:'background .2s, box-shadow .2s, border-color .2s, color .2s',boxShadow:'0 0 14px rgba(99,130,255,0.15)',whiteSpace:'nowrap'}}
+            onMouseEnter={e=>{e.currentTarget.style.background='rgba(99,130,255,0.16)';e.currentTarget.style.borderColor='rgba(99,130,255,0.55)';e.currentTarget.style.color='rgba(200,216,255,1)';e.currentTarget.style.boxShadow='0 0 26px rgba(99,130,255,0.32)';}}
+            onMouseLeave={e=>{e.currentTarget.style.background='rgba(99,130,255,0.08)';e.currentTarget.style.borderColor='rgba(99,130,255,0.30)';e.currentTarget.style.color='rgba(180,200,255,0.75)';e.currentTarget.style.boxShadow='0 0 14px rgba(99,130,255,0.15)';}}
+          >Submit Pitch →</button>
+        </div>
+      </nav>
+      <div style={{paddingTop:'var(--nav-h)'}}>
+        {view==='home'&&<HomeView onEnter={()=>{setView('catalog');window.scrollTo({top:0,behavior:'smooth'});}} onSubmitPitch={()=>{setView('pitch');window.scrollTo({top:0,behavior:'smooth'});}}/>}
+        {view==='catalog'&&<CatalogView completed={completed} onStartCourse={handleStartCourse}/>}
+        {view==='lesson'&&activeCourse&&activeTrack&&<CourseLessonView key={activeCourse.id} course={activeCourse} track={activeTrack} completed={completed} onComplete={handleComplete} onFinishCourse={handleBack}/>}
+        {view==='dashboard'&&<UnifiedDashboard completed={completed} onNavigate={()=>{setView('catalog');window.scrollTo({top:0,behavior:'smooth'});}}/>}
+        {view==='pitch'&&<PitchSubmissionView onBack={()=>{setView('home');window.scrollTo({top:0,behavior:'smooth'});}}/>}
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node converter_ib.js)",
+      "Bash(node -e ':*)",
+      "Bash(node -e \"const l = require\\('./node_modules/lucide-react'\\); console.log\\(Object.keys\\(l\\).filter\\(k => /twitter|github|x$/i.test\\(k\\)\\)\\)\")"
+    ]
+  }
+}

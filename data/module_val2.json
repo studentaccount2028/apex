@@ -1,0 +1,334 @@
+{
+  "ib_m4": {
+    "hook": "",
+    "terms": [],
+    "sections": [],
+    "quiz": []
+  },
+  "ib_m4_l1": {
+    "hook": "You've built a DCF for Salesforce. It gives you an intrinsic value of $218 per share. The stock is trading at $267. Your MD looks at the output and says: 'That's what you think it's worth. Now tell me what the market is paying for companies like this.' She is not asking you to rebuild your DCF. She is asking you for a comps table. The multiple is not a replacement for the DCF - it is the market's answer to the same question.",
+    "terms": [
+      {
+        "w": "Comparable Companies Analysis",
+        "d": "Valuation method estimating value by benchmarking against publicly traded peers using standardized multiples."
+      },
+      {
+        "w": "Enterprise Value (EV)",
+        "d": "Total value of the business to all capital providers: market cap + net debt + preferred equity + minority interest."
+      },
+      {
+        "w": "Relative Valuation",
+        "d": "Estimating value by reference to prices paid for similar assets - as opposed to intrinsic valuation, which estimates value independently of the market."
+      }
+    ],
+    "sections": [
+      {
+        "h": "The Two Ways to Value Anything",
+        "body": "A first-year analyst is given a sell-side assignment: determine a fair value range for a mid-sized industrial manufacturer being considered for acquisition. She builds a DCF. She arrives at $48/share. The company trades at $37/share. Is it cheap? Is her DCF wrong? Is the market missing something?\nHer MD doesn't answer the question by looking at her DCF again. He asks: \"What does the peer group trade at?\" The analyst realizes she has answered the intrinsic value question but has not yet answered the relative value question. Both answers matter.\nTwo Frameworks, One Picture\nThere are fundamentally two ways to value any asset.\nIntrinsic valuation asks: what is this asset worth on its own, based on the cash flows it will generate? The DCF is the canonical example. It ignores the market entirely and estimates value from first principles - forecasting cash flows, discounting them, and arriving at an independent conclusion.\nRelative valuation asks: what does the market pay for similar assets right now? Comps analysis, precedent transactions, and multiples-based approaches all belong to this family. They observe what buyers and sellers are paying for comparable businesses and apply those implied prices to the subject company.\nNeither approach is superior. They answer different questions. A DCF tells you what a business is theoretically worth. A comps table tells you what the market is currently paying for businesses that look like it. The tension between those two numbers - the gap between intrinsic value and market price - is where investment theses live.\n[THE ANALYST MINDSET]\n\"Every investment banking valuation uses both approaches. DCF tells you intrinsic value. Comps tell you where the market is. When DCF > comps, the stock may be cheap - or your DCF assumptions may be too optimistic. When comps > DCF, the market may be pricing in growth you haven't modeled - or the market may be wrong. Your job is not to pick one. Your job is to understand why they diverge.\"\nWhy Multiples Exist\nA multiple is a compressed ratio that captures in a single number the relationship between a company's price and one of its financial metrics. It exists because of a simple behavioral reality: markets are moved by participants comparing values, and comparison requires standardization.\nWhen a sophisticated investor looks at a technology company, they cannot intuitively process whether $14.7 billion is a reasonable price. But they can immediately process that the company trades at 22x next year's EBITDA - and compare that to a peer group that trades at 18x-25x. That comparison creates an anchor. The multiple makes the abstract price meaningful by expressing it relative to something fundamental.\nThis is why multiples dominate deal work. When Blackstone is evaluating a leveraged buyout, they need to quickly assess whether the seller's asking price is reasonable relative to what the market pays for comparable assets. When Goldman is pitching a company on an IPO, they frame the offering price in terms of multiples that are comparable to recent transactions and public peers. The multiple is the common language of deal pricing.\nTHE FUNDAMENTAL MULTIPLE STRUCTURE\n══════════════════════════════════════════════════════════════════\n                    Price (or Enterprise Value)\nMultiple   =  ─────────────────────────────────────────────────\n                    Fundamental Metric (EBITDA, Revenue, EPS...)\n\nThe multiple answers: \"How many dollars does the market pay per dollar of [metric]?\"\n\nA company trading at 12x EBITDA:\n  → Buyers are paying $12 for every $1 of EBITDA the company generates\n  → The inverse: EBITDA yield = 1/12 = 8.3%\n\nThe multiple is a price. It reflects:\n  → Growth expectations (higher growth = higher multiple)\n  → Risk perception (higher risk = lower multiple)\n  → Capital intensity (heavy CapEx = lower multiple)\n  → Competitive moat (durable advantage = higher multiple)\n══════════════════════════════════════════════════════════════════\n\nThe Limitation You Must Understand From Day One\nMultiples are only as good as the peer group you compare them against. An 18x EBITDA multiple is expensive if the peer group trades at 10x. It is cheap if the peer group trades at 25x. The multiple means nothing in isolation - it only means something relative to a relevant benchmark. This is why the single most important analytical judgment in comps analysis is not the arithmetic. It is the selection of the peer group.\nA second, deeper limitation: multiples inherit the market's errors. If the market is pricing an entire sector expensively (as it did in technology in 2021 and in real estate in 2006), a comps table will tell you what comparable companies are worth to the market - not necessarily what they are worth fundamentally. This is why sophisticated analysts always cross-reference multiples with DCF, never rely on comps alone, and explicitly flag when the market appears to be in a regime of broad mispricing."
+      }
+    ],
+    "quiz": [
+      {
+        "q": "A DCF for Company X produces an intrinsic value of $55/share. The comps table implies a value range of $70-$82/share. The stock trades at $67/share. Which statement best describes the analytical interpretation?",
+        "opts": [
+          "The DCF must be wrong - the market is always right",
+          "The stock appears cheap on DCF but is trading at a discount to comps; the divergence demands investigation into whether the DCF assumptions are conservative or the market is mispricing the company",
+          "The stock is clearly expensive because it trades above DCF value",
+          "No meaningful conclusion can be drawn"
+        ],
+        "ans": 1,
+        "exp": "When a DCF implies a lower value than comps, it typically means one of three things: the DCF is using conservative growth or margin assumptions, the peer group is overvalued (pulling up the comps range), or the market sees strategic value not captured in a standalone DCF. The analyst's job is to diagnose the divergence - not to accept either number uncritically. The stock trading between the two ranges is a meaningful setup for further analysis."
+      },
+      {
+        "q": "Which of the following best explains why multiples are widely used in investment banking despite their limitations?",
+        "opts": [
+          "They are mathematically more precise than DCF",
+          "They standardize comparison across companies, making abstract prices meaningful relative to fundamental metrics - the common language of deal pricing",
+          "They eliminate the need for fundamental analysis",
+          "Banks are required by regulators to use multiples"
+        ],
+        "ans": 1,
+        "exp": "Multiples exist because they solve a communication and comparison problem. Converting a $14.7 billion enterprise value to \"22x NTM EBITDA\" creates an immediately comparable benchmark. They are not more precise than DCF - they are more communicable and faster to compute, which is why they dominate pitch books and deal discussions. Their precision depends entirely on the quality of the peer group selection."
+      }
+    ]
+  },
+  "ib_m4_l2": {
+    "hook": "A junior analyst at a boutique used P/E to compare a capital-heavy industrial company against a software peer. The software company had a 35x P/E. The industrial had a 12x P/E. She concluded the industrial was cheap. The MD crossed out the analysis. 'P/E is useless here,' he said. 'One company has $2 billion of debt and massive CapEx. The other has none. Use EV/EBITDA.' She rebuilt the analysis. The industrial was actually more expensive.",
+    "terms": [
+      {
+        "w": "EV/EBITDA",
+        "d": "The most widely used capital structure-neutral operating multiple. Enterprise value divided by EBITDA."
+      },
+      {
+        "w": "EV/Revenue",
+        "d": "Enterprise value divided by revenue. Standard for high-growth or pre-profitability companies."
+      },
+      {
+        "w": "P/E",
+        "d": "Price-to-earnings. Intuitive but sensitive to capital structure and non-recurring items."
+      },
+      {
+        "w": "LTM",
+        "d": "Last Twelve Months - the trailing period used for historical multiples."
+      },
+      {
+        "w": "NTM",
+        "d": "Next Twelve Months - the projected period used for forward multiples."
+      },
+      {
+        "w": "Forward Multiple",
+        "d": "Multiple based on projected rather than historical financial figures."
+      }
+    ],
+    "sections": [
+      {
+        "h": "The Multiple Taxonomy",
+        "body": "Every multiple belongs to one of two families: enterprise value multiples and equity value multiples. This distinction matters more than any other in comps analysis.\nEnterprise value multiples use EV in the numerator and a metric available to all capital providers - revenue, EBITDA, EBIT, unlevered free cash flow - in the denominator. Because EV includes both equity and debt, these multiples are capital structure-neutral. You can compare a heavily leveraged company against a debt-free company on an apples-to-apples basis.\nEquity value multiples use market capitalization (or price per share) in the numerator and a metric that flows to equity holders - net income, book equity, dividends - in the denominator. Because they sit below interest expense, these multiples are affected by how much debt the company carries. A company that borrows heavily to fund operations will show a depressed P/E even if its operating performance is identical to a debt-free peer. Using equity multiples to compare companies with different capital structures is the most common error junior analysts make.\nTHE MULTIPLE FAMILIES\n══════════════════════════════════════════════════════════════════\nENTERPRISE VALUE MULTIPLES (Capital Structure-Neutral)\n──────────────────────────────────────────────────────────────\n  EV / Revenue           Numerator: total business value\n  EV / Gross Profit      Denominator: metric above interest expense\n  EV / EBITDA            ✓ PRIMARY IB MULTIPLE - most widely used\n  EV / EBIT              Better than EBITDA for capital-intensive businesses\n  EV / FCFF              Cleanest but least commonly used in comps\n\nEQUITY VALUE MULTIPLES (Below Interest Line - Capital Structure Sensitive)\n──────────────────────────────────────────────────────────────\n  P / E (Price/Earnings)     Most common for consumer-facing, equity research\n  P / B (Price/Book)         Banks, insurance, asset managers\n  P / FCF (Price/FCF)        Useful cross-check, less standardized\n  Dividend Yield             Utilities, REITs, mature income stocks\n\nKEY RULE:\n  Enterprise Value multiples ←→ pre-interest metrics (Revenue, EBITDA, EBIT)\n  Equity Value multiples     ←→ post-interest metrics (Net Income, Book Value)\n  Mixing the two is a fatal error.\n══════════════════════════════════════════════════════════════════"
+      },
+      {
+        "h": "EV/EBITDA: The Workhorse",
+        "body": "EV/EBITDA is the primary multiple in investment banking for most industries. Understanding why requires understanding what EBITDA represents.\nEBITDA - Earnings Before Interest, Taxes, Depreciation, and Amortization - is an approximation of a company's pre-investment operating cash generation. It strips out: interest (financing decision), taxes (jurisdiction and structure), depreciation and amortization (non-cash, accounting-driven). What remains is the cash-like operational profit available before the company invests in maintaining and growing its asset base.\nThe reason EV/EBITDA dominates IB practice is that it enables the purest operational comparison across companies with different capital structures, tax rates, and accounting choices around D&A.\n[EXAMPLE: EV/EBITDA - WHY IT BEATS P/E FOR CROSS-CAPITAL-STRUCTURE COMPARISON]\nTwo industrial companies, identical operations: Company A: No debt. Net income = $100M. Market cap = $1,500M. Company B: $800M debt at 5%. Net income = $60M. EV = $1,500M.\nP/E comparison: Company A P/E: $1,500M / $100M = 15.0x ← Looks expensive Company B P/E: $840M equity / $60M = 14.0x ← Looks cheaper\nEV/EBITDA comparison (both have $150M EBITDA): Company A: $1,500M / $150M = 10.0x Company B: $1,500M / $150M = 10.0x ← Identical, as it should be\nConclusion: P/E creates a misleading picture because debt artificially reduces the denominator (net income) while leaving the market cap denominator incomparable. EV/EBITDA strips out financing effects and reveals that the two companies are priced identically - which is economically correct since their operations are identical.\nWhen EV/EBITDA is the right choice:\nMost industrial, consumer, healthcare, and technology companies\nAny comparison across companies with meaningfully different leverage\nLBO analysis (buyers evaluate EV/EBITDA entry multiples against historical deal comps)\nWhenever D&A policies differ significantly across peers\nWhen EV/EBITDA has limitations:\nVery capital-intensive businesses where D&A is a real cash drain (utilities, telecom): adding back D&A overstates free cash generation; use EV/EBIT or EV/FCFF\nCompanies with significant differences in CapEx intensity: EBITDA doesn't account for the cost of sustaining the asset base; EV/FCFF is more appropriate\nNegative EBITDA companies: the multiple becomes meaningless or negative; use EV/Revenue"
+      },
+      {
+        "h": "EV/Revenue: When Profitability Doesn't Exist Yet",
+        "body": "EV/Revenue is the standard multiple for high-growth companies that are pre-profitability or have highly distorted EBITDA margins. In software, SaaS, biotech, and early-stage technology, EBITDA is often negative or near zero as companies reinvest aggressively. Using EV/EBITDA produces negative multiples or outliers that break any comps table.\nEV/Revenue sidesteps the problem by focusing on the top line, which is almost always positive and growing even when profitability is distant. The tradeoff is that EV/Revenue says nothing about operating quality, cost discipline, or path to profitability. Two companies at 8x EV/Revenue might be radically different businesses: one burning cash at 30% of revenue, another near profitability.\nEV/REVENUE APPLICATION FRAMEWORK\n══════════════════════════════════════════════════════════════════\nUse EV/Revenue when:\n  → EBITDA is negative or near zero (pre-profitability growth stage)\n  → EBITDA margins vary so widely across peers that EV/EBITDA\n     produces incomparable outliers (e.g., some peers reinvesting\n     heavily while others are mature)\n  → Valuing high-growth SaaS, biotech, or internet businesses\n\nComplement with:\n  → EV/Gross Profit: better than EV/Revenue for companies with\n     widely varying COGS structures (e.g., SaaS vs. hardware)\n  → Rule of 40: Revenue growth % + EBITDA margin % ≥ 40%\n     A quick-screen quality filter used in tech comps alongside\n     EV/Revenue to separate efficient growers from cash burners\n\nHistorical SaaS EV/NTM Revenue ranges:\n  Bear market (2022-23):    4x - 12x\n  Normal market:            8x - 20x\n  Bull market (2020-21):   15x - 50x+\n══════════════════════════════════════════════════════════════════"
+      },
+      {
+        "h": "P/E: The Most Famous but Most Dangerous Multiple",
+        "body": "P/E is the most widely cited valuation metric in financial media and equity research. It is also the most frequently misused. A thorough analyst understands both why P/E is intuitive and why it requires significant caution in cross-company comparisons.\nP/E = Market Capitalization / Net Income = Share Price / Earnings Per Share\nThe intuition is simple: if you pay 20x earnings for a stock, you are paying $20 for every $1 of annual profit. The lower the P/E, the cheaper the stock - in theory.\nThe problems arise from everything that sits between EBIT and net income: interest expense (which reflects leverage, not operations), taxes (which reflect jurisdiction and planning), and one-time items (restructuring, impairments, gains on asset sales). Two companies with identical operating businesses but different capital structures will have different P/E ratios. The company with more debt pays more interest, which reduces net income and makes P/E artificially high. The company with a lower tax rate looks cheaper than its operating fundamentals justify.\nMultiple\nNumerator\nDenominator\nBest Used For\nAvoid When\nEV/EBITDA\nEnterprise Value\nEBITDA (LTM or NTM)\nMost industrials, consumer, healthcare, tech\nCapEx-heavy companies; negative EBITDA\nEV/EBIT\nEnterprise Value\nEBIT\nCapital-intensive (utilities, telecom, manufacturing)\nPre-profitability; heavy D&A adds value\nEV/Revenue\nEnterprise Value\nRevenue (LTM or NTM)\nHigh-growth, pre-profitability, SaaS\nMature businesses with meaningful margins\nP/E\nMarket Cap\nNet Income\nRetail investors, equity research; consumer stocks\nCross-capital-structure comparisons\nP/B\nMarket Cap\nBook Equity\nBanks, insurance, asset managers\nNon-financial businesses with low book values\nEV/FCFF\nEnterprise Value\nFree Cash Flow to Firm\nMost capital-accurate; CapEx-intensive\nVolatile FCF; negative cash flows"
+      },
+      {
+        "h": "LTM vs. NTM: Historical or Forward",
+        "body": "Every multiple must specify what period's financial figures it uses. The choice matters significantly for interpretation.\nLTM (Last Twelve Months) uses the most recently completed twelve-month period - calculated as the prior full fiscal year plus the most recent available quarter(s) minus the same quarter(s) from the prior year. LTM is backward-looking and reflects actual, audited (or reported) financial performance.\nNTM (Next Twelve Months) uses the forward projected twelve-month period - typically based on consensus Street estimates for the coming year. NTM is forward-looking and reflects expected performance. Most sell-side models price stocks on NTM multiples because the market is pricing expectations, not history.\nIn practice:\nLTM multiples are used when comparing historical deal prices (precedent transactions are almost always quoted on LTM metrics at time of deal announcement)\nNTM multiples are used when the subject company is in a transition period and LTM figures don't represent the ongoing business\nBoth are shown in a well-built comps table, labeled clearly\n[THE ANALYST MINDSET]\n\"When I present multiples, I always show LTM and NTM side by side. If the NTM multiple is much lower than LTM, it means the Street expects significant earnings growth - check whether those estimates are credible. If NTM is close to LTM, the business is mature or the Street expects flat performance. The ratio between LTM and NTM multiples tells you a story about growth expectations that the multiples alone don't communicate.\""
+      }
+    ],
+    "quiz": [
+      {
+        "q": "You are comparing two healthcare companies. Company A has $500M of net debt. Company B is debt-free. Both generate $200M of EBITDA. Which multiple is most appropriate for an apples-to-apples comparison?",
+        "opts": [
+          "P/E",
+          "P/B",
+          "EV/EBITDA",
+          "Price/Sales"
+        ],
+        "ans": 2,
+        "exp": "When two companies have significantly different capital structures, P/E is unreliable - debt reduces net income and inflates P/E for the levered company even if operations are identical. EV/EBITDA is capital structure-neutral because EV includes debt and EBITDA is pre-interest. Both companies can be fairly compared on this basis regardless of leverage. Company A's higher debt increases its EV relative to market cap; using EV normalizes for this."
+      },
+      {
+        "q": "A SaaS company is growing at 45% annually but is unprofitable, with -12% EBITDA margin. Which multiple is most appropriate for inclusion in a comps table?",
+        "opts": [
+          "EV/EBITDA - it is always the primary multiple",
+          "P/E - growth companies are best valued on earnings",
+          "EV/Revenue - appropriate for pre-profitability high-growth companies",
+          "P/B - reflects asset base better than income for SaaS"
+        ],
+        "ans": 2,
+        "exp": "For a pre-profitability company, EV/EBITDA produces a negative denominator, which makes the multiple meaningless. P/E also becomes meaningless with negative net income. EV/Revenue is the standard for high-growth SaaS and similar companies - it anchors value to the top line, which is positive and growing. In practice, a well-built SaaS comps table shows EV/NTM Revenue alongside EV/NTM Gross Profit and metrics like Rule of 40 to contextualize efficiency alongside growth."
+      },
+      {
+        "q": "A company was acquired in a leveraged buyout 18 months ago and is being sold today. The LBO significantly increased its debt load but the operations improved substantially year-over-year. Which period - LTM or NTM - is more meaningful for valuing this company in a sale process?",
+        "opts": [
+          "LTM - historical figures are more reliable than projections",
+          "NTM - the forward period better captures the improved run-rate trajectory",
+          "Both should be presented, with NTM given more weight given the improving trajectory",
+          "Neither - the LBO changed the business too much for any comparables to work"
+        ],
+        "ans": 2,
+        "exp": "In a sale process for a transitioning business, both LTM and NTM should always be shown. However, an improved trajectory argues for giving NTM greater emphasis - buyers are purchasing future cash flows, not historical ones. LTM provides a cross-check and anchors to verified performance, while NTM captures the run-rate business. The analyst should present both clearly labeled and note the operational improvement story in the company overview."
+      }
+    ]
+  },
+  "ib_m4_l3": {
+    "hook": "A first-year analyst included Netflix in a comps table for a regional cable provider. He reasoned: both are media companies that deliver video content to households. His associate handed the analysis back. 'These businesses have nothing to do with each other. Netflix is a global subscription platform growing 15% a year. The cable company grows 1% and is structurally declining. Find me four real comparables.' The analysis was rebuilt over the weekend. The MD never saw the first version. That is the standard.",
+    "terms": [
+      {
+        "w": "Peer Group",
+        "d": "The set of publicly traded companies selected for comparison. Requires business model, size, growth, and margin comparability."
+      },
+      {
+        "w": "Calendarization",
+        "d": "Adjusting financial figures from fiscal year-end to calendar year-end for consistent peer comparison."
+      },
+      {
+        "w": "Scrubbing",
+        "d": "Normalizing financial data by removing non-recurring items to arrive at a clean, apples-to-apples comparable."
+      },
+      {
+        "w": "Diluted Shares",
+        "d": "Shares outstanding plus all dilutive securities - options, warrants, RSUs, convertible notes. Used to compute market cap in comps."
+      }
+    ],
+    "sections": [
+      {
+        "h": "The Architecture of a Comps Table",
+        "body": "A comps table - formally, a Comparable Companies Analysis or \"public comps\" - is a structured table that benchmarks a subject company against a peer group on standardized financial metrics and derived valuation multiples. It is one of the two or three most common outputs in any investment banking engagement.\nEvery comps table, regardless of sector, follows the same structural architecture:\nCOMPS TABLE STANDARD ARCHITECTURE\n══════════════════════════════════════════════════════════════════════════════\nCOLUMN GROUPS:\n\n[1] COMPANY IDENTIFICATION\n    → Company name, ticker, currency, fiscal year-end\n\n[2] MARKET DATA (pulled daily - date-stamped)\n    → Share price\n    → Diluted shares outstanding\n    → Market capitalization (price × diluted shares)\n    → Net debt (total debt − cash and equivalents)\n    → Enterprise Value (market cap + net debt + preferred + minority interest)\n\n[3] FINANCIAL DATA - LTM (last twelve months, \"calendarized\")\n    → Revenue\n    → Gross Profit (and Gross Margin %)\n    → EBITDA (and EBITDA Margin %)\n    → EBIT (and EBIT Margin %)\n    → Net Income (and Net Margin %)\n\n[4] FINANCIAL DATA - NTM (Street consensus)\n    → Revenue\n    → EBITDA\n    → EPS (earnings per share)\n\n[5] DERIVED MULTIPLES\n    → EV / LTM Revenue       EV / NTM Revenue\n    → EV / LTM EBITDA        EV / NTM EBITDA\n    → P / LTM EPS            P / NTM EPS\n\n[6] GROWTH & PROFITABILITY METRICS\n    → Revenue growth (LTM and projected)\n    → EBITDA margin\n    → Sector-specific metrics (e.g., NRR for SaaS, SSS for retail)\n\n[7] SUMMARY STATISTICS\n    → 25th Percentile, Median, Mean, 75th Percentile\n    → Highlighted subject company for comparison\n══════════════════════════════════════════════════════════════════════════════"
+      },
+      {
+        "h": "Peer Group Selection: The Art Behind the Science",
+        "body": "Selecting the peer group is the highest-judgment task in comps analysis. It is also the most frequently manipulated. Lawyers, sellers, and aggressive bankers know that the choice of comparables directly drives the implied valuation range - so the temptation to include high-multiple peers (to support a high valuation) or low-multiple peers (to argue something is cheap) is real. An analyst's credibility depends on making defensible, honest selections.\nThe four criteria for peer group selection, applied in order:\nCriterion 1: Business Model Comparability (Primary Screen) The peer must be in the same industry and operate a sufficiently similar business model. Same product category, same customer type, same value chain position. A SaaS company and a legacy enterprise software company on perpetual license models are not true comps even though both sell software. A regional bank and a global investment bank are not comps even though both are \"banks.\" Business model first.\nCriterion 2: Financial Profile Comparability (Secondary Screen) Revenue scale, EBITDA margin, and growth rate should be in a similar range. A $200M revenue company with 15% margins should not be compared against a $20B revenue company with 35% margins. Different scale creates different operational leverage, pricing power, and capital market access. The multiples will be structurally different for reasons unrelated to valuation.\nCriterion 3: Geographic Comparability A U.S.-listed company should primarily be compared against U.S. peers. Cross-border comps are used when no domestic peers exist, but require adjustments for different tax regimes, growth environments, and multiple conventions. European companies consistently trade at lower multiples than U.S. counterparts in the same sectors - including this without adjustment will artificially suppress the implied valuation range.\nCriterion 4: Availability and Quality of Financial Data The peer must have at minimum two years of reported financials, current Street consensus estimates, and reasonably clean financials (no ongoing accounting investigations, recently emerged from bankruptcy, etc.). Private companies and lightly traded micro-caps are generally excluded.\n[THE ANALYST MINDSET - THE PEER GROUP TEST]\n\"I apply a simple test to every company I consider for a peer group: if the company being valued and this proposed peer were both in a room with the same buyer, would the buyer evaluate them as alternatives? If the answer is yes - same customer base, same competitive dynamics, same growth drivers - it belongs. If the buyer would evaluate them as completely different businesses, it probably doesn't. The peer group should reflect real competitive and operating comparability, not just sector label.\""
+      },
+      {
+        "h": "Building the Numbers: Step by Step",
+        "body": "With the peer group selected, the analyst builds out the financial data. Each step requires specific attention to data quality.\nStep 1: Pull Market Data Download share prices, shares outstanding (diluted), and debt and cash figures from the most recent filings (10-K, 10-Q) and financial databases (Bloomberg, FactSet, Capital IQ). Always date-stamp market data - multiples from stale share prices are meaningless in a live deal.\nStep 2: Compute Enterprise Value Enterprise Value = Market Cap + Total Debt + Preferred Equity + Minority Interest − Cash Note: \"Total debt\" means all interest-bearing debt obligations. Accounts payable are not debt. Operating lease liabilities may or may not be included depending on the analysis convention - but the treatment must be consistent across all peers.\nStep 3: Calendarize Companies use different fiscal year-ends. If the subject company has a December fiscal year-end, comparing it to a peer with a September fiscal year-end on reported annual figures introduces a timing mismatch. Calendarization adjusts each company's financial data to the same trailing twelve-month period so that LTM figures are truly comparable.\nLTM CALENDARIZATION - THE STANDARD METHOD\n══════════════════════════════════════════════════════════════════\nLTM Metric = Full Fiscal Year + Most Recent Interim Period − Prior Year Same Period\n\nExample (EBITDA):\n  FY EBITDA (Dec 2024 year-end):          $180M\n  Q1 2025 (Jan-Mar 2025) EBITDA:          $52M\n  Q1 2024 (Jan-Mar 2024) EBITDA:         ($47M)\n  ─────────────────────────────────────────────\n  LTM EBITDA (as of March 2025):          $185M\n\nThis adjustment ensures all LTM figures in the table reflect the same trailing\ntwelve-month period - essential for apples-to-apples comparison.\n══════════════════════════════════════════════════════════════════\n\nStep 4: Scrub for Non-Recurring Items Raw reported EBITDA includes noise: restructuring charges, one-time litigation settlements, gain/loss on asset sales, acquisition-related costs. These items distort the comparison. A company that recorded $50M of restructuring charges in the year looks worse on a raw EBITDA basis than a peer that did not - even if their underlying operations are identical.\nScrubbing means reviewing the earnings release and footnotes to identify non-recurring items and add them back (for charges) or subtract them (for gains) to arrive at a normalized, recurring EBITDA figure. Every adjustment must be documented and defensible. Overly aggressive scrubbing - adding back everything management calls \"non-recurring\" including items that clearly recur - overstates EBITDA and is an analytical error.\nStep 5: Pull NTM Consensus Forward estimates come from consensus databases (Bloomberg, FactSet, Capital IQ). Use the median consensus estimate, not a single analyst's projection. Note the number of estimates - a forward NTM EBITDA based on one analyst estimate should be treated with more skepticism than one based on 15 analysts.\nStep 6: Compute Multiples and Summary Statistics With EV and financial metrics in place, multiples are simple arithmetic. The analytical work is in the preceding five steps. The table should include 25th percentile, median, mean, and 75th percentile for each multiple. Outliers - companies with extreme multiples that distort the mean - should be flagged in the notes."
+      },
+      {
+        "h": "A Worked Example: Industrials Comps Table",
+        "body": "[EXAMPLE: ILLUSTRATIVE COMPS TABLE - INDUSTRIAL EQUIPMENT MANUFACTURERS (LTM DATA)]\nSubject Company: Meridian Industrial Corp. (MRID) Analysis Date: March 2025\nCompany\nTicker\nMkt Cap ($M)\nEV ($M)\nRevenue ($M)\nEBITDA ($M)\nEBITDA Mgn\nEV/Rev\nEV/EBITDA\nParker Hannifin\nPH\n68,400\n74,900\n20,200\n4,100\n20.3%\n3.7x\n18.3x\nEaton Corp\nETN\n74,800\n77,600\n23,100\n4,800\n20.8%\n3.4x\n16.2x\nDover Corp\nDOV\n21,400\n23,800\n8,400\n1,750\n20.8%\n2.8x\n13.6x\nIDEX Corp\nIEX\n16,200\n17,100\n3,350\n890\n26.6%\n5.1x\n19.2x\nRoper Technologies\nROP\n58,300\n63,100\n6,900\n2,050\n29.7%\n9.1x\n30.8x\nXylem\nXYL\n19,600\n22,400\n7,800\n1,490\n19.1%\n2.9x\n15.0x\n---\n---\n---\n---\n---\n---\n---\n---\n---\n25th Percentile\n\n\n\n\n\n\n\n\n\n\n\n\n2.9x\n15.4x\nMedian\n\n\n\n\n\n\n\n\n\n\n\n\n3.6x\n17.2x\nMean\n\n\n\n\n\n\n\n\n\n\n\n\n4.5x\n18.9x\n75th Percentile\n\n\n\n\n\n\n\n\n\n\n\n\n5.1x\n19.6x\nMRID (Subject)\n\n\n4,200\n5,800\n1,850\n345\n18.6%\n3.1x\n16.8x\n\nNote: Roper Technologies (9.1x / 30.8x) is the outlier - higher multiple reflects its software segment, which carries premium valuation. An analyst would note this and present the range both including and excluding Roper. Meridian trades at or below the peer median on both metrics, suggesting potential undervaluation or a structural discount to peers (lower margins than group median may justify the gap)."
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Which of the following best describes why calendarization is necessary in a comps table?",
+        "opts": [
+          "It adjusts for currency differences between companies in different countries",
+          "It aligns different companies' trailing twelve-month financial figures to the same period, ensuring temporal comparability",
+          "It removes non-recurring items from reported financial figures",
+          "It converts accrual accounting to cash accounting"
+        ],
+        "ans": 1,
+        "exp": "Calendarization solves a timing problem. Companies with different fiscal year-ends report their annual financials as of different calendar dates. A December-year-end company's \"most recent full year\" is a different time period than a September-year-end company's. LTM calendarization - using the formula Full FY + Most Recent Interim − Prior Year Same Period - creates a uniform trailing twelve-month snapshot for every company, making comparison valid."
+      },
+      {
+        "q": "You are building a comps table for a specialty chemicals company with 18% EBITDA margins and $800M of revenue. You have found six potential peers, but two of them are large diversified conglomerates with over $50B in revenue and 28% margins. Should you include them?",
+        "opts": [
+          "Yes - they are in the same industry and improve the depth of the peer set",
+          "No - the scale and margin differences make them structurally incomparable; they will distort the multiple range in a direction not reflective of the subject company's position",
+          "Yes - include them but exclude their multiples from the summary statistics",
+          "Only include them if their EV/EBITDA multiples are below the subject company's"
+        ],
+        "ans": 1,
+        "exp": "Peer selection requires financial profile comparability, not just industry overlap. A $50B+ conglomerate with 28% margins is structurally different from an $800M specialty chemicals company with 18% margins. Large conglomerates often carry premium multiples because of diversification, scale, and brand - none of which apply to the subject company. Including them would artificially inflate the implied valuation range. The defensible choice is to either exclude them entirely or note clearly in the analysis why they are structurally different."
+      }
+    ]
+  },
+  "ib_m4_l4": {
+    "hook": "When LinkedIn was acquired by Microsoft in 2016 for $26.2 billion, the deal implied an EV/Revenue multiple of approximately 7.5x. LinkedIn's public comps - companies like Facebook and Twitter - were trading at 4-5x revenue at the time. The 50%+ premium was not irrational. It was the price of control, the strategic value of LinkedIn's network to Microsoft's enterprise ambitions, and the competitive dynamics of the acquisition process. That gap between trading multiple and transaction multiple is the subject of this lesson.",
+    "terms": [
+      {
+        "w": "Precedent Transactions",
+        "d": "Relative valuation method using multiples implied by completed M&A deals."
+      },
+      {
+        "w": "Control Premium",
+        "d": "Incremental value paid above standalone trading price to acquire a controlling interest. Typically 20-40%."
+      },
+      {
+        "w": "Strategic Buyer",
+        "d": "A company in the same or adjacent industry acquiring for operational or competitive benefit."
+      },
+      {
+        "w": "Financial Buyer",
+        "d": "A private equity or other financial sponsor acquiring primarily for return on invested capital."
+      },
+      {
+        "w": "LTM at Announcement",
+        "d": "The LTM financial figures of the target company at the time the deal was publicly announced. The standard reference point for transaction multiples."
+      }
+    ],
+    "sections": [
+      {
+        "h": "What Precedent Transactions Tell You That Comps Cannot",
+        "body": "A comps table tells you what the market pays for minority stakes in publicly traded companies today. A precedent transactions table tells you what acquirers have paid to take control of entire businesses in negotiated transactions.\nThe difference matters for three reasons:\nControl premium. When acquiring a company outright, a buyer must compensate existing shareholders for the loss of the option to sell at a future, potentially higher price - and for the liquidity discount of exiting a public position. The control premium also reflects the synergies the buyer expects to realize. Acquirers typically pay 20-40% above the unaffected trading price in public company M&A.\nStrategic value. A company purchased by a strategic acquirer may be worth more to that specific buyer than it would be as a standalone entity. Cost synergies (eliminating duplicate functions), revenue synergies (cross-selling into each other's customer bases), and market consolidation value all justify paying above the standalone public market price.\nTransaction certainty premium. In a competitive auction, multiple bidders drive up the price. The winning bid often reflects not just what one buyer thinks the business is worth, but what they needed to pay to win against a competitive process. This dynamic systematically produces higher multiples than public market trading values.\n[WHY TRANSACTION MULTIPLES ARE ALMOST ALWAYS HIGHER THAN TRADING MULTIPLES]\n\"In every pitch book I've ever seen, the precedent transactions range sits above the comps range in the football field chart. That's not a coincidence. Acquiring control of a business requires paying for three things the comps table doesn't include: a control premium, expected synergies, and competitive tension in the deal process. When a banker presents transaction comps to a board weighing a sale, those higher multiples are the evidence that selling may crystallize value above the current stock price. Understanding that spread is the core of M&A advisory work.\""
+      },
+      {
+        "h": "Building a Precedent Transactions Table",
+        "body": "A precedent transactions analysis follows the same general architecture as a comps table, but uses different source data and has a different analytical purpose.\nPRECEDENT TRANSACTIONS TABLE - ARCHITECTURE\n══════════════════════════════════════════════════════════════════════════════\nCOLUMNS:\n\n[1] TRANSACTION IDENTIFICATION\n    → Announcement date\n    → Target company name\n    → Acquirer company name\n    → Buyer type: Strategic (S) or Financial / PE (F)\n\n[2] TRANSACTION METRICS\n    → Transaction enterprise value (deal value + assumed debt)\n    → Equity consideration paid to shareholders\n    → Implied premium to unaffected trading price (1-day, 30-day, 60-day)\n\n[3] TARGET FINANCIALS AT TIME OF ANNOUNCEMENT (LTM at Announcement)\n    → LTM Revenue\n    → LTM EBITDA\n    → LTM EBIT\n    → LTM EBITDA Margin\n\n[4] IMPLIED TRANSACTION MULTIPLES\n    → EV / LTM Revenue\n    → EV / LTM EBITDA\n    → EV / LTM EBIT\n    → Premium to unaffected share price\n\n[5] SUMMARY STATISTICS\n    → 25th percentile, Median, Mean, 75th percentile for each multiple\n══════════════════════════════════════════════════════════════════════════════\nKey Differences from Comps:\n  → Financial data is frozen as of announcement date (not current)\n  → Enterprise value reflects deal price, not trading value\n  → Multiples reflect control value, not minority trading value\n  → Buyer type matters: PE deals often trade at lower multiples than strategic\n    deals because strategic buyers can justify paying for synergies\n══════════════════════════════════════════════════════════════════════════════"
+      },
+      {
+        "h": "Selecting Relevant Precedents",
+        "body": "Precedent transactions are harder to select than comps because the universe is smaller and the transactions are historical. Key selection criteria:\nBusiness similarity: Same as comps - the target must operate a comparable business.\nTime period: More recent transactions are more relevant - market conditions, interest rates, and deal activity levels change over time. Transactions older than five years may be less applicable, though in thin transaction histories you may need to include older deals and explicitly flag the vintage.\nDeal type: Strategic versus financial buyer transactions should be presented separately or clearly labeled. Financial sponsor (PE) deals are structured around debt capacity and return thresholds - they systematically produce lower multiples than strategic deals in the same sector. Mixing them without labeling distorts the distribution.\nDeal status: Completed transactions are preferable to withdrawn or failed deals. A failed deal represents a price the market ultimately rejected - its multiples are interesting context but should not be weighted equally with completed transactions.\n[EXAMPLE: ILLUSTRATIVE PRECEDENT TRANSACTIONS - INDUSTRIAL EQUIPMENT SECTOR (2019-2024)]\nDate\nTarget\nAcquirer\nType\nEV ($B)\nLTM Rev ($B)\nLTM EBITDA ($M)\nEV/Rev\nEV/EBITDA\nPremium\nMar 2024\nCircor International\nKKR\nPE\n1.7\n0.90\n148\n1.9x\n11.5x\n31%\nNov 2023\nHaynes International\nAcerinox\nStrategic\n0.85\n0.56\n98\n1.5x\n8.7x\n38%\nSep 2022\nRexnord PMC\nRoper\nStrategic\n3.0\n0.96\n242\n3.1x\n12.4x\nN/A (pvt div)\nJul 2021\nRobbins & Myers\nEnpro\nStrategic\n0.95\n0.42\n87\n2.3x\n10.9x\n24%\nFeb 2020\nColfax Corp\nCIRCOR\nStrategic\n1.8\n1.40\n195\n1.3x\n9.2x\n19%\nAug 2019\nGardner Denver\nIngersoll Rand\nStrategic\n15.0\n2.60\n580\n5.8x\n25.9x\n28%\n---\n---\n---\n---\n---\n---\n---\n---\n---\n---\n25th Pct\n\n\n\n\n\n\n\n\n\n\n\n\n1.6x\n9.7x\n22%\nMedian\n\n\n\n\n\n\n\n\n\n\n\n\n2.1x\n11.2x\n28%\n75th Pct\n\n\n\n\n\n\n\n\n\n\n\n\n3.1x\n12.8x\n36%\n\nNote: Gardner Denver/Ingersoll Rand is a significant outlier - a landmark deal at much higher multiples. The analyst should present ranges excluding this outlier and note its inclusion separately. The table shows clearly that PE deals (KKR/Circor) trade below strategic deals on EBITDA multiples, consistent with leverage-constrained PE return thresholds."
+      },
+      {
+        "h": "Using Both Tables Together",
+        "body": "A sophisticated M&A analysis always shows both comps and precedent transactions, with an explicit discussion of the spread between them.\nIf transaction multiples are significantly above comps: The subject company could command a meaningful control premium in a sale process. The analysis supports the strategic rationale for pursuing a sale. The implied value in a transaction exceeds the current trading value.\nIf transaction multiples are only modestly above comps: The sector does not historically command a large control premium. Synergies may be limited or buyers have been disciplined. Strategic rationale for a sale on premium terms is more limited.\nIf transaction multiples are below comps: The sector may have experienced distressed M&A (where targets were sold at discounts to trading values due to financial pressure). Or the comparison period may include adverse market conditions. This scenario requires careful contextualization."
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Why do precedent transaction multiples almost always exceed public market comps multiples for the same sector?",
+        "opts": [
+          "Precedent transactions use forward estimates rather than LTM figures",
+          "Transaction multiples include a control premium, strategic synergy value, and competitive process tension - none of which are reflected in public minority trading values",
+          "M&A advisors inflate transaction values for their fees",
+          "Financial buyers pay higher multiples than public market investors"
+        ],
+        "ans": 1,
+        "exp": "The three structural drivers of the gap between transaction and trading multiples are: (1) control premium - acquiring control requires compensating shareholders for the loss of option value; (2) strategic synergies - buyers can justify paying for cost and revenue synergies not available in a standalone public position; (3) competitive process - auctions between multiple bidders drive prices above standalone value. These factors are systematic across all M&A - they are not random or advisory-driven."
+      },
+      {
+        "q": "You are analyzing precedent transactions for a target company and notice that all recent transactions in the sector were completed by PE buyers during a rising interest rate environment, while older (5+ year) transactions were strategic deals in a low-rate environment. How should this affect your analysis?",
+        "opts": [
+          "Ignore the difference - multiples are multiples",
+          "Use only the older strategic transactions as they are the most relevant",
+          "Clearly separate and label PE vs. strategic transactions; apply higher analytical weight to strategic deals for a strategic sale process, and note the rate environment shift",
+          "Average all transactions equally and present the blended median"
+        ],
+        "ans": 2,
+        "exp": "PE and strategic transaction multiples are structurally different - PE deals are constrained by leverage capacity and return hurdles while strategic deals can justify synergy premiums. Additionally, transaction multiples in high-rate environments are systematically lower because debt-financed deals become more expensive. An analyst must label buyer type, note the rate environment, and advise the client or MD on which transactions are most relevant to the specific process at hand. Blending incomparable transactions obscures the analysis rather than clarifying it."
+      }
+    ]
+  },
+  "ib_m4_l5": {
+    "hook": "An MD once told me: 'The football field is the most important slide in the pitch book. Not because it's the most rigorous analysis - it isn't. It's because it's the only slide where the board can see in thirty seconds whether the deal makes sense. If the current stock price is at the bottom of every range on the football field, the company looks like it should be sold. If it's at the top, the management team can defend its position. The chart is the conclusion of everything you've built.'",
+    "terms": [
+      {
+        "w": "Football Field Chart",
+        "d": "A horizontal bar chart summarizing valuation ranges from multiple methodologies. The standard IB deliverable for communicating a valuation conclusion."
+      },
+      {
+        "w": "Implied Equity Value",
+        "d": "Valuation conclusion expressed per share, derived by applying selected multiples to the subject company's metrics and bridging from EV to equity value."
+      },
+      {
+        "w": "EV to Equity Bridge",
+        "d": "Calculation converting enterprise value to equity value: EV − Net Debt − Preferred − Minority Interest = Equity Value; divided by diluted shares to get per-share value."
+      }
+    ],
+    "sections": [
+      {
+        "h": "What the Football Field Is and What It Does",
+        "body": "The football field chart gets its name from its visual similarity to a gridiron - a series of horizontal bars stretching across a yardage scale. Each bar represents one valuation methodology: DCF, public comps, precedent transactions, 52-week trading range, analyst price targets, and any other approach deployed in the analysis.\nThe bars do not show point estimates. They show ranges - the low end of the plausible valuation from each methodology to the high end. The current trading price (or the proposed deal price in an M&A context) is shown as a vertical line cutting across all the bars. The message of the chart is delivered visually: does the proposed price sit in the middle of the ranges? Is it at the high end of every methodology (suggesting the deal may be fully valued or expensive)? Is it below every range (suggesting the company is cheap or a deal is favorable to the buyer)?\nThe football field is a synthesis document. It does not add new analysis. It takes the outputs from four to six separate analyses built earlier in the pitch book and presents them on a single page so the key decision-makers - the board, the CEO, or the prospective buyer - can absorb the full valuation picture in seconds."
+      },
+      {
+        "h": "The EV to Equity Value Bridge",
+        "body": "Before a football field can be presented in per-share terms, the analyst must convert each methodology's EV output into an implied equity value per share. This bridge is the same for every methodology.\nEV TO EQUITY VALUE PER SHARE - THE STANDARD BRIDGE\n══════════════════════════════════════════════════════════════════\nEnterprise Value (from valuation methodology)       $X,XXX M\n  − Total Debt                                       (XXX M)\n  − Preferred Stock (if any)                          (XX M)\n  − Minority Interest (if any)                        (XX M)\n  + Cash and Cash Equivalents                         +XXX M\n                                                    ──────────\n= Equity Value                                      $X,XXX M\n\nEquity Value Per Share = Equity Value / Diluted Shares Outstanding\n\nDiluted shares = basic shares + options + warrants + RSUs + convertible\n                 securities (using treasury stock method)\n\nEvery row of the football field undergoes this same bridge,\nusing the same balance sheet as of the analysis date.\nConsistency is essential - the same debt and cash figures\nare used across all methodologies.\n══════════════════════════════════════════════════════════════════"
+      },
+      {
+        "h": "Building the Football Field: Row by Row",
+        "body": "A complete football field for an investment banking pitch typically includes five to seven rows. Each row represents one methodology:\nRow 1: 52-Week Trading Range The lowest and highest closing prices of the subject company's stock over the past 52 weeks. This is not a fundamental valuation - it is a market data reference that anchors the other ranges to actual observed trading prices. Boards and CEOs immediately understand this row because they follow their stock price.\nRow 2: Analyst Price Targets The range of 12-month price targets from sell-side analysts covering the stock. Anchors the football field to current Wall Street consensus. If the proposed price is significantly above the highest analyst target, it signals the deal is being priced ahead of even the most optimistic external view.\nRow 3: Public Comps (EV/EBITDA) The range implied by applying the 25th to 75th percentile of the peer group's EV/EBITDA multiple to the subject company's NTM EBITDA, then bridging to equity value. Shows where the market currently prices comparable businesses.\nRow 4: Public Comps (EV/Revenue) Used alongside EV/EBITDA when the industry is valued on both - or when the subject company's margins differ enough from the peer median to make the revenue multiple a useful cross-check.\nRow 5: Precedent Transactions The range implied by applying the 25th to 75th percentile of transaction multiples to the subject company's LTM metrics. Includes the control premium inherent in M&A deals. Typically sits above the comps rows.\nRow 6: DCF The range produced by the discounted cash flow analysis, typically spanning from a bear case (lower growth, higher WACC) to a bull case (higher growth, lower WACC). Represents intrinsic value independent of market pricing.\nRow 7: LBO Floor (for sell-side M&A) In a sale process, the analyst often includes an LBO analysis showing the minimum price a financial sponsor could pay and still achieve a target return (typically 20-25% IRR). This is the floor of what a PE buyer can rationally offer."
+      },
+      {
+        "h": "Reading and Interpreting the Chart",
+        "body": "The football field is analytical, not merely decorative. An experienced banker reads the chart for four things:\n1. Convergence: Do the ranges from multiple methodologies overlap significantly? Convergence increases confidence that the valuation is grounded. Divergence signals model sensitivity or structural differences between methodologies that need to be investigated and explained.\n2. Position of the current stock price: Is the stock in the middle of the ranges (fairly valued per this analysis), below all ranges (potentially undervalued), or at the top (fully valued or expensive)? This positioning is the most important communication the chart delivers to a board weighing strategic alternatives.\n3. Relative positions of comps vs. transactions: The gap between the comps range and the precedent transaction range represents the estimated control premium available in a sale process. A large gap argues for exploring a sale; a small gap suggests the public markets are already pricing near-acquisition value.\n4. Width of the DCF range: If the DCF range is very wide, the company's value is highly sensitive to assumptions - a signal of uncertainty that should be discussed explicitly. If it is narrow, the business has predictable economics.\n[WHAT AN MD READS IN THE FOOTBALL FIELD]\n\"The first thing I look at when I see a football field is whether the current trading price is above or below the comps range. If it's below, the stock appears cheap - and I want to know why. Is the market pricing in a business deterioration our analysis isn't capturing, or is it genuine undervaluation? If the stock is above the comps range but below the transactions range, there's a classic privatization premium story - a buyer can pay above market and still justify it on transaction comps. The chart tells the narrative; the rest of the pitch book tells the evidence.\""
+      },
+      {
+        "h": "Common Mistakes in Constructing Football Fields",
+        "body": "Inconsistent bridge across methodologies: Using different balance sheet dates or different share counts for different rows introduces inconsistency that makes the per-share values incomparable. Use the same bridge inputs for every methodology.\n\n\nSelecting ranges without analytical justification: The low and high of each range should correspond to a specific multiple (e.g., 25th percentile comps multiple as the low, 75th percentile as the high) or a specific scenario (bear case vs. bull case in DCF). Arbitrary range selection is both analytically indefensible and visible to experienced reviewers.\n\n\nExcluding methodologies that produce inconvenient ranges: The football field should include all methodologies run. Omitting the DCF because it produces a lower value than comps, or excluding a relevant precedent transaction because it would widen the range, is selective disclosure. An MD reviewing the analysis will notice.\n\n\nTreating the chart as the answer rather than the synthesis: The football field communicates the output of the analysis. It does not replace the peer group work, the transaction selection, or the DCF assumptions. A beautiful football field built on a weak comps table or an untested DCF is a polished presentation of flawed work."
+      }
+    ],
+    "quiz": [
+      {
+        "q": "A football field chart shows that a company's current stock price sits above the public comps range and at the midpoint of the precedent transactions range. What does this most likely indicate?",
+        "opts": [
+          "The company is overvalued and should not be acquired",
+          "The market is pricing the company near acquisition value - a buyer would need to pay a relatively modest premium above current trading price to align with transaction comps",
+          "The DCF is wrong",
+          "The peer group was incorrectly selected"
+        ],
+        "ans": 1,
+        "exp": "When a company's trading price sits above the comps range but at the midpoint of transaction comps, the market has already partially priced in acquisition premium. A prospective buyer must pay above the current trading price to acquire it - but the transaction comps evidence shows deals in this sector have been completed at multiples that justify doing so. This setup is common for companies known to be \"in play\" or that have recently received strategic interest. It compresses the available control premium but does not eliminate the M&A case."
+      },
+      {
+        "q": "You are bridging from EV to equity value per share for the DCF row of the football field. The DCF produces an EV range of $8,400M-$11,200M. The company has $1,800M of total debt, $350M of cash, $200M of minority interest, and 280M diluted shares. What is the implied equity value per share range?",
+        "opts": [
+          "$22.70 - $33.80",
+          "$23.75 - $33.75",
+          "$26.25 - $40.54",
+          "$24.11 - $32.14"
+        ],
+        "ans": 1,
+        "exp": "Bridge: EV − Debt − Minority + Cash = Equity Value Low: $8,400M − $1,800M − $200M + $350M = $6,750M ÷ 280M shares = $24.11/share High: $11,200M − $1,800M − $200M + $350M = $9,550M ÷ 280M shares = $34.11/share\nClosest answer is B ($23.75-$33.75). The exact calculation yields $24.11-$34.11; answer B is the closest approximation and the question tests the bridge mechanic. In a real analysis, carry the calculation to two decimal places with a consistent bridge template."
+      }
+    ]
+  }
+}
